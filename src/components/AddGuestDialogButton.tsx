@@ -18,19 +18,18 @@ export const AddGuestDialogButton = () => {
   const [open, setOpen] = useState(false);
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-    <DialogTrigger asChild>
+      <DialogTrigger asChild>
         <Button variant="outline">Add guest</Button>
-    </DialogTrigger>
-    <DialogContent className="max-w-xs">
+      </DialogTrigger>
+      <DialogContent className="max-w-xs">
         <DialogHeader>
-        <DialogTitle className="mb-4">Add guest</DialogTitle>
-        {/* <DialogDescription>ABC</DialogDescription> */}
-        <AddGuestForm onSubmit={() => wait().then(() => setOpen(false))} />
+          <DialogTitle className="mb-4">Add guest</DialogTitle>
+          {/* <DialogDescription>ABC</DialogDescription> */}
+          <AddGuestForm
+            onSubmitFromParent={() => setOpen(false)}
+          />
         </DialogHeader>
-        {/* <Button onClick={() => wait().then(() => setOpen(false))}>
-        Wait
-        </Button> */}
-    </DialogContent>
+      </DialogContent>
     </Dialog>
   );
 };

@@ -18,18 +18,35 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { toast } from "@/components/ui/use-toast";
+import { createBrowserClient } from "@supabase/ssr";
 
 const formSchema = z.object({
-  name: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
+  name: z.string().min(3, {
+    message: "The name must be at least 3 characters.",
   }),
   type: z.enum(["free", "half", "skip"], {
     required_error: "You need to select guestlist type.",
   }),
 });
 
-export function AddGuestForm() {
-  // 1. Define your form.
+// props are a handler to run w when the form is submitted
+type AddGuestFormProps = {
+    onSubmitFromParent: () => void;
+};
+
+export function AddGuestForm({ onSubmitFromParent }: AddGuestFormProps) {
+  const supabase = createBrowserClient<Database>(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get(name: string) {
+          return document.cookie;
+        },
+      },
+    },
+  );
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -38,32 +55,47 @@ export function AddGuestForm() {
     },
   });
 
-  // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(values, null, 2)}</code>
-        </pre>
-      ),
-    });
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    console.log(values)
+    const { name, type } = values;
+
+    const { data, error } = await supabase
+      .from("guests")
+      .insert([{ name: name, organisation: "Turbulence", type: type }])
+      .select();
+    console.log(data, error)
+
+    onSubmitFromParent()
   }
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-8  max-w-xs"
+      >
         <FormField
           control={form.control}
-          name="guest"
+          name="name"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="text-left">
+              {" "}
+              {/* Align title to the left */}
               <FormLabel>Name</FormLabel>
               <FormControl>
-                <Input placeholder="Guest's name" {...field} />
+                <Input {...field} />
               </FormControl>
+              {/* <FormDescription>
+                This is the name as it will appear on the guestlist.
+              </FormDescription> */}
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="type"
+          render={({ field }) => (
+            <FormItem className="text-left">
               <FormLabel>Type</FormLabel>
               <FormControl>
                 <RadioGroup
@@ -91,9 +123,8 @@ export function AddGuestForm() {
                   </FormItem>
                 </RadioGroup>
               </FormControl>
-
               {/* <FormDescription>
-                This is your public display name.
+                "Free" guests pay nothing for entry, "Half" pay half, "Skip" pay the full price but can skip the line.
               </FormDescription> */}
               <FormMessage />
             </FormItem>
