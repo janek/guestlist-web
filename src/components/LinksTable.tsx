@@ -57,9 +57,18 @@ const LinksTable = ({ links } : LinksTableProps) => {
       </TableHeader>
       <TableBody>
         {links.map((link) => (
+          // XXX: The table should be customised to enable the whole row being a link
           <TableRow key={link.id}>
-            <TableCell>{link.url_code}</TableCell>
-            <TableCell>{link.organisation}</TableCell>
+            <TableCell>
+              <a className="block" href={link.url_code} target="_blank">
+                {link.url_code}
+              </a>
+            </TableCell>
+            <TableCell>
+              <a className="block" href={link.url_code} target="_blank">
+                {link.organisation}
+              </a>
+            </TableCell>
           </TableRow>
         ))}
       </TableBody>
