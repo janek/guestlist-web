@@ -14,12 +14,13 @@ export default async function Page() {
       },
     },
   );
-  const { data, error } = await supabase.from("guests").select();
-  console.log(data, error);
+  const { data } = await supabase.from("guests").select();
 
   return (
     <>
-      <pre> {JSON.stringify(data, null, 2)}</pre>;
+      <div>
+        <pre>{JSON.stringify(data, null, 2)}</pre>
+      </div>
     </>
   );
 }
