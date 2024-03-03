@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useEffect } from "react";
 import { Tables } from "../../lib/database.types";
@@ -14,15 +14,14 @@ import {
 import { createBrowserClient } from "@supabase/ssr";
 import { useRouter } from "next/navigation";
 
-type GuestlistTableProps = {
-  guests: Tables<"guests">[];
-  shouldShowOrganization: boolean;
+type LinksTableProps = {
+  links: Tables<"links">[];
 };
 
-const GuestlistTable = ({ guests, shouldShowOrganization }: GuestlistTableProps) => {
+const LinksTable = ({ links } : LinksTableProps) => {
   const supabase = createBrowserClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
   );
   const router = useRouter();
 
@@ -34,12 +33,13 @@ const GuestlistTable = ({ guests, shouldShowOrganization }: GuestlistTableProps)
         {
           event: "*",
           schema: "public",
-          table: "guests",
+          table: "links",
         },
         (payload) => {
-          console.log("payload")
+          console.log("payload");
           router.refresh();
-        })
+        }
+      )
       .subscribe();
 
     return () => {
@@ -51,17 +51,15 @@ const GuestlistTable = ({ guests, shouldShowOrganization }: GuestlistTableProps)
       {/* <TableCaption>Guestlist for event {event.name} </TableCaption> */}
       <TableHeader>
         <TableRow>
-          <TableHead>Name</TableHead>
-          <TableHead>Type</TableHead>
-          {shouldShowOrganization && <TableHead>Organization</TableHead>}
+          <TableHead>Link</TableHead>
+          <TableHead>Organisation</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {guests.map((guest) => (
-          <TableRow key={guest.id}>
-            <TableCell>{guest.name}</TableCell>
-            <TableCell>{guest.type}</TableCell>
-            {shouldShowOrganization && <TableCell>{guest.organisation}</TableCell>}
+        {links.map((link) => (
+          <TableRow key={link.id}>
+            <TableCell>{link.url_code}</TableCell>
+            <TableCell>{link.organisation}</TableCell>
           </TableRow>
         ))}
       </TableBody>
@@ -69,4 +67,4 @@ const GuestlistTable = ({ guests, shouldShowOrganization }: GuestlistTableProps)
   );
 };
 
-export default GuestlistTable;
+export default LinksTable;

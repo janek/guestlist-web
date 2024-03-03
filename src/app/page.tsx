@@ -23,10 +23,10 @@ export default async function Page() {
   return (
     <div className="flex flex-col items-center justify-center h-screen">
       <h4 className="scroll-m-20 text-xl mb-4 font-semibold tracking-tight text-left">
-        Turbulence
+        Complete guestlist
       </h4>
       <ScrollArea className="h-[500px] w-[350px] rounded-md border p-4 mb-4">
-        <GuestlistTable guests={guests || []} />
+        <GuestlistTable guests={guests || []} shouldShowOrganization/>
       </ScrollArea>
       <AddGuestDialogButton organisationName="Turbulence"/>
     </div>
