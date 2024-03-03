@@ -4,6 +4,7 @@ import GuestlistTable from "@/components/GuestlistTable";
 import { AddGuestDialogButton } from "@/components/AddGuestDialogButton";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
+
 export default async function Page() {
   const cookieStore = cookies();
   const supabase = createServerClient<Database>(
@@ -20,11 +21,11 @@ export default async function Page() {
   const { data: guests } = await supabase.from("guests").select();
 
   return (
-    <>
-      <ScrollArea className="h-[200px] w-[350px] rounded-md border p-4">
+    <div className="flex flex-col items-center justify-center h-screen">
+      <ScrollArea className="h-[500px] w-[350px] rounded-md border p-4 mb-4">
         <GuestlistTable guests={guests || []} />
       </ScrollArea>
       <AddGuestDialogButton />
-    </>
+    </div>
   );
 }
