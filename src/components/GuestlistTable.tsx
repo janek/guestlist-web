@@ -2,7 +2,7 @@ import { Tables } from "../../lib/database.types";
 import {
   Table,
   TableBody,
-  TableCaption,
+  // TableCaption,
   TableCell,
   TableHead,
   TableHeader,

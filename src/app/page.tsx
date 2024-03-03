@@ -2,6 +2,7 @@ import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import GuestlistTable from "@/components/GuestlistTable";
 import { AddGuestDialogButton } from "@/components/AddGuestDialogButton";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export default async function Page() {
   const cookieStore = cookies();
@@ -20,12 +21,10 @@ export default async function Page() {
 
   return (
     <>
-      <div className="flex justify-center items-center h-screen">
-        <div className="overflow-auto max-w-md max-h-96">
-          <GuestlistTable guests={guests || []} />
-          <AddGuestDialogButton />
-        </div>
-      </div>
+      <ScrollArea className="h-[200px] w-[350px] rounded-md border p-4">
+        <GuestlistTable guests={guests || []} />
+      </ScrollArea>
+      <AddGuestDialogButton />
     </>
   );
 }
