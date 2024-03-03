@@ -1,6 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import GuestlistTable from "@/components/GuestlistTable";
+import { AddGuestDialogButton } from "@/components/AddGuestDialogButton";
 
 export default async function Page() {
   const cookieStore = cookies();
@@ -22,6 +23,7 @@ export default async function Page() {
       <div className="flex justify-center items-center h-screen">
         <div className="overflow-auto max-w-md max-h-96">
           <GuestlistTable guests={guests || []} />
+          <AddGuestDialogButton />
         </div>
       </div>
     </>
