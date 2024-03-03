@@ -1,3 +1,6 @@
+"use client"
+
+import { useEffect } from "react";
 import { Tables } from "../../lib/database.types";
 import {
   Table,
@@ -8,12 +11,41 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { createBrowserClient } from "@supabase/ssr";
+import { useRouter } from "next/navigation";
 
 type GuestlistTableProps = {
   guests: Tables<"guests">[];
 };
 
 const GuestlistTable = ({ guests }: GuestlistTableProps) => {
+  const supabase = createBrowserClient<Database>(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+  );
+  const router = useRouter();
+
+  useEffect(() => {
+    "use server"
+    const channel = supabase
+      .channel("realtime guests")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "guests",
+        },
+        (payload) => {
+          console.log("payload")
+          router.refresh();
+        })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [supabase, router]);
   return (
     <Table>
       {/* <TableCaption>Guestlist for event {event.name} </TableCaption> */}
