@@ -38,13 +38,6 @@ export function AddGuestForm({ onSubmitFromParent }: AddGuestFormProps) {
   const supabase = createBrowserClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get(name: string) {
-          return document.cookie;
-        },
-      },
-    },
   );
 
   const form = useForm<z.infer<typeof formSchema>>({
