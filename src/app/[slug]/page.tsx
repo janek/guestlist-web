@@ -35,19 +35,22 @@ export default async function Page({ params }: { params: { slug: string } }) {
   }
 
   // TODO: this should be a joined table, probably, for performance readsons - see egghead course
-  const organisationName = links[0].organisation; // XXX: type
+  const organisationName = links[0].organisation!; // XXX: type
   console.log(links);
-  const { data: guests } = await supabase.from("guests").select().eq("organisation", organisationName);
+  const { data: guests } = await supabase
+    .from("guests")
+    .select()
+    .eq("organisation", organisationName);
 
   return (
     <div className="flex flex-col items-center justify-center h-screen">
       <h4 className="scroll-m-20 text-xl mb-4 font-semibold tracking-tight text-left">
-        List for {params.slug}
+        List for {organisationName}
       </h4>
       <ScrollArea className="h-[500px] w-[350px] rounded-md border p-4 mb-4">
-        <GuestlistTable guests={guests || []} />
+        <GuestlistTable guests={guests || []} shouldShowOrganization={false}/>
       </ScrollArea>
-      <AddGuestDialogButton organisationName={organisationName}/>
+      <AddGuestDialogButton organisationName={organisationName} />
     </div>
   );
 }
