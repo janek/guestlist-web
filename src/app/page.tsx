@@ -15,13 +15,14 @@ export default async function Page() {
       },
     },
   );
-  const { data } = await supabase.from("guests").select();
+  const { data: guests } = await supabase.from("guests").select();
 
   return (
     <>
-      <div>
-        <pre>{JSON.stringify(data, null, 2)}</pre>
-        <GuestlistTable />
+      <div className="flex justify-center items-center h-screen">
+        <div className="overflow-auto max-w-md max-h-96">
+          <GuestlistTable guests={guests || []} />
+        </div>
       </div>
     </>
   );
