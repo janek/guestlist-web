@@ -1,3 +1,4 @@
+"use client"
 import {
   Dialog,
   DialogContent,
@@ -9,22 +10,27 @@ import {
 import { Button } from "@/components/ui/button";
 import { AddGuestForm } from "./AddGuestForm";
 
+import { useState } from "react";
+
+const wait = () => new Promise((resolve) => setTimeout(resolve, 1000));
+
 export const AddGuestDialogButton = () => {
+  const [open, setOpen] = useState(false);
   return (
-    <Dialog>
-      <DialogTrigger asChild>
+    <Dialog open={open} onOpenChange={setOpen}>
+    <DialogTrigger asChild>
         <Button variant="outline">Add guest</Button>
-      </DialogTrigger>
-      <DialogContent>
+    </DialogTrigger>
+    <DialogContent className="max-w-xs">
         <DialogHeader>
-          <DialogTitle>Add guest</DialogTitle>
-          {/* <DialogDescription>
-            This action cannot be undone. This will permanently delete your
-            account and remove your data from our servers.
-          </DialogDescription> */}
-          <AddGuestForm />
+        <DialogTitle className="mb-4">Add guest</DialogTitle>
+        {/* <DialogDescription>ABC</DialogDescription> */}
+        <AddGuestForm onSubmit={() => wait().then(() => setOpen(false))} />
         </DialogHeader>
-      </DialogContent>
+        {/* <Button onClick={() => wait().then(() => setOpen(false))}>
+        Wait
+        </Button> */}
+    </DialogContent>
     </Dialog>
   );
 };
