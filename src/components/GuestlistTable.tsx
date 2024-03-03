@@ -26,7 +26,6 @@ const GuestlistTable = ({ guests }: GuestlistTableProps) => {
   const router = useRouter();
 
   useEffect(() => {
-    "use server"
     const channel = supabase
       .channel("realtime guests")
       .on(
