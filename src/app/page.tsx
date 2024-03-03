@@ -28,7 +28,7 @@ export default async function Page() {
       <ScrollArea className="h-[500px] w-[350px] rounded-md border p-4 mb-4">
         <GuestlistTable guests={guests || []} />
       </ScrollArea>
-      <AddGuestDialogButton />
+      <AddGuestDialogButton organisationName="Turbulence"/>
     </div>
   );
 }
