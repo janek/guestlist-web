@@ -52,7 +52,7 @@ const GuestlistTable = ({ guests }: GuestlistTableProps) => {
         <TableRow>
           <TableHead>Name</TableHead>
           <TableHead>Type</TableHead>
-          <TableHead>Organization</TableHead>
+          {/* <TableHead>Organization</TableHead> */}
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -60,7 +60,7 @@ const GuestlistTable = ({ guests }: GuestlistTableProps) => {
           <TableRow key={guest.id}>
             <TableCell>{guest.name}</TableCell>
             <TableCell>{guest.type}</TableCell>
-            <TableCell>{guest.organisation}</TableCell>
+            {/* <TableCell>{guest.organisation}</TableCell> */}
           </TableRow>
         ))}
       </TableBody>
