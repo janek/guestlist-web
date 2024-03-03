@@ -32,9 +32,10 @@ const formSchema = z.object({
 // props are a handler to run w when the form is submitted
 type AddGuestFormProps = {
     onSubmitFromParent: () => void;
+    organisationName: string;
 };
 
-export function AddGuestForm({ onSubmitFromParent }: AddGuestFormProps) {
+export function AddGuestForm({ onSubmitFromParent, organisationName }: AddGuestFormProps) {
   const supabase = createBrowserClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -54,7 +55,7 @@ export function AddGuestForm({ onSubmitFromParent }: AddGuestFormProps) {
 
     const { data, error } = await supabase
       .from("guests")
-      .insert([{ name: name, organisation: "Turbulence", type: type }])
+      .insert([{ name: name, organisation: organisationName, type: type }])
       .select();
     console.log(data, error)
 

@@ -12,9 +12,11 @@ import { AddGuestForm } from "./AddGuestForm";
 
 import { useState } from "react";
 
-const wait = () => new Promise((resolve) => setTimeout(resolve, 1000));
+type AddGuestDialogButtonProps = {
+    organisationName: string;
+};
 
-export const AddGuestDialogButton = () => {
+export const AddGuestDialogButton = (props: AddGuestDialogButtonProps) => {
   const [open, setOpen] = useState(false);
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -27,6 +29,7 @@ export const AddGuestDialogButton = () => {
           {/* <DialogDescription>ABC</DialogDescription> */}
           <AddGuestForm
             onSubmitFromParent={() => setOpen(false)}
+            organisationName={props.organisationName}
           />
         </DialogHeader>
       </DialogContent>
