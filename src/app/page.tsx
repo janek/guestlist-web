@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import GuestlistTable from "@/components/GuestlistTable";
 import { AddGuestDialogButton } from "@/components/AddGuestDialogButton";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import LinksTable from "@/components/LinksTable";
 
 
 export default async function Page() {
@@ -19,6 +20,7 @@ export default async function Page() {
     },
   );
   const { data: guests } = await supabase.from("guests").select();
+  const { data: links } = await supabase.from("links").select();
 
   return (
     <div className="flex flex-col items-center justify-center h-screen">
@@ -29,6 +31,14 @@ export default async function Page() {
         <GuestlistTable guests={guests || []} shouldShowOrganization/>
       </ScrollArea>
       <AddGuestDialogButton organisationName="Turbulence"/>
+
+      <h4 className="scroll-m-20 text-xl mb-4 mt-10 font-semibold tracking-tight text-left">
+        Links
+      </h4>
+      <ScrollArea className="h-[300px] w-[350px] rounded-md border p-4 mb-4">
+        <LinksTable links={links || []} />
+      </ScrollArea>
+      {/* <AddGuestDialogButton organisationName="Turbulence" /> */}
     </div>
   );
 }

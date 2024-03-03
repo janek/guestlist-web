@@ -27,7 +27,7 @@ const LinksTable = ({ links } : LinksTableProps) => {
 
   useEffect(() => {
     const channel = supabase
-      .channel("realtime guests")
+      .channel("realtime links")
       .on(
         "postgres_changes",
         {
