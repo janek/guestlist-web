@@ -36,7 +36,6 @@ export default async function Page({ params }: { params: { slug: string } }) {
 
   // TODO: this should be a joined table, probably, for performance readsons - see egghead course
   const organisationName = links[0].organisation!; // XXX: type
-  console.log(links);
   const { data: guests } = await supabase
     .from("guests")
     .select()

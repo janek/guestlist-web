@@ -36,7 +36,7 @@ const LinksTable = ({ links } : LinksTableProps) => {
           table: "links",
         },
         (payload) => {
-          console.log("payload");
+          console.log("Links Payload");
           router.refresh();
         }
       )

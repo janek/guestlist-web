@@ -50,7 +50,6 @@ export function AddGuestForm({ onSubmitFromParent, organisationName }: AddGuestF
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values)
     const { name, type } = values;
 
     const { data, error } = await supabase

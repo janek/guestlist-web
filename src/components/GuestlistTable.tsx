@@ -37,7 +37,7 @@ const GuestlistTable = ({ guests, shouldShowOrganization }: GuestlistTableProps)
           table: "guests",
         },
         (payload) => {
-          console.log("payload")
+          console.log("Guests Payload")
           router.refresh();
         })
       .subscribe();
