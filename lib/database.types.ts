@@ -12,38 +12,38 @@ export type Database = {
       clients: {
         Row: {
           email: string
-          id: number
+          id: string
           name: string
         }
         Insert: {
           email: string
-          id?: number
+          id?: string
           name: string
         }
         Update: {
           email?: string
-          id?: number
+          id?: string
           name?: string
         }
         Relationships: []
       }
       events: {
         Row: {
-          client_id: number | null
+          client_id: string | null
           date: string
-          id: number
+          id: string
           name: string
         }
         Insert: {
-          client_id?: number | null
+          client_id?: string | null
           date: string
-          id?: number
+          id?: string
           name: string
         }
         Update: {
-          client_id?: number | null
+          client_id?: string | null
           date?: string
-          id?: number
+          id?: string
           name?: string
         }
         Relationships: [
@@ -58,22 +58,22 @@ export type Database = {
       }
       guests: {
         Row: {
-          event_id: number | null
-          id: number
+          event_id: string | null
+          id: string
           name: string
           organisation: string | null
           type: string | null
         }
         Insert: {
-          event_id?: number | null
-          id?: number
+          event_id?: string | null
+          id?: string
           name: string
           organisation?: string | null
           type?: string | null
         }
         Update: {
-          event_id?: number | null
-          id?: number
+          event_id?: string | null
+          id?: string
           name?: string
           organisation?: string | null
           type?: string | null
@@ -90,27 +90,24 @@ export type Database = {
       }
       links: {
         Row: {
-          event_id: number | null
-          id: number
-          parent_id: number | null
+          event_id: string | null
+          id: string
+          organisation: string | null
           permissions: Json | null
-          provider: string | null
           url_code: string
         }
         Insert: {
-          event_id?: number | null
-          id?: number
-          parent_id?: number | null
+          event_id?: string | null
+          id?: string
+          organisation?: string | null
           permissions?: Json | null
-          provider?: string | null
           url_code: string
         }
         Update: {
-          event_id?: number | null
-          id?: number
-          parent_id?: number | null
+          event_id?: string | null
+          id?: string
+          organisation?: string | null
           permissions?: Json | null
-          provider?: string | null
           url_code?: string
         }
         Relationships: [
@@ -119,13 +116,6 @@ export type Database = {
             columns: ["event_id"]
             isOneToOne: false
             referencedRelation: "events"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "links_parent_id_fkey"
-            columns: ["parent_id"]
-            isOneToOne: false
-            referencedRelation: "links"
             referencedColumns: ["id"]
           }
         ]
