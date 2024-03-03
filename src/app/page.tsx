@@ -1,5 +1,6 @@
-import { createServerClient, type CookieOptions } from "@supabase/ssr";
+import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
+import GuestlistTable from "@/components/GuestlistTable";
 
 export default async function Page() {
   const cookieStore = cookies();
@@ -20,6 +21,7 @@ export default async function Page() {
     <>
       <div>
         <pre>{JSON.stringify(data, null, 2)}</pre>
+        <GuestlistTable />
       </div>
     </>
   );
