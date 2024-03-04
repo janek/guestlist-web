@@ -4,6 +4,7 @@ import GuestlistTable from "@/components/GuestlistTable";
 import { AddGuestDialogButton } from "@/components/AddGuestDialogButton";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import LinksTable from "@/components/LinksTable";
+import { AddLinkDialogButton } from "@/components/AddLinkDialogButton";
 
 
 export default async function Page() {
@@ -38,7 +39,7 @@ export default async function Page() {
       <ScrollArea className="h-[300px] w-[350px] rounded-md border p-4 mb-4">
         <LinksTable links={links || []} />
       </ScrollArea>
-      {/* <AddGuestDialogButton organisationName="Turbulence" /> */}
+      <AddLinkDialogButton />
     </div>
   );
 }
