@@ -12,8 +12,6 @@ import { AddLinkForm } from "./AddLinkForm";
 
 import { useState } from "react";
 
-
-
 export const AddLinkDialogButton = () => {
   const [open, setOpen] = useState(false);
   return (
@@ -30,5 +28,6 @@ export const AddLinkDialogButton = () => {
           />
         </DialogHeader>
       </DialogContent>
-    </Dialog>  );
+    </Dialog>  
+  );
 };

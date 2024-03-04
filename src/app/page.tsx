@@ -5,6 +5,7 @@ import { AddGuestDialogButton } from "@/components/AddGuestDialogButton";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import LinksTable from "@/components/LinksTable";
 import { AddLinkDialogButton } from "@/components/AddLinkDialogButton";
+import { DownloadCsvButton } from "@/components/DownloadCsvButton";
 
 
 export default async function Page() {
@@ -29,9 +30,12 @@ export default async function Page() {
         Complete guestlist
       </h4>
       <ScrollArea className="h-[500px] w-[350px] rounded-md border p-4 mb-4">
-        <GuestlistTable guests={guests || []} shouldShowOrganization/>
+        <GuestlistTable guests={guests || []} shouldShowOrganization />
       </ScrollArea>
-      <AddGuestDialogButton organisationName="Turbulence"/>
+      <div className="flex hflex space-x-2">
+        <AddGuestDialogButton organisationName="Turbulence" />
+        <DownloadCsvButton guests={guests || []} />
+      </div>
 
       <h4 className="scroll-m-20 text-xl mb-4 mt-10 font-semibold tracking-tight text-left">
         Links
