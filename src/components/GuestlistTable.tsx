@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useEffect } from "react";
 import { Tables } from "../../lib/database.types";
@@ -19,10 +19,13 @@ type GuestlistTableProps = {
   shouldShowOrganization: boolean;
 };
 
-const GuestlistTable = ({ guests, shouldShowOrganization }: GuestlistTableProps) => {
+const GuestlistTable = ({
+  guests,
+  shouldShowOrganization,
+}: GuestlistTableProps) => {
   const supabase = createBrowserClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
   );
   const router = useRouter();
 
@@ -37,9 +40,10 @@ const GuestlistTable = ({ guests, shouldShowOrganization }: GuestlistTableProps)
           table: "guests",
         },
         (payload) => {
-          console.log("Guests Payload")
+          console.log("Guests Payload");
           router.refresh();
-        })
+        }
+      )
       .subscribe();
 
     return () => {
@@ -58,10 +62,18 @@ const GuestlistTable = ({ guests, shouldShowOrganization }: GuestlistTableProps)
       </TableHeader>
       <TableBody>
         {guests.map((guest) => (
-          <TableRow key={guest.id}>
+          <TableRow
+            key={guest.id}
+            style={{
+              textDecoration: guest.used ? "line-through" : "none",
+              color: guest.used ? "gray" : "black",
+            }}
+          >
             <TableCell>{guest.name}</TableCell>
             <TableCell>{guest.type}</TableCell>
-            {shouldShowOrganization && <TableCell>{guest.organisation}</TableCell>}
+            {shouldShowOrganization && (
+              <TableCell>{guest.organisation}</TableCell>
+            )}
           </TableRow>
         ))}
       </TableBody>
