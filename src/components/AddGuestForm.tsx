@@ -1,10 +1,10 @@
-"use client";
+"use client"
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
@@ -13,12 +13,12 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { toast } from "@/components/ui/use-toast";
-import { createClient } from "@/utils/supabase/client";
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { toast } from "@/components/ui/use-toast"
+import { createClient } from "@/utils/supabase/client"
 
 const formSchema = z.object({
   name: z.string().min(3, {
@@ -27,19 +27,19 @@ const formSchema = z.object({
   type: z.enum(["free", "half", "skip"], {
     required_error: "You need to select guestlist type.",
   }),
-});
+})
 
 // props are a handler to run w when the form is submitted
 type AddGuestFormProps = {
-  onSubmitFromParent: () => void;
-  organisationName: string;
-};
+  onSubmitFromParent: () => void
+  organisationName: string
+}
 
 export function AddGuestForm({
   onSubmitFromParent,
   organisationName,
 }: AddGuestFormProps) {
-  const supabase = createClient();
+  const supabase = createClient()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -47,18 +47,18 @@ export function AddGuestForm({
       name: "",
       type: "free",
     },
-  });
+  })
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const { name, type } = values;
+    const { name, type } = values
 
     const { data, error } = await supabase
       .from("guests")
       .insert([{ name: name, organisation: organisationName, type: type }])
-      .select();
-    console.log(data, error);
+      .select()
+    console.log(data, error)
 
-    onSubmitFromParent();
+    onSubmitFromParent()
   }
   return (
     <Form {...form}>
@@ -126,5 +126,5 @@ export function AddGuestForm({
         <Button type="submit">Submit</Button>
       </form>
     </Form>
-  );
+  )
 }

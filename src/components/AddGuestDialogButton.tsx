@@ -1,5 +1,5 @@
-"use client";
-import { Button } from "@/components/ui/button";
+"use client"
+import { Button } from "@/components/ui/button"
 import {
   Dialog,
   DialogContent,
@@ -7,17 +7,17 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { AddGuestForm } from "./AddGuestForm";
+} from "@/components/ui/dialog"
+import { AddGuestForm } from "./AddGuestForm"
 
-import { useState } from "react";
+import { useState } from "react"
 
 type AddGuestDialogButtonProps = {
-  organisationName: string;
-};
+  organisationName: string
+}
 
 export const AddGuestDialogButton = (props: AddGuestDialogButtonProps) => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false)
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -34,5 +34,5 @@ export const AddGuestDialogButton = (props: AddGuestDialogButtonProps) => {
         </DialogHeader>
       </DialogContent>
     </Dialog>
-  );
-};
+  )
+}

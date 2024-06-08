@@ -1,45 +1,45 @@
-"use server";
-import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
+"use server"
+import { revalidatePath } from "next/cache"
+import { redirect } from "next/navigation"
 
-import { createClient } from "@/utils/supabase/server";
+import { createClient } from "@/utils/supabase/server"
 
 type LoginData = {
-  email: string;
-  password: string;
-};
+  email: string
+  password: string
+}
 
 export async function login(loginData: LoginData) {
-  const supabase = createClient();
-  const { error } = await supabase.auth.signInWithPassword(loginData);
+  const supabase = createClient()
+  const { error } = await supabase.auth.signInWithPassword(loginData)
 
   if (error) {
-    console.error("Login error:", error.message);
+    console.error("Login error:", error.message)
     return {
       message:
         error.message === "Invalid login credentials"
           ? "Password or email is incorrect"
           : "An unknown error occurred",
-    };
+    }
   }
 
-  console.log("Login successful, revalidating path and redirecting.");
-  revalidatePath("/", "layout");
-  redirect("/");
+  console.log("Login successful, revalidating path and redirecting.")
+  revalidatePath("/", "layout")
+  redirect("/")
 }
 
 export async function logout() {
-  const supabase = createClient();
-  const { error } = await supabase.auth.signOut();
+  const supabase = createClient()
+  const { error } = await supabase.auth.signOut()
 
   if (error) {
-    console.error("Logout error:", error.message);
-    return { message: "An error occurred during logout" };
+    console.error("Logout error:", error.message)
+    return { message: "An error occurred during logout" }
   }
 
-  console.log("Logout successful, revalidating path and redirecting.");
-  revalidatePath("/", "layout");
-  redirect("/login");
+  console.log("Logout successful, revalidating path and redirecting.")
+  revalidatePath("/", "layout")
+  redirect("/login")
 }
 // export async function signup(formData: FormData) {
 //   const supabase = createClient();

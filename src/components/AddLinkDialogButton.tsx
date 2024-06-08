@@ -1,5 +1,5 @@
-"use client";
-import { Button } from "@/components/ui/button";
+"use client"
+import { Button } from "@/components/ui/button"
 import {
   Dialog,
   DialogContent,
@@ -7,13 +7,13 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { AddLinkForm } from "./AddLinkForm";
+} from "@/components/ui/dialog"
+import { AddLinkForm } from "./AddLinkForm"
 
-import { useState } from "react";
+import { useState } from "react"
 
 export const AddLinkDialogButton = () => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false)
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -27,5 +27,5 @@ export const AddLinkDialogButton = () => {
         </DialogHeader>
       </DialogContent>
     </Dialog>
-  );
-};
+  )
+}

@@ -1,23 +1,23 @@
-import { AddGuestDialogButton } from "@/components/AddGuestDialogButton";
-import { AddLinkDialogButton } from "@/components/AddLinkDialogButton";
-import { DownloadCsvButton } from "@/components/DownloadCsvButton";
-import GuestlistTable from "@/components/GuestlistTable";
-import LinksTable from "@/components/LinksTable";
-import { LogoutButton } from "@/components/LogoutButton";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { createClient } from "@/utils/supabase/server";
-import { redirect } from "next/navigation";
+import { AddGuestDialogButton } from "@/components/AddGuestDialogButton"
+import { AddLinkDialogButton } from "@/components/AddLinkDialogButton"
+import { DownloadCsvButton } from "@/components/DownloadCsvButton"
+import GuestlistTable from "@/components/GuestlistTable"
+import LinksTable from "@/components/LinksTable"
+import { LogoutButton } from "@/components/LogoutButton"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { createClient } from "@/utils/supabase/server"
+import { redirect } from "next/navigation"
 
 export default async function Page() {
-  const supabase = createClient();
+  const supabase = createClient()
 
-  const { data, error } = await supabase.auth.getUser();
+  const { data, error } = await supabase.auth.getUser()
   if (error || !data?.user) {
-    redirect("/login");
+    redirect("/login")
   }
 
-  const { data: guests } = await supabase.from("guests").select();
-  const { data: links } = await supabase.from("links").select();
+  const { data: guests } = await supabase.from("guests").select()
+  const { data: links } = await supabase.from("links").select()
 
   return (
     <div className="flex flex-col md:h-screen md:justify-center">
@@ -49,5 +49,5 @@ export default async function Page() {
         <LogoutButton />
       </div>
     </div>
-  );
+  )
 }

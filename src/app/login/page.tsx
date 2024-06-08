@@ -1,7 +1,7 @@
-"use client";
+"use client"
 
-import { login } from "@/app/login/actions";
-import { Button } from "@/components/ui/button";
+import { login } from "@/app/login/actions"
+import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
@@ -9,19 +9,19 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useState } from "react"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
 
 const formSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
   password: z
     .string()
     .min(1, { message: "Password must be at least 1 character" }),
-});
+})
 
 export default function LoginPage() {
   const form = useForm<z.infer<typeof formSchema>>({
@@ -30,20 +30,20 @@ export default function LoginPage() {
       email: "",
       password: "",
     },
-  });
+  })
 
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null)
+  const [loading, setLoading] = useState<boolean>(false)
 
   const handleSubmit = async (data: z.infer<typeof formSchema>) => {
-    setLoading(true);
-    setError(null);
-    const response = await login(data);
+    setLoading(true)
+    setError(null)
+    const response = await login(data)
     if (response?.message) {
-      setError(response.message);
-      setLoading(false);
+      setError(response.message)
+      setLoading(false)
     }
-  };
+  }
 
   return (
     <div className="flex items-center justify-center min-h-screen md:bg-gray-100">
@@ -93,5 +93,5 @@ export default function LoginPage() {
         </form>
       </Form>
     </div>
-  );
+  )
 }

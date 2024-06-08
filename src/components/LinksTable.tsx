@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import {
   Table,
@@ -8,19 +8,19 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { createClient } from "@/utils/supabase/client";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
-import type { Tables } from "../../lib/database.types";
+} from "@/components/ui/table"
+import { createClient } from "@/utils/supabase/client"
+import { useRouter } from "next/navigation"
+import { useEffect } from "react"
+import type { Tables } from "../../lib/database.types"
 
 type LinksTableProps = {
-  links: Tables<"links">[];
-};
+  links: Tables<"links">[]
+}
 
 const LinksTable = ({ links }: LinksTableProps) => {
-  const supabase = createClient();
-  const router = useRouter();
+  const supabase = createClient()
+  const router = useRouter()
 
   useEffect(() => {
     const channel = supabase
@@ -33,16 +33,16 @@ const LinksTable = ({ links }: LinksTableProps) => {
           table: "links",
         },
         (payload) => {
-          console.log("Links Payload");
-          router.refresh();
+          console.log("Links Payload")
+          router.refresh()
         },
       )
-      .subscribe();
+      .subscribe()
 
     return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [supabase, router]);
+      supabase.removeChannel(channel)
+    }
+  }, [supabase, router])
   return (
     <Table>
       {/* <TableCaption>Guestlist for event {event.name} </TableCaption> */}
@@ -80,7 +80,7 @@ const LinksTable = ({ links }: LinksTableProps) => {
         ))}
       </TableBody>
     </Table>
-  );
-};
+  )
+}
 
-export default LinksTable;
+export default LinksTable

@@ -1,10 +1,10 @@
-"use client";
+"use client"
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
@@ -13,9 +13,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { createClient } from "@/utils/supabase/client";
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { createClient } from "@/utils/supabase/client"
 
 const formSchema = z.object({
   slug: z.string().min(3, {
@@ -24,15 +24,15 @@ const formSchema = z.object({
   organisation: z.string().min(2, {
     message: "The org name must be at least 2 characters.",
   }),
-});
+})
 
 // props are a handler to run w when the form is submitted
 type AddLinkFormProps = {
-  onSubmitFromParent: () => void;
-};
+  onSubmitFromParent: () => void
+}
 
 export function AddLinkForm({ onSubmitFromParent }: AddLinkFormProps) {
-  const supabase = createClient();
+  const supabase = createClient()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -40,18 +40,18 @@ export function AddLinkForm({ onSubmitFromParent }: AddLinkFormProps) {
       slug: "",
       organisation: "",
     },
-  });
+  })
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const { slug, organisation } = values;
+    const { slug, organisation } = values
 
     const { data, error } = await supabase
       .from("links")
       .insert([{ url_code: slug, organisation: organisation }])
-      .select();
-    console.log(data, error);
+      .select()
+    console.log(data, error)
 
-    onSubmitFromParent();
+    onSubmitFromParent()
   }
   return (
     <Form {...form}>
@@ -94,5 +94,5 @@ export function AddLinkForm({ onSubmitFromParent }: AddLinkFormProps) {
         <Button type="submit">Submit</Button>
       </form>
     </Form>
-  );
+  )
 }

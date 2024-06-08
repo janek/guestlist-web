@@ -1,15 +1,15 @@
-import { AddGuestDialogButton } from "@/components/AddGuestDialogButton";
-import GuestlistTable from "@/components/GuestlistTable";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { createClient } from "@/utils/supabase/server";
+import { AddGuestDialogButton } from "@/components/AddGuestDialogButton"
+import GuestlistTable from "@/components/GuestlistTable"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { createClient } from "@/utils/supabase/server"
 
 export default async function Page({ params }: { params: { slug: string } }) {
-  const supabase = createClient();
+  const supabase = createClient()
 
   const { data: links } = await supabase
     .from("links")
     .select()
-    .eq("url_code", params.slug);
+    .eq("url_code", params.slug)
 
   if (!links || links.length === 0) {
     return (
@@ -18,16 +18,16 @@ export default async function Page({ params }: { params: { slug: string } }) {
           Invalid link
         </h4>
       </div>
-    );
+    )
   }
 
   // TODO: this should be a joined table, probably, for performance reasons - see egghead course
   // https://egghead.io/courses/build-a-twitter-clone-with-the-next-js-app-router-and-supabase-19bebadb
-  const organisationName = links[0].organisation ?? ""; // XXX: Use a joined view instead
+  const organisationName = links[0].organisation ?? "" // XXX: Use a joined view instead
   const { data: guests } = await supabase
     .from("guests")
     .select()
-    .eq("organisation", organisationName);
+    .eq("organisation", organisationName)
 
   return (
     <div className="flex flex-col items-center justify-center h-screen">
@@ -39,5 +39,5 @@ export default async function Page({ params }: { params: { slug: string } }) {
       </ScrollArea>
       <AddGuestDialogButton organisationName={organisationName} />
     </div>
-  );
+  )
 }

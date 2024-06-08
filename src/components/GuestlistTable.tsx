@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import {
   Table,
@@ -8,23 +8,23 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { createClient } from "@/utils/supabase/client";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
-import type { Tables } from "../../lib/database.types";
+} from "@/components/ui/table"
+import { createClient } from "@/utils/supabase/client"
+import { useRouter } from "next/navigation"
+import { useEffect } from "react"
+import type { Tables } from "../../lib/database.types"
 
 type GuestlistTableProps = {
-  guests: Tables<"guests">[];
-  shouldShowOrganization: boolean;
-};
+  guests: Tables<"guests">[]
+  shouldShowOrganization: boolean
+}
 
 const GuestlistTable = ({
   guests,
   shouldShowOrganization,
 }: GuestlistTableProps) => {
-  const supabase = createClient();
-  const router = useRouter();
+  const supabase = createClient()
+  const router = useRouter()
 
   useEffect(() => {
     const channel = supabase
@@ -37,16 +37,16 @@ const GuestlistTable = ({
           table: "guests",
         },
         (payload) => {
-          console.log("Guests Payload");
-          router.refresh();
+          console.log("Guests Payload")
+          router.refresh()
         },
       )
-      .subscribe();
+      .subscribe()
 
     return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [supabase, router]);
+      supabase.removeChannel(channel)
+    }
+  }, [supabase, router])
   return (
     <Table>
       {/* <TableCaption>Guestlist for event {event.name} </TableCaption> */}
@@ -75,7 +75,7 @@ const GuestlistTable = ({
         ))}
       </TableBody>
     </Table>
-  );
-};
+  )
+}
 
-export default GuestlistTable;
+export default GuestlistTable
