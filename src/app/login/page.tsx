@@ -88,7 +88,7 @@ export default function LoginPage() {
           >
             {error
               ? error + ". If you need help, reach out."
-              : "If you need an account, please ask us to make you one."}
+              : "If you need an account, please contact us."}
           </p>
         </form>
       </Form>

@@ -20,11 +20,11 @@ export default async function Page() {
   const { data: links } = await supabase.from("links").select();
 
   return (
-    <div>
-      <div className="flex flex-col items-center justify-center md:flex-row">
+    <div className="flex flex-col md:h-screen md:justify-center">
+      <div className="flex flex-col items-center md:flex-row md:items-start">
         <div className="flex flex-col items-center w-full">
           <h4 className="scroll-m-20 text-xl mb-4 font-semibold tracking-tight text-left">
-            Complete guestlist
+            Full guestlist
           </h4>
           <ScrollArea className="h-[500px] w-[350px] rounded-md border p-4 mb-4">
             <GuestlistTable guests={guests || []} shouldShowOrganization />
