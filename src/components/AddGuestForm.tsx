@@ -18,6 +18,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { toast } from "@/components/ui/use-toast";
+import { createClient } from "@/utils/supabase/client";
 import { createBrowserClient } from "@supabase/ssr";
 
 const formSchema = z.object({
@@ -31,15 +32,15 @@ const formSchema = z.object({
 
 // props are a handler to run w when the form is submitted
 type AddGuestFormProps = {
-    onSubmitFromParent: () => void;
-    organisationName: string;
+  onSubmitFromParent: () => void;
+  organisationName: string;
 };
 
-export function AddGuestForm({ onSubmitFromParent, organisationName }: AddGuestFormProps) {
-  const supabase = createBrowserClient<Database>(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-  );
+export function AddGuestForm({
+  onSubmitFromParent,
+  organisationName,
+}: AddGuestFormProps) {
+  const supabase = createClient();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -56,9 +57,9 @@ export function AddGuestForm({ onSubmitFromParent, organisationName }: AddGuestF
       .from("guests")
       .insert([{ name: name, organisation: organisationName, type: type }])
       .select();
-    console.log(data, error)
+    console.log(data, error);
 
-    onSubmitFromParent()
+    onSubmitFromParent();
   }
   return (
     <Form {...form}>

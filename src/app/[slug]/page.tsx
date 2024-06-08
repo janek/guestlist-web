@@ -1,6 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
-import { cookies } from "next/headers"
-import GuestlistTable from "@/components/GuestlistTable"
+import { cookies } from "next/headers";
+import GuestlistTable from "@/components/GuestlistTable";
 import { AddGuestDialogButton } from "@/components/AddGuestDialogButton";
 import { ScrollArea } from "@/components/ui/scroll-area";
 

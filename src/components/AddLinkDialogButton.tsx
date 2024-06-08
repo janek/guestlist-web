@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import {
   Dialog,
   DialogContent,
@@ -23,11 +23,9 @@ export const AddLinkDialogButton = () => {
         <DialogHeader>
           <DialogTitle className="mb-4">Add guest</DialogTitle>
           {/* <DialogDescription>ABC</DialogDescription> */}
-          <AddLinkForm
-            onSubmitFromParent={() => setOpen(false)}
-          />
+          <AddLinkForm onSubmitFromParent={() => setOpen(false)} />
         </DialogHeader>
       </DialogContent>
-    </Dialog>  
+    </Dialog>
   );
 };

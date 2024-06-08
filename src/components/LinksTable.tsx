@@ -18,10 +18,10 @@ type LinksTableProps = {
   links: Tables<"links">[];
 };
 
-const LinksTable = ({ links } : LinksTableProps) => {
+const LinksTable = ({ links }: LinksTableProps) => {
   const supabase = createBrowserClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
   );
   const router = useRouter();
 
@@ -38,7 +38,7 @@ const LinksTable = ({ links } : LinksTableProps) => {
         (payload) => {
           console.log("Links Payload");
           router.refresh();
-        }
+        },
       )
       .subscribe();
 

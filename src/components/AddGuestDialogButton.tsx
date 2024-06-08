@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import {
   Dialog,
   DialogContent,
@@ -13,7 +13,7 @@ import { AddGuestForm } from "./AddGuestForm";
 import { useState } from "react";
 
 type AddGuestDialogButtonProps = {
-    organisationName: string;
+  organisationName: string;
 };
 
 export const AddGuestDialogButton = (props: AddGuestDialogButtonProps) => {

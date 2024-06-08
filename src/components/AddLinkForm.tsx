@@ -28,7 +28,7 @@ const formSchema = z.object({
 
 // props are a handler to run w when the form is submitted
 type AddLinkFormProps = {
-    onSubmitFromParent: () => void;
+  onSubmitFromParent: () => void;
 };
 
 export function AddLinkForm({ onSubmitFromParent }: AddLinkFormProps) {
@@ -52,9 +52,9 @@ export function AddLinkForm({ onSubmitFromParent }: AddLinkFormProps) {
       .from("links")
       .insert([{ url_code: slug, organisation: organisation }])
       .select();
-    console.log(data, error)
+    console.log(data, error);
 
-    onSubmitFromParent()
+    onSubmitFromParent();
   }
   return (
     <Form {...form}>
@@ -71,7 +71,9 @@ export function AddLinkForm({ onSubmitFromParent }: AddLinkFormProps) {
               <FormControl>
                 <Input {...field} />
               </FormControl>
-              <FormDescription>This will create the link, e.g. guestlist.berlin/slug</FormDescription>
+              <FormDescription>
+                This will create the link, e.g. guestlist.berlin/slug
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -85,7 +87,9 @@ export function AddLinkForm({ onSubmitFromParent }: AddLinkFormProps) {
               <FormControl>
                 <Input {...field} />
               </FormControl>
-              <FormDescription>For example: DJ Transparency, Sweet Collective </FormDescription>
+              <FormDescription>
+                For example: DJ Transparency, Sweet Collective{" "}
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}

@@ -25,7 +25,7 @@ const GuestlistTable = ({
 }: GuestlistTableProps) => {
   const supabase = createBrowserClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
   );
   const router = useRouter();
 
@@ -42,7 +42,7 @@ const GuestlistTable = ({
         (payload) => {
           console.log("Guests Payload");
           router.refresh();
-        }
+        },
       )
       .subscribe();
 

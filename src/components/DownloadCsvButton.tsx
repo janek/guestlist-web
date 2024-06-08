@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { Button } from "@/components/ui/button";
 
 type Guest = Database["public"]["Tables"]["guests"]["Row"];
