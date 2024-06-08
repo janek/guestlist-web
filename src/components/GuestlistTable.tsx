@@ -9,7 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { createBrowserClient } from "@supabase/ssr";
+import { createClient } from "@/utils/supabase/client";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import type { Tables } from "../../lib/database.types";
@@ -23,10 +23,7 @@ const GuestlistTable = ({
   guests,
   shouldShowOrganization,
 }: GuestlistTableProps) => {
-  const supabase = createBrowserClient<Database>(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-  );
+  const supabase = createClient();
   const router = useRouter();
 
   useEffect(() => {

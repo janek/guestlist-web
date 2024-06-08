@@ -1,22 +1,10 @@
 import { AddGuestDialogButton } from "@/components/AddGuestDialogButton";
 import GuestlistTable from "@/components/GuestlistTable";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { createServerClient } from "@supabase/ssr";
-import { cookies } from "next/headers";
+import { createClient } from "@/utils/supabase/server";
 
 export default async function Page({ params }: { params: { slug: string } }) {
-  const cookieStore = cookies();
-  const supabase = createServerClient<Database>(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get(name: string) {
-          return cookieStore.get(name)?.value;
-        },
-      },
-    },
-  );
+  const supabase = createClient();
 
   const { data: links } = await supabase
     .from("links")
@@ -33,7 +21,8 @@ export default async function Page({ params }: { params: { slug: string } }) {
     );
   }
 
-  // TODO: this should be a joined table, probably, for performance readsons - see egghead course
+  // TODO: this should be a joined table, probably, for performance reasons - see egghead course
+  // https://egghead.io/courses/build-a-twitter-clone-with-the-next-js-app-router-and-supabase-19bebadb
   const organisationName = links[0].organisation!; // XXX: type
   const { data: guests } = await supabase
     .from("guests")

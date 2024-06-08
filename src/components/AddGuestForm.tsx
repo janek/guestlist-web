@@ -19,7 +19,6 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { toast } from "@/components/ui/use-toast";
 import { createClient } from "@/utils/supabase/client";
-import { createBrowserClient } from "@supabase/ssr";
 
 const formSchema = z.object({
   name: z.string().min(3, {
