@@ -33,9 +33,9 @@ export default function LoginPage() {
   });
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex items-center justify-center min-h-screen md:bg-gray-100">
       <Form {...form}>
-        <form className="bg-white p-6 rounded shadow-md w-full max-w-sm space-y-4">
+        <form className="bg-white p-6 rounded md:shadow-md w-full max-w-sm space-y-4 sm:w-full ">
           <FormField
             control={form.control}
             name="email"
@@ -62,8 +62,8 @@ export default function LoginPage() {
               </FormItem>
             )}
           />
-          <div className="flex items-center justify-between">
-            <Button type="submit" formAction={login}>
+          <div className="flex items-center justify-between pt-2">
+            <Button type="submit" formAction={login} className="w-full h-10">
               Log in
             </Button>
           </div>
