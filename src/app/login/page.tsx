@@ -15,6 +15,7 @@ import {
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { useState } from "react";
 
 const formSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
@@ -32,10 +33,22 @@ export default function LoginPage() {
     },
   });
 
+  const [error, setError] = useState<string | null>(null);
+
+  const handleSubmit = async (data: z.infer<typeof formSchema>) => {
+    const response = await login(data);
+    if (response?.message) {
+      setError(response.message);
+    }
+  };
+
   return (
     <div className="flex items-center justify-center min-h-screen md:bg-gray-100">
       <Form {...form}>
-        <form className="bg-white p-6 rounded md:shadow-md w-full max-w-sm space-y-4 sm:w-full ">
+        <form
+          onSubmit={form.handleSubmit(handleSubmit)}
+          className="bg-white p-6 rounded md:shadow-md w-full max-w-sm space-y-4 sm:w-full "
+        >
           <FormField
             control={form.control}
             name="email"
@@ -63,12 +76,15 @@ export default function LoginPage() {
             )}
           />
           <div className="flex items-center justify-between pt-2">
-            <Button type="submit" formAction={login} className="w-full h-10">
+            <Button type="submit" className="w-full h-10">
               Log in
             </Button>
           </div>
+          {error && <p className="text-red-500 text-xs">{error}</p>}
           <p className="text-xs text-gray-500">
-            If you need an account, please ask us to make you one.
+            {error
+              ? "If you have trouble logging in, please contact us."
+              : "If you need an account, please ask us to make you one."}
           </p>
         </form>
       </Form>
