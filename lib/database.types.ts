@@ -9,52 +9,26 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      clients: {
-        Row: {
-          email: string
-          id: string
-          name: string
-        }
-        Insert: {
-          email: string
-          id?: string
-          name: string
-        }
-        Update: {
-          email?: string
-          id?: string
-          name?: string
-        }
-        Relationships: []
-      }
       events: {
         Row: {
-          client_id: string | null
           date: string
           id: string
           name: string
+          owner: string | null
         }
         Insert: {
-          client_id?: string | null
           date: string
           id?: string
           name: string
+          owner?: string | null
         }
         Update: {
-          client_id?: string | null
           date?: string
           id?: string
           name?: string
+          owner?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "events_client_id_fkey"
-            columns: ["client_id"]
-            isOneToOne: false
-            referencedRelation: "clients"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       guests: {
         Row: {
@@ -98,6 +72,9 @@ export type Database = {
         Row: {
           event_id: string | null
           id: string
+          limit_free: number
+          limit_half: number | null
+          limit_skip: number | null
           organisation: string | null
           permissions: Json | null
           url_code: string
@@ -105,6 +82,9 @@ export type Database = {
         Insert: {
           event_id?: string | null
           id?: string
+          limit_free?: number
+          limit_half?: number | null
+          limit_skip?: number | null
           organisation?: string | null
           permissions?: Json | null
           url_code: string
@@ -112,6 +92,9 @@ export type Database = {
         Update: {
           event_id?: string | null
           id?: string
+          limit_free?: number
+          limit_half?: number | null
+          limit_skip?: number | null
           organisation?: string | null
           permissions?: Json | null
           url_code?: string
@@ -126,9 +109,61 @@ export type Database = {
           },
         ]
       }
+      user_event_permissions: {
+        Row: {
+          event_id: string
+          user_id: string
+        }
+        Insert: {
+          event_id: string
+          user_id: string
+        }
+        Update: {
+          event_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_events_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_events_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
-      [_ in never]: never
+      links_with_event_details: {
+        Row: {
+          event_date: string | null
+          event_id: string | null
+          event_name: string | null
+          id: string | null
+          limit_free: number | null
+          limit_half: number | null
+          limit_skip: number | null
+          organisation: string | null
+          permissions: Json | null
+          url_code: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "links_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
       [_ in never]: never
