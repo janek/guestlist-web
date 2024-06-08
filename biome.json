@@ -17,5 +17,10 @@
       "semicolons": "always",
       "trailingCommas": "all"
     }
+  },
+  "json": {
+    "parser": {
+      "allowComments": true
+    }
   }
 }
