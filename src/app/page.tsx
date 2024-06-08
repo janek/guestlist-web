@@ -1,12 +1,12 @@
-import GuestlistTable from "@/components/GuestlistTable";
 import { AddGuestDialogButton } from "@/components/AddGuestDialogButton";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import LinksTable from "@/components/LinksTable";
 import { AddLinkDialogButton } from "@/components/AddLinkDialogButton";
 import { DownloadCsvButton } from "@/components/DownloadCsvButton";
+import GuestlistTable from "@/components/GuestlistTable";
+import LinksTable from "@/components/LinksTable";
+import { LogoutButton } from "@/components/LogoutButton";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
-import { LogoutButton } from "@/components/LogoutButton";
 
 export default async function Page() {
   const supabase = createClient();

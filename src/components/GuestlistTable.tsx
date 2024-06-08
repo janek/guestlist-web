@@ -1,7 +1,5 @@
 "use client";
 
-import { useEffect } from "react";
-import { Tables } from "../../lib/database.types";
 import {
   Table,
   TableBody,
@@ -13,6 +11,8 @@ import {
 } from "@/components/ui/table";
 import { createBrowserClient } from "@supabase/ssr";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import type { Tables } from "../../lib/database.types";
 
 type GuestlistTableProps = {
   guests: Tables<"guests">[];

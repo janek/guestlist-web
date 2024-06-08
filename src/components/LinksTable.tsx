@@ -1,7 +1,5 @@
 "use client";
 
-import { useEffect } from "react";
-import { Tables } from "../../lib/database.types";
 import {
   Table,
   TableBody,
@@ -13,6 +11,8 @@ import {
 } from "@/components/ui/table";
 import { createBrowserClient } from "@supabase/ssr";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import type { Tables } from "../../lib/database.types";
 
 type LinksTableProps = {
   links: Tables<"links">[];
@@ -60,12 +60,22 @@ const LinksTable = ({ links }: LinksTableProps) => {
           // XXX: The table should be customised to enable the whole row being a link
           <TableRow key={link.id}>
             <TableCell>
-              <a className="block" href={link.url_code} target="_blank">
+              <a
+                className="block"
+                href={link.url_code}
+                target="_blank"
+                rel="noreferrer"
+              >
                 {link.url_code}
               </a>
             </TableCell>
             <TableCell>
-              <a className="block" href={link.url_code} target="_blank">
+              <a
+                className="block"
+                href={link.url_code}
+                target="_blank"
+                rel="noreferrer"
+              >
                 {link.organisation}
               </a>
             </TableCell>

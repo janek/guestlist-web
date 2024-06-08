@@ -1,8 +1,8 @@
 "use client";
 
-import React from "react";
-import { Button } from "@/components/ui/button";
 import { logout } from "@/app/login/actions"; // Ensure the path is correct
+import { Button } from "@/components/ui/button";
+import React from "react";
 
 export const LogoutButton = () => {
   const handleLogout = async () => {
