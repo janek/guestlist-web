@@ -12,17 +12,14 @@ import { AddGuestForm } from "./AddGuestForm"
 
 import { useState } from "react"
 
-type AddGuestDialogButtonProps = {
+type AddGuestDialogProps = {
   organisationName: string
 }
 
-export const AddGuestDialogButton = (props: AddGuestDialogButtonProps) => {
+export const AddGuestDialog = (props: AddGuestDialogProps) => {
   const [open, setOpen] = useState(false)
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button variant="outline">Add guest</Button>
-      </DialogTrigger>
       <DialogContent className="max-w-xs">
         <DialogHeader>
           <DialogTitle className="mb-4">Add guest</DialogTitle>
