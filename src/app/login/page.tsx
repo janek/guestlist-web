@@ -1,9 +1,8 @@
 "use client";
 
-import { login, signup } from "@/app/login/actions";
+import { login } from "@/app/login/actions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   Form,
   FormField,
@@ -34,11 +33,15 @@ export default function LoginPage() {
   });
 
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleSubmit = async (data: z.infer<typeof formSchema>) => {
+    setLoading(true);
+    setError(null);
     const response = await login(data);
     if (response?.message) {
       setError(response.message);
+      setLoading(false);
     }
   };
 
@@ -76,8 +79,8 @@ export default function LoginPage() {
             )}
           />
           <div className="flex items-center justify-between pt-2">
-            <Button type="submit" className="w-full h-10">
-              Log in
+            <Button type="submit" className="w-full h-10" disabled={loading}>
+              {loading ? "Logging in..." : "Log in"}
             </Button>
           </div>
           <p
