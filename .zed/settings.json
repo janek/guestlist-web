@@ -4,5 +4,10 @@
     "source.fixAll": true,
     "source.organizeImports.biome": true
   },
-  "formatter": "language_server"
+  "formatter": {
+    "external": {
+      "command": "./node_modules/.bin/biome",
+      "arguments": ["format", "--write", "--stdin-file-path={buffer_path}"]
+    }
+  }
 }
