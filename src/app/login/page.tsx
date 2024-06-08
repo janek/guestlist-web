@@ -87,7 +87,7 @@ export default function LoginPage() {
             className={`text-xs flex-shrink-0 ${error ? "text-red-500" : "text-gray-500"} h-3`}
           >
             {error
-              ? error + ". If you need help, reach out."
+              ? `${error}. If you need help, reach out.`
               : "If you need an account, please contact us."}
           </p>
         </form>

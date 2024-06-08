@@ -10,11 +10,12 @@ export const LogoutButton = () => {
   };
 
   return (
-    <a
+    <button
       onClick={handleLogout}
       className="underline cursor-pointer not-italic text-gray-500 hover:text-gray-900"
+      type="button"
     >
       Log out
-    </a>
+    </button>
   );
 };
