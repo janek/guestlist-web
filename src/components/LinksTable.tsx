@@ -48,8 +48,8 @@ const LinksTable = ({ links }: LinksTableProps) => {
       {/* <TableCaption>Guestlist for event {event.name} </TableCaption> */}
       <TableHeader>
         <TableRow>
-          <TableHead>Link</TableHead>
           <TableHead>Organisation</TableHead>
+          <TableHead>Limits</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -63,7 +63,7 @@ const LinksTable = ({ links }: LinksTableProps) => {
                 target="_blank"
                 rel="noreferrer"
               >
-                {link.url_code}
+                {link.organisation}
               </a>
             </TableCell>
             <TableCell>
@@ -73,7 +73,7 @@ const LinksTable = ({ links }: LinksTableProps) => {
                 target="_blank"
                 rel="noreferrer"
               >
-                {link.organisation}
+                {link.limit_free}-{link.limit_half}-{link.limit_skip}
               </a>
             </TableCell>
           </TableRow>
