@@ -21,7 +21,7 @@ const formSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
   password: z
     .string()
-    .min(6, { message: "Password must be at least 6 characters" }),
+    .min(1, { message: "Password must be at least 1 character" }),
 });
 
 export default function LoginPage() {
@@ -47,7 +47,7 @@ export default function LoginPage() {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(handleSubmit)}
-          className="bg-white p-6 rounded md:shadow-md w-full max-w-sm space-y-4 sm:w-full "
+          className="bg-white p-6 rounded md:shadow-md w-full max-w-sm space-y-4 sm:w-full flex flex-col"
         >
           <FormField
             control={form.control}
@@ -80,10 +80,11 @@ export default function LoginPage() {
               Log in
             </Button>
           </div>
-          {error && <p className="text-red-500 text-xs">{error}</p>}
-          <p className="text-xs text-gray-500">
+          <p
+            className={`text-xs flex-shrink-0 ${error ? "text-red-500" : "text-gray-500"} h-3`}
+          >
             {error
-              ? "If you have trouble logging in, please contact us."
+              ? error + ". If you need help, reach out."
               : "If you need an account, please ask us to make you one."}
           </p>
         </form>
