@@ -12,20 +12,21 @@ import { AddGuestForm } from "./AddGuestForm"
 
 import { useState } from "react"
 
-type AddGuestDialogProps = {
+type GuestDetailsDialogProps = {
   organisationName: string
+  open: boolean
+  onOpenChange: (open: boolean) => void
 }
 
-export const AddGuestDialog = (props: AddGuestDialogProps) => {
-  const [open, setOpen] = useState(false)
+export const GuestDetailsDialog = (props: GuestDetailsDialogProps) => {
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={props.open} onOpenChange={props.onOpenChange}>
       <DialogContent className="max-w-xs">
         <DialogHeader>
           <DialogTitle className="mb-4">Add guest</DialogTitle>
           {/* <DialogDescription>ABC</DialogDescription> */}
           <AddGuestForm
-            onSubmitFromParent={() => setOpen(false)}
+            onSubmitFromParent={() => console.log("submit")}
             organisationName={props.organisationName}
           />
         </DialogHeader>

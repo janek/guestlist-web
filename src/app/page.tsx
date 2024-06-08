@@ -1,4 +1,4 @@
-import { AddGuestDialog } from "@/components/AddGuestDialog"
+import { GuestDetailsDialog } from "@/components/GuestDetailsDialog"
 import { AddLinkDialogButton } from "@/components/AddLinkDialogButton"
 import { DownloadCsvButton } from "@/components/DownloadCsvButton"
 import GuestlistTable from "@/components/GuestlistTable"
@@ -30,7 +30,7 @@ export default async function Page() {
             <GuestlistTable guests={guests || []} shouldShowOrganization />
           </ScrollArea>
           <div className="flex hflex space-x-2">
-            <AddGuestDialog organisationName="Turbulence" />
+            <GuestDetailsDialog organisationName="Turbulence" />
             <DownloadCsvButton guests={guests || []} />
           </div>
         </div>

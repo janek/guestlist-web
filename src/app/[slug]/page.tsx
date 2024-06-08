@@ -1,4 +1,4 @@
-import { AddGuestDialog } from "@/components/AddGuestDialog"
+import { GuestDetailsDialog } from "@/components/GuestDetailsDialog"
 import GuestlistTable from "@/components/GuestlistTable"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { createClient } from "@/utils/supabase/server"
@@ -37,7 +37,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
       <ScrollArea className="h-[500px] w-[350px] rounded-md border p-4 mb-4">
         <GuestlistTable guests={guests || []} shouldShowOrganization={false} />
       </ScrollArea>
-      <AddGuestDialog organisationName={organisationName} />
+      <GuestDetailsDialog organisationName={organisationName} />
     </div>
   )
 }

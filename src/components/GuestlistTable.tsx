@@ -1,9 +1,15 @@
 "use client"
 
 import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import {
   Table,
   TableBody,
-  // TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -11,8 +17,9 @@ import {
 } from "@/components/ui/table"
 import { createClient } from "@/utils/supabase/client"
 import { useRouter } from "next/navigation"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import type { Tables } from "../../lib/database.types"
+import { GuestDetailsDialog } from "./GuestDetailsDialog"
 
 type GuestlistTableProps = {
   guests: Tables<"guests">[]
@@ -25,6 +32,10 @@ const GuestlistTable = ({
 }: GuestlistTableProps) => {
   const supabase = createClient()
   const router = useRouter()
+  const [selectedGuest, setSelectedGuest] = useState<Tables<"guests"> | null>(
+    null,
+  )
+  const [dialogOpen, setDialogOpen] = useState(false)
 
   useEffect(() => {
     const channel = supabase
@@ -47,34 +58,47 @@ const GuestlistTable = ({
       supabase.removeChannel(channel)
     }
   }, [supabase, router])
+
+  const handleRowClick = (guest: Tables<"guests">) => {
+    setSelectedGuest(guest)
+    setDialogOpen(true)
+  }
+
   return (
-    <Table>
-      {/* <TableCaption>Guestlist for event {event.name} </TableCaption> */}
-      <TableHeader>
-        <TableRow>
-          <TableHead>Name</TableHead>
-          <TableHead>Type</TableHead>
-          {shouldShowOrganization && <TableHead>Organization</TableHead>}
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {guests.map((guest) => (
-          <TableRow
-            key={guest.id}
-            style={{
-              textDecoration: guest.used ? "line-through" : "none",
-              color: guest.used ? "gray" : "black",
-            }}
-          >
-            <TableCell>{guest.name}</TableCell>
-            <TableCell>{guest.type}</TableCell>
-            {shouldShowOrganization && (
-              <TableCell>{guest.organisation}</TableCell>
-            )}
+    <>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Name</TableHead>
+            <TableHead>Type</TableHead>
+            {shouldShowOrganization && <TableHead>Organization</TableHead>}
           </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+        </TableHeader>
+        <TableBody>
+          {guests.map((guest) => (
+            <TableRow
+              key={guest.id}
+              style={{
+                textDecoration: guest.used ? "line-through" : "none",
+                color: guest.used ? "gray" : "black",
+              }}
+              onClick={() => handleRowClick(guest)}
+            >
+              <TableCell>{guest.name}</TableCell>
+              <TableCell>{guest.type}</TableCell>
+              {shouldShowOrganization && (
+                <TableCell>{guest.organisation}</TableCell>
+              )}
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+      <GuestDetailsDialog
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+        organisationName="A"
+      />
+    </>
   )
 }
 
