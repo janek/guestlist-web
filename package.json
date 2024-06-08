@@ -6,7 +6,6 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    // Note https://github.com/vercel/next.js/discussions/59347
     "lint": "bunx @biomejs/biome format --write src/*",
     "db-types": "supabase  gen types typescript --project-id $SUPABASE_PROJECT_ID > lib/database.types.ts"
   },
