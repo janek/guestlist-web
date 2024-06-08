@@ -7,7 +7,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
   const supabase = createClient()
 
   const { data: links } = await supabase
-    .from("links")
+    .from("links_with_event_details")
     .select()
     .eq("url_code", params.slug)
 
