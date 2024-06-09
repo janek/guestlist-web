@@ -34,7 +34,7 @@ export const GuestDetailsDialog = ({
   return (
     <Dialog open={open ?? undefined} onOpenChange={onOpenChange ?? undefined}>
       {isClient && !addGuestButtonHidden && (
-        <DialogTrigger>
+        <DialogTrigger asChild>
           <Button>Add guest</Button>
         </DialogTrigger>
       )}
