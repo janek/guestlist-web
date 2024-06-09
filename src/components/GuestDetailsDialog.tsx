@@ -13,9 +13,10 @@ import { GuestDetailsForm } from "./GuestDetailsForm"
 
 // Define prop types with optionality
 type GuestDetailsDialogProps = {
-  guest?: Tables["guests"] | null
+  guest?: Tables<"guests"> | null
   open?: boolean | null
   onOpenChange?: ((open: boolean) => void) | null
+  addGuestButtonHidden?: boolean
 }
 
 // Set default props using destructuring with default values
@@ -23,10 +24,16 @@ export const GuestDetailsDialog = ({
   guest = null,
   open = null,
   onOpenChange = null,
+  addGuestButtonHidden = false,
 }: Partial<GuestDetailsDialogProps> = {}) => {
+  const [isClient, setIsClient] = useState(false)
+
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
   return (
     <Dialog open={open ?? undefined} onOpenChange={onOpenChange ?? undefined}>
-      {guest === null && (
+      {isClient && !addGuestButtonHidden && (
         <DialogTrigger>
           <Button>Add guest</Button>
         </DialogTrigger>

@@ -96,7 +96,8 @@ const GuestlistTable = ({
       <GuestDetailsDialog
         open={dialogOpen}
         onOpenChange={setDialogOpen}
-        guest={selectedGuest}
+        guest={selectedGuest} // null at first, set to the selected guest when a row is clicked
+        addGuestButtonHidden={true}
       />
     </>
   )
