@@ -1,8 +1,6 @@
 "use client"
 import { Button } from "@/components/ui/button"
 
-type Guest = Database["public"]["Tables"]["guests"]["Row"]
-
 export function DownloadCsvButton({ guests }: { guests: Guest[] }) {
   const downloadGuests = async (guests: Guest[]) => {
     const csv = guests

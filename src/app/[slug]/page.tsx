@@ -21,9 +21,11 @@ export default async function Page({ params }: { params: { slug: string } }) {
     )
   }
 
+  const linkInfo = links[0] as Link
+
   // TODO: this should be a joined table, probably, for performance reasons - see egghead course
   // https://egghead.io/courses/build-a-twitter-clone-with-the-next-js-app-router-and-supabase-19bebadb
-  const organisationName = links[0].organisation ?? "" // XXX: Use a joined view instead
+  const organisationName = linkInfo.organisation // XXX: Use a joined view instead
   const { data: guests } = await supabase
     .from("guests")
     .select()
