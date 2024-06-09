@@ -17,7 +17,7 @@ type GuestDetailsDialogProps = {
   open?: boolean | null
   onOpenChange?: ((open: boolean) => void) | null
   addGuestButtonHidden?: boolean
-  organisation?: string
+  organisation?: string | null
 }
 
 // Set default props using destructuring with default values
