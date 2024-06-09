@@ -32,13 +32,11 @@ const formSchema = z.object({
 })
 
 type GuestDetailsFormProps = {
-  onSubmitFromParent: () => void
   guest: Tables<"guests"> | null
   organisation: string
 }
 
 export function GuestDetailsForm({
-  onSubmitFromParent,
   guest,
   organisation,
 }: GuestDetailsFormProps) {

@@ -45,11 +45,7 @@ export const GuestDetailsDialog = ({
           <DialogTitle className="mb-4">
             {guest ? "Edit guest" : "Add guest"}
           </DialogTitle>
-          <GuestDetailsForm
-            onSubmitFromParent={() => console.log("submit")}
-            guest={guest}
-            organisation={organisation}
-          />
+          <GuestDetailsForm guest={guest} organisation={organisation} />
         </DialogHeader>
       </DialogContent>
     </Dialog>
