@@ -50,10 +50,18 @@ export default async function Page({ params }: { params: { slug: string } }) {
       </p>
       {/* {guests && guests.length > 0 && ( */}
       <ScrollArea className="h-[350px] w-[350px] rounded-md border p-4 mb-4">
-        <GuestlistTable guests={guests || []} shouldShowOrganization={false} />
+        <GuestlistTable
+          guests={guests || []}
+          link={link}
+          shouldShowOrganization={false}
+        />
       </ScrollArea>
       {/* )} */}
-      <GuestDetailsDialog organisation={organisationName} />
+      <GuestDetailsDialog
+        organisation={organisationName}
+        link={link}
+        currentGuestlist={guests}
+      />
     </div>
   )
 }

@@ -13,26 +13,68 @@ import { GuestDetailsForm } from "./GuestDetailsForm"
 
 // Define prop types with optionality
 type GuestDetailsDialogProps = {
-  guest?: Guest | null
+  editingGuest?: Guest | null
   open?: boolean | null
   onOpenChange?: ((open: boolean) => void) | null
   addGuestButtonHidden?: boolean
-  organisation?: string
+  organisation?: string // Deprecated, use info from link
+  link: Link
+  currentGuestlist: Guest[]
 }
 
 // Set default props using destructuring with default values
 export const GuestDetailsDialog = ({
-  guest = null,
+  editingGuest: guest = null,
   open = null,
   onOpenChange = null,
   addGuestButtonHidden = false,
   organisation = "no_org_error",
+  link,
+  currentGuestlist = [],
 }: Partial<GuestDetailsDialogProps> = {}) => {
   const [isClient, setIsClient] = useState(false)
 
   useEffect(() => {
     setIsClient(true)
   }, [])
+
+  const availableListTypes = (
+    link: Link,
+    guests: Guest[],
+  ): AvailableListTypes => {
+    const currentGuests = guests.reduce(
+      (acc, guest) => {
+        if (guest.type === "free") {
+          acc.free += 1
+        } else if (guest.type === "half") {
+          acc.half += 1
+        } else if (guest.type === "skip") {
+          acc.skip += 1
+        }
+        return acc
+      },
+      { free: 0, half: 0, skip: 0 },
+    )
+
+    const availableListTypes: Set<ListType> = new Set()
+
+    if (currentGuests.free < link.limit_free) {
+      availableListTypes.add("free")
+    }
+    if (currentGuests.half < link.limit_half) {
+      availableListTypes.add("half")
+    }
+    if (currentGuests.skip < link.limit_skip) {
+      availableListTypes.add("skip")
+    }
+
+    return availableListTypes
+  }
+
+  const types = availableListTypes(link!, currentGuestlist)
+
+  console.log("Types: ", types)
+
   return (
     <Dialog open={open ?? undefined} onOpenChange={onOpenChange ?? undefined}>
       {isClient && !addGuestButtonHidden && (
@@ -45,7 +87,11 @@ export const GuestDetailsDialog = ({
           <DialogTitle className="mb-4">
             {guest ? "Edit guest" : "Add guest"}
           </DialogTitle>
-          <GuestDetailsForm guest={guest} organisation={organisation} />
+          <GuestDetailsForm
+            guest={guest}
+            organisation={organisation}
+            availableListTypes={types ?? new Set([])}
+          />
         </DialogHeader>
       </DialogContent>
     </Dialog>

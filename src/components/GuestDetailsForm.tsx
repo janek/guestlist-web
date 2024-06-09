@@ -34,6 +34,7 @@ const formSchema = z.object({
 type GuestDetailsFormProps = {
   guest: Guest | null
   organisation: string
+  availableListTypes: Set<ListType>
 }
 
 type GuestlistType = "free" | "half" | "skip"
@@ -41,7 +42,11 @@ type GuestlistType = "free" | "half" | "skip"
 export function GuestDetailsForm({
   guest,
   organisation,
+  availableListTypes,
 }: GuestDetailsFormProps) {
+  console.log(
+    `In GDF, availableListTypes: ${JSON.stringify(Array.from(availableListTypes))}`,
+  )
   const supabase = createClient()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -53,8 +58,6 @@ export function GuestDetailsForm({
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const { name, type } = values
-
-    // Check if values have changed
     if (guest && guest.name === name && guest.type === type) {
       return
     }
@@ -117,27 +120,27 @@ export function GuestDetailsForm({
               <FormControl>
                 <RadioGroup
                   onValueChange={field.onChange}
-                  value={field.value}
+                  value={
+                    availableListTypes.has(field.value as ListType)
+                      ? field.value
+                      : Array.from(availableListTypes)[0]
+                  }
                   className="flex flex-col space-y-1"
                 >
-                  <FormItem className="flex items-center space-x-3 space-y-0">
-                    <FormControl>
-                      <RadioGroupItem value="free" />
-                    </FormControl>
-                    <FormLabel className="font-normal">Free</FormLabel>
-                  </FormItem>
-                  <FormItem className="flex items-center space-x-3 space-y-0">
-                    <FormControl>
-                      <RadioGroupItem value="half" />
-                    </FormControl>
-                    <FormLabel className="font-normal">Half</FormLabel>
-                  </FormItem>
-                  <FormItem className="flex items-center space-x-3 space-y-0">
-                    <FormControl>
-                      <RadioGroupItem value="skip" />
-                    </FormControl>
-                    <FormLabel className="font-normal">Skip</FormLabel>
-                  </FormItem>
+                  {["free", "half", "skip"].map((type) => (
+                    <FormItem
+                      key={type}
+                      className="flex items-center space-x-3 space-y-0"
+                    >
+                      <FormControl>
+                        <RadioGroupItem
+                          value={type}
+                          disabled={!availableListTypes.has(type as ListType)}
+                        />
+                      </FormControl>
+                      <FormLabel className="font-normal">{type}</FormLabel>
+                    </FormItem>
+                  ))}
                 </RadioGroup>
               </FormControl>
               <FormMessage />

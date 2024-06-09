@@ -4,4 +4,6 @@ declare global {
   type Database = DB
   type Link = Database["public"]["Views"]["links_with_event_details"]["Row"]
   type Guest = Database["public"]["Tables"]["guests"]["Row"]
+  type ListType = "free" | "half" | "skip"
+  type AvailableListTypes = Set<ListType>
 }

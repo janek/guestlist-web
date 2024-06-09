@@ -22,11 +22,13 @@ import type { Tables } from "../../lib/database.types"
 import { GuestDetailsDialog } from "./GuestDetailsDialog"
 
 type GuestlistTableProps = {
+  link: Link
   guests: Guest[]
   shouldShowOrganization: boolean
 }
 
 const GuestlistTable = ({
+  link,
   guests,
   shouldShowOrganization,
 }: GuestlistTableProps) => {
@@ -94,8 +96,10 @@ const GuestlistTable = ({
       <GuestDetailsDialog
         open={dialogOpen}
         onOpenChange={setDialogOpen}
-        guest={selectedGuest} // null at first, set to the selected guest when a row is clicked
+        editingGuest={selectedGuest} // null at first, set to the selected guest when a row is clicked
         addGuestButtonHidden={true}
+        link={link}
+        currentGuestlist={guests}
       />
     </>
   )
