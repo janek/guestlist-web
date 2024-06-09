@@ -52,7 +52,7 @@ export function GuestDetailsForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: guest?.name || "",
-      type: (guest?.type as GuestlistType) || "free",
+      type: (guest?.type as GuestlistType) || "",
     },
   })
 
@@ -120,11 +120,7 @@ export function GuestDetailsForm({
               <FormControl>
                 <RadioGroup
                   onValueChange={field.onChange}
-                  value={
-                    availableListTypes.has(field.value as ListType)
-                      ? field.value
-                      : Array.from(availableListTypes)[0]
-                  }
+                  value={field.value}
                   className="flex flex-col space-y-1"
                 >
                   {["free", "half", "skip"].map((type) => (
