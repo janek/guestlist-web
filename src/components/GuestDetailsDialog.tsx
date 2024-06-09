@@ -35,7 +35,7 @@ export const GuestDetailsDialog = ({
     <Dialog open={open ?? undefined} onOpenChange={onOpenChange ?? undefined}>
       {isClient && !addGuestButtonHidden && (
         <DialogTrigger asChild>
-          <Button>Add guest</Button>
+          <Button variant="outline">Add guest</Button>
         </DialogTrigger>
       )}
       <DialogContent className="max-w-xs">
