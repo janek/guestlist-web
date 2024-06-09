@@ -25,10 +25,11 @@ export default async function Page({ params }: { params: { slug: string } }) {
 
   // TODO: this should be a joined table, probably, for performance reasons - see egghead course
   // https://egghead.io/courses/build-a-twitter-clone-with-the-next-js-app-router-and-supabase-19bebadb
+  const organisationName = link.organisation as string // XXX: Use a joined view instead
   const { data: guests } = await supabase
     .from("guests")
     .select()
-    .eq("organisation", link.slug)
+    .eq("organisation", organisationName)
 
   return (
     <div className="flex flex-col items-center justify-center h-screen">
@@ -41,7 +42,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
         </h5>
       )}
       <p className="scroll-m-20 text-md mb-4 font-normal tracking-tight text-left">
-        Guestlist for {link.organisation}
+        Guestlist for {organisationName}
       </p>
       <p className="scroll-m-20 text-md mb-4 font-normal tracking-tight text-left">
         Free: {link.limit_free ?? "N/A"}, Half: {link.limit_half ?? "N/A"},
@@ -52,7 +53,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
         <GuestlistTable guests={guests || []} shouldShowOrganization={false} />
       </ScrollArea>
       {/* )} */}
-      <GuestDetailsDialog organisation={link.organisation} />
+      <GuestDetailsDialog organisation={organisationName} />
     </div>
   )
 }

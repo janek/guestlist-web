@@ -33,7 +33,7 @@ const formSchema = z.object({
 
 type GuestDetailsFormProps = {
   guest: Guest | null
-  organisation: string | null
+  organisation: string
 }
 
 type GuestlistType = "free" | "half" | "skip"
