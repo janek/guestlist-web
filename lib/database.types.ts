@@ -75,7 +75,7 @@ export type Database = {
           limit_free: number
           limit_half: number | null
           limit_skip: number | null
-          organisation: string | null
+          organisation: string
           permissions: Json | null
           url_code: string
         }
@@ -85,7 +85,7 @@ export type Database = {
           limit_free?: number
           limit_half?: number | null
           limit_skip?: number | null
-          organisation?: string | null
+          organisation: string
           permissions?: Json | null
           url_code: string
         }
@@ -95,7 +95,7 @@ export type Database = {
           limit_free?: number
           limit_half?: number | null
           limit_skip?: number | null
-          organisation?: string | null
+          organisation?: string
           permissions?: Json | null
           url_code?: string
         }
