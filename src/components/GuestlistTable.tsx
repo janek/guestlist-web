@@ -96,7 +96,7 @@ const GuestlistTable = ({
       <GuestDetailsDialog
         open={dialogOpen}
         onOpenChange={setDialogOpen}
-        organisationName="A"
+        guest={selectedGuest}
       />
     </>
   )

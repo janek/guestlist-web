@@ -19,6 +19,7 @@ import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { toast } from "@/components/ui/use-toast"
 import { createClient } from "@/utils/supabase/client"
+import type { Tables } from "../../lib/database.types"
 
 const formSchema = z.object({
   name: z.string().min(3, {
@@ -29,18 +30,16 @@ const formSchema = z.object({
   }),
 })
 
-// props are a handler to run w when the form is submitted
-type AddGuestFormProps = {
+type GuestDetailsFormProps = {
   onSubmitFromParent: () => void
-  organisationName: string
+  guest: Tables<"guests"> | null
 }
 
-export function AddGuestForm({
+export function GuestDetailsForm({
   onSubmitFromParent,
-  organisationName,
-}: AddGuestFormProps) {
+  guest,
+}: GuestDetailsFormProps) {
   const supabase = createClient()
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -54,12 +53,13 @@ export function AddGuestForm({
 
     const { data, error } = await supabase
       .from("guests")
-      .insert([{ name: name, organisation: organisationName, type: type }])
+      .insert([{ name: name, organisation: guest.organisation, type: type }])
       .select()
     console.log(data, error)
 
     onSubmitFromParent()
   }
+  console.log("hi", guest)
   return (
     <Form {...form}>
       <form
@@ -71,15 +71,10 @@ export function AddGuestForm({
           name="name"
           render={({ field }) => (
             <FormItem className="text-left">
-              {" "}
-              {/* Align title to the left */}
               <FormLabel>Name</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <Input {...field} value={field.value || guest?.name || ""} />
               </FormControl>
-              {/* <FormDescription>
-                This is the name as it will appear on the guestlist.
-              </FormDescription> */}
               <FormMessage />
             </FormItem>
           )}
@@ -93,7 +88,7 @@ export function AddGuestForm({
               <FormControl>
                 <RadioGroup
                   onValueChange={field.onChange}
-                  defaultValue={field.value}
+                  defaultValue={guest?.type || field.value}
                   className="flex flex-col space-y-1"
                 >
                   <FormItem className="flex items-center space-x-3 space-y-0">
@@ -116,9 +111,6 @@ export function AddGuestForm({
                   </FormItem>
                 </RadioGroup>
               </FormControl>
-              {/* <FormDescription>
-                "Free" guests pay nothing for entry, "Half" pay half, "Skip" pay the full price but can skip the line.
-              </FormDescription> */}
               <FormMessage />
             </FormItem>
           )}

@@ -8,12 +8,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { AddGuestForm } from "./AddGuestForm"
+import type { Tables } from "../../lib/database.types"
+import { GuestDetailsForm } from "./GuestDetailsForm"
 
-import { useState } from "react"
+import type { useState } from "react"
 
 type GuestDetailsDialogProps = {
-  organisationName: string
+  guest: Tables<"guests"> | null
   open: boolean
   onOpenChange: (open: boolean) => void
 }
@@ -23,11 +24,11 @@ export const GuestDetailsDialog = (props: GuestDetailsDialogProps) => {
     <Dialog open={props.open} onOpenChange={props.onOpenChange}>
       <DialogContent className="max-w-xs">
         <DialogHeader>
-          <DialogTitle className="mb-4">Add guest</DialogTitle>
+          {/* <DialogTitle className="mb-4">Add guest</DialogTitle> */}
           {/* <DialogDescription>ABC</DialogDescription> */}
-          <AddGuestForm
+          <GuestDetailsForm
             onSubmitFromParent={() => console.log("submit")}
-            organisationName={props.organisationName}
+            guest={props.guest}
           />
         </DialogHeader>
       </DialogContent>
