@@ -3,32 +3,42 @@ import { Button } from "@/components/ui/button"
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import { useEffect, useState } from "react"
 import type { Tables } from "../../lib/database.types"
 import { GuestDetailsForm } from "./GuestDetailsForm"
 
-import type { useState } from "react"
-
+// Define prop types with optionality
 type GuestDetailsDialogProps = {
-  guest: Tables<"guests"> | null
-  open: boolean
-  onOpenChange: (open: boolean) => void
+  guest?: Tables["guests"] | null
+  open?: boolean | null
+  onOpenChange?: ((open: boolean) => void) | null
 }
 
-export const GuestDetailsDialog = (props: GuestDetailsDialogProps) => {
+// Set default props using destructuring with default values
+export const GuestDetailsDialog = ({
+  guest = null,
+  open = null,
+  onOpenChange = null,
+}: Partial<GuestDetailsDialogProps> = {}) => {
   return (
-    <Dialog open={props.open} onOpenChange={props.onOpenChange}>
+    <Dialog open={open ?? undefined} onOpenChange={onOpenChange ?? undefined}>
+      {guest === null && (
+        <DialogTrigger>
+          <Button>Add guest</Button>
+        </DialogTrigger>
+      )}
       <DialogContent className="max-w-xs">
         <DialogHeader>
-          {/* <DialogTitle className="mb-4">Add guest</DialogTitle> */}
-          {/* <DialogDescription>ABC</DialogDescription> */}
+          <DialogTitle className="mb-4">
+            {guest ? "Edit guest" : "Add guest"}
+          </DialogTitle>
           <GuestDetailsForm
             onSubmitFromParent={() => console.log("submit")}
-            guest={props.guest}
+            guest={guest}
           />
         </DialogHeader>
       </DialogContent>

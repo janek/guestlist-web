@@ -37,7 +37,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
       <ScrollArea className="h-[500px] w-[350px] rounded-md border p-4 mb-4">
         <GuestlistTable guests={guests || []} shouldShowOrganization={false} />
       </ScrollArea>
-      {/* <GuestDetailsDialog guest={guest} /> */}
+      <GuestDetailsDialog />
     </div>
   )
 }
