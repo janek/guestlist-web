@@ -71,19 +71,23 @@ export const GuestDetailsDialog = ({
     return availableListTypes
   }
 
-  const types = link
+  const listTypes = link
     ? availableListTypes(link, currentGuestlist)
     : new Set<ListType>(["free", "half", "skip"])
 
-  console.log("Types: ", types)
-
   return (
     <Dialog open={open ?? undefined} onOpenChange={onOpenChange ?? undefined}>
-      {isClient && !addGuestButtonHidden && (
-        <DialogTrigger asChild>
-          <Button variant="outline">Add guest</Button>
-        </DialogTrigger>
-      )}
+      {isClient &&
+        !addGuestButtonHidden &&
+        (listTypes.size > 0 ? (
+          <DialogTrigger asChild>
+            <Button variant="outline">Add guest</Button>
+          </DialogTrigger>
+        ) : (
+          <p className="text-sm italic">
+            Your list is full, click on a name to edit or delete it
+          </p>
+        ))}
       <DialogContent className="max-w-xs">
         <DialogHeader>
           <DialogTitle className="mb-4">
@@ -92,7 +96,7 @@ export const GuestDetailsDialog = ({
           <GuestDetailsForm
             guest={guest}
             organisation={organisation}
-            availableListTypes={types ?? new Set([])}
+            availableListTypes={listTypes ?? new Set([])}
           />
         </DialogHeader>
       </DialogContent>
