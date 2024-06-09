@@ -70,31 +70,31 @@ export type Database = {
       }
       links: {
         Row: {
-          event_id: string | null
+          event_id: string
           id: string
           limit_free: number
-          limit_half: number | null
-          limit_skip: number | null
+          limit_half: number
+          limit_skip: number
           organisation: string
           permissions: Json | null
           slug: string
         }
         Insert: {
-          event_id?: string | null
+          event_id: string
           id?: string
           limit_free?: number
-          limit_half?: number | null
-          limit_skip?: number | null
+          limit_half?: number
+          limit_skip?: number
           organisation: string
           permissions?: Json | null
           slug: string
         }
         Update: {
-          event_id?: string | null
+          event_id?: string
           id?: string
           limit_free?: number
-          limit_half?: number | null
-          limit_skip?: number | null
+          limit_half?: number
+          limit_skip?: number
           organisation?: string
           permissions?: Json | null
           slug?: string
