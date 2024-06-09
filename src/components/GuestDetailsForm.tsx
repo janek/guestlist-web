@@ -23,8 +23,8 @@ import { createClient } from "@/utils/supabase/client"
 import type { Tables } from "../../lib/database.types"
 
 const formSchema = z.object({
-  name: z.string().min(3, {
-    message: "The name must be at least 3 characters.",
+  name: z.string().min(2, {
+    message: "The name must be at least 2 characters.",
   }),
   type: z.enum(["free", "half", "skip"], {
     required_error: "You need to select guestlist type.",
@@ -44,19 +44,23 @@ export function GuestDetailsForm({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      type: "free",
+      name: guest?.name || "",
+      type: guest?.type || "free",
     },
   })
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const { name, type } = values
 
+    // Check if values have changed
+    if (guest && guest.name === name && guest.type === type) {
+      return
+    }
+
     if (guest) {
       const { data, error } = await supabase
         .from("guests")
         .update({
-          id: guest.id,
           name: name,
           type: type,
         })
@@ -83,7 +87,7 @@ export function GuestDetailsForm({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-8  max-w-xs"
+        className="space-y-8 max-w-xs"
       >
         <FormField
           control={form.control}
@@ -92,7 +96,11 @@ export function GuestDetailsForm({
             <FormItem className="text-left">
               <FormLabel>Name</FormLabel>
               <FormControl>
-                <Input {...field} value={field.value || guest?.name || ""} />
+                <Input
+                  {...field}
+                  value={field.value}
+                  onChange={field.onChange}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -107,7 +115,7 @@ export function GuestDetailsForm({
               <FormControl>
                 <RadioGroup
                   onValueChange={field.onChange}
-                  defaultValue={guest?.type || field.value}
+                  value={field.value}
                   className="flex flex-col space-y-1"
                 >
                   <FormItem className="flex items-center space-x-3 space-y-0">
