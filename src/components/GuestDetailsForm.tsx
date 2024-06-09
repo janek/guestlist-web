@@ -33,11 +33,13 @@ const formSchema = z.object({
 type GuestDetailsFormProps = {
   onSubmitFromParent: () => void
   guest: Tables<"guests"> | null
+  organisation: string
 }
 
 export function GuestDetailsForm({
   onSubmitFromParent,
   guest,
+  organisation,
 }: GuestDetailsFormProps) {
   const supabase = createClient()
   const form = useForm<z.infer<typeof formSchema>>({
@@ -53,13 +55,12 @@ export function GuestDetailsForm({
 
     const { data, error } = await supabase
       .from("guests")
-      .insert([{ name: name, organisation: guest.organisation, type: type }])
+      .insert([{ name: name, organisation: organisation, type: type }])
       .select()
     console.log(data, error)
 
     onSubmitFromParent()
   }
-  console.log("hi", guest)
   return (
     <Form {...form}>
       <form

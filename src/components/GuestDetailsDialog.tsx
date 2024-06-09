@@ -17,6 +17,7 @@ type GuestDetailsDialogProps = {
   open?: boolean | null
   onOpenChange?: ((open: boolean) => void) | null
   addGuestButtonHidden?: boolean
+  organisation?: string
 }
 
 // Set default props using destructuring with default values
@@ -25,6 +26,7 @@ export const GuestDetailsDialog = ({
   open = null,
   onOpenChange = null,
   addGuestButtonHidden = false,
+  organisation = "no_org_error",
 }: Partial<GuestDetailsDialogProps> = {}) => {
   const [isClient, setIsClient] = useState(false)
 
@@ -46,6 +48,7 @@ export const GuestDetailsDialog = ({
           <GuestDetailsForm
             onSubmitFromParent={() => console.log("submit")}
             guest={guest}
+            organisation={organisation}
           />
         </DialogHeader>
       </DialogContent>
