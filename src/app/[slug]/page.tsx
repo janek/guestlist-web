@@ -48,14 +48,11 @@ export default async function Page({ params }: { params: { slug: string } }) {
         Free: {link.limit_free ?? "N/A"}, Half: {link.limit_half ?? "N/A"},
         Skip: {link.limit_skip ?? "N/A"}
       </p>
-      {guests && guests.length > 0 && (
-        <ScrollArea className="h-[350px] w-[350px] rounded-md border p-4 mb-4">
-          <GuestlistTable
-            guests={guests || []}
-            shouldShowOrganization={false}
-          />
-        </ScrollArea>
-      )}
+      {/* {guests && guests.length > 0 && ( */}
+      <ScrollArea className="h-[350px] w-[350px] rounded-md border p-4 mb-4">
+        <GuestlistTable guests={guests || []} shouldShowOrganization={false} />
+      </ScrollArea>
+      {/* )} */}
       <GuestDetailsDialog organisation={organisationName} />
     </div>
   )
