@@ -32,7 +32,7 @@ const formSchema = z.object({
 })
 
 type GuestDetailsFormProps = {
-  guest: Tables<"guests"> | null
+  guest: Guest | null
   organisation: string
 }
 

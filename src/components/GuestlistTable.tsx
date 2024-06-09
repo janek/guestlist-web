@@ -22,7 +22,7 @@ import type { Tables } from "../../lib/database.types"
 import { GuestDetailsDialog } from "./GuestDetailsDialog"
 
 type GuestlistTableProps = {
-  guests: Tables<"guests">[]
+  guests: Guest[]
   shouldShowOrganization: boolean
 }
 
@@ -32,9 +32,7 @@ const GuestlistTable = ({
 }: GuestlistTableProps) => {
   const supabase = createClient()
   const router = useRouter()
-  const [selectedGuest, setSelectedGuest] = useState<Tables<"guests"> | null>(
-    null,
-  )
+  const [selectedGuest, setSelectedGuest] = useState<Guest | null>(null)
   const [dialogOpen, setDialogOpen] = useState(false)
 
   useEffect(() => {
@@ -59,7 +57,7 @@ const GuestlistTable = ({
     }
   }, [supabase, router])
 
-  const handleRowClick = (guest: Tables<"guests">) => {
+  const handleRowClick = (guest: Guest) => {
     setSelectedGuest(guest)
     setDialogOpen(true)
   }

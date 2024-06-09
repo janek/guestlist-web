@@ -13,7 +13,7 @@ import { GuestDetailsForm } from "./GuestDetailsForm"
 
 // Define prop types with optionality
 type GuestDetailsDialogProps = {
-  guest?: Tables<"guests"> | null
+  guest?: Guest | null
   open?: boolean | null
   onOpenChange?: ((open: boolean) => void) | null
   addGuestButtonHidden?: boolean
