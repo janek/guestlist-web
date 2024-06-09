@@ -22,7 +22,7 @@ import type { Tables } from "../../lib/database.types"
 import { GuestDetailsDialog } from "./GuestDetailsDialog"
 
 type GuestlistTableProps = {
-  link: Link
+  link?: Link
   guests: Guest[]
   shouldShowOrganization: boolean
 }

@@ -58,20 +58,22 @@ export const GuestDetailsDialog = ({
 
     const availableListTypes: Set<ListType> = new Set()
 
-    if (currentGuests.free < link.limit_free) {
+    if (currentGuests.free < (link.limit_free ?? 0)) {
       availableListTypes.add("free")
     }
-    if (currentGuests.half < link.limit_half) {
+    if (currentGuests.half < (link.limit_half ?? 0)) {
       availableListTypes.add("half")
     }
-    if (currentGuests.skip < link.limit_skip) {
+    if (currentGuests.skip < (link.limit_skip ?? 0)) {
       availableListTypes.add("skip")
     }
 
     return availableListTypes
   }
 
-  const types = availableListTypes(link!, currentGuestlist)
+  const types = link
+    ? availableListTypes(link, currentGuestlist)
+    : new Set<ListType>(["free", "half", "skip"])
 
   console.log("Types: ", types)
 

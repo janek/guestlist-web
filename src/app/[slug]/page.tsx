@@ -10,6 +10,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
     .from("links_with_event_details")
     .select()
     .eq("slug", params.slug)
+    .returns<Link[]>()
 
   if (!links || links.length === 0) {
     return (
@@ -30,6 +31,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
     .from("guests")
     .select()
     .eq("organisation", organisationName)
+    .returns<Guest[]>()
 
   return (
     <div className="flex flex-col items-center justify-center h-screen">
@@ -38,7 +40,14 @@ export default async function Page({ params }: { params: { slug: string } }) {
       </h4>
       {link.event_date && (
         <h5 className="scroll-m-20 text-lg mb-4 font-normal tracking-tight text-left italic">
-          {`${new Date(link.event_date).toLocaleDateString("de-DE")} ${link.event_date.includes("T") ? new Date(link.event_date).toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" }) : ""}, TXL Airport`}
+          {`${new Date(link.event_date).toLocaleDateString("de-DE")} ${
+            link.event_date.includes("T")
+              ? new Date(link.event_date).toLocaleTimeString("de-DE", {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })
+              : ""
+          }, TXL Airport`}
         </h5>
       )}
       <p className="scroll-m-20 text-md mb-4 font-normal tracking-tight text-left">
@@ -60,7 +69,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
       <GuestDetailsDialog
         organisation={organisationName}
         link={link}
-        currentGuestlist={guests}
+        currentGuestlist={guests || []}
       />
     </div>
   )
