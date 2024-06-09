@@ -9,7 +9,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
   const { data: links } = await supabase
     .from("links_with_event_details")
     .select()
-    .eq("url_code", params.slug)
+    .eq("slug", params.slug)
 
   if (!links || links.length === 0) {
     return (

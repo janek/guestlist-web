@@ -77,7 +77,7 @@ export type Database = {
           limit_skip: number | null
           organisation: string
           permissions: Json | null
-          url_code: string
+          slug: string
         }
         Insert: {
           event_id?: string | null
@@ -87,7 +87,7 @@ export type Database = {
           limit_skip?: number | null
           organisation: string
           permissions?: Json | null
-          url_code: string
+          slug: string
         }
         Update: {
           event_id?: string | null
@@ -97,7 +97,7 @@ export type Database = {
           limit_skip?: number | null
           organisation?: string
           permissions?: Json | null
-          url_code?: string
+          slug?: string
         }
         Relationships: [
           {
@@ -152,7 +152,7 @@ export type Database = {
           limit_skip: number | null
           organisation: string | null
           permissions: Json | null
-          url_code: string | null
+          slug: string | null
         }
         Relationships: [
           {

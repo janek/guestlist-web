@@ -59,7 +59,7 @@ const LinksTable = ({ links }: LinksTableProps) => {
             <TableCell>
               <a
                 className="block"
-                href={link.url_code}
+                href={link.slug}
                 target="_blank"
                 rel="noreferrer"
               >
@@ -69,7 +69,7 @@ const LinksTable = ({ links }: LinksTableProps) => {
             <TableCell>
               <a
                 className="block"
-                href={link.url_code}
+                href={link.slug}
                 target="_blank"
                 rel="noreferrer"
               >

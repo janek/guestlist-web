@@ -47,7 +47,7 @@ export function AddLinkForm({ onSubmitFromParent }: AddLinkFormProps) {
 
     const { data, error } = await supabase
       .from("links")
-      .insert([{ url_code: slug, organisation: organisation }])
+      .insert([{ slug: slug, organisation: organisation }])
       .select()
     console.log(data, error)
 
