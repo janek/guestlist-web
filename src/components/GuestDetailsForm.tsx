@@ -36,6 +36,8 @@ type GuestDetailsFormProps = {
   organisation: string
 }
 
+type GuestlistType = "free" | "half" | "skip"
+
 export function GuestDetailsForm({
   guest,
   organisation,
@@ -45,7 +47,7 @@ export function GuestDetailsForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: guest?.name || "",
-      type: guest?.type || "free",
+      type: (guest?.type as GuestlistType) || "free",
     },
   })
 
