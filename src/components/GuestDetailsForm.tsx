@@ -54,11 +54,25 @@ export function GuestDetailsForm({
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const { name, type } = values
 
-    const { data, error } = await supabase
-      .from("guests")
-      .insert([{ name: name, organisation: organisation, type: type }])
-      .select()
-    console.log(data, error)
+    if (guest) {
+      const { data, error } = await supabase
+        .from("guests")
+        .update({
+          id: guest.id,
+          name: name,
+          type: type,
+        })
+        .eq("id", guest.id)
+        .select()
+      console.log(data, error)
+    } else {
+      const { data, error } = await supabase
+        .from("guests")
+        .insert([{ name: name, organisation: organisation, type: type }])
+        .select()
+      console.log(data, error)
+    }
+  }
 
     onSubmitFromParent()
   }
