@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 
 import { Button } from "@/components/ui/button"
+import { DialogClose } from "@/components/ui/dialog"
 import {
   Form,
   FormControl,
@@ -116,7 +117,10 @@ export function GuestDetailsForm({
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+
+        <DialogClose asChild>
+          <Button type="submit">Save</Button>
+        </DialogClose>
       </form>
     </Form>
   )
