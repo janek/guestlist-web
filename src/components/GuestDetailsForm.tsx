@@ -74,8 +74,13 @@ export function GuestDetailsForm({
     }
   }
 
-    onSubmitFromParent()
+  async function handleDelete() {
+    if (guest) {
+      const response = await supabase.from("guests").delete().eq("id", guest.id)
+      console.log(response)
+    }
   }
+
   return (
     <Form {...form}>
       <form
@@ -132,9 +137,16 @@ export function GuestDetailsForm({
           )}
         />
 
-        <DialogClose asChild>
-          <Button type="submit">Save</Button>
-        </DialogClose>
+        <div className="flex justify-center space-x-4">
+          <DialogClose asChild>
+            <Button type="submit">Save</Button>
+          </DialogClose>
+          <DialogClose asChild>
+            <Button variant="outline" onClick={handleDelete}>
+              Delete
+            </Button>
+          </DialogClose>
+        </div>
       </form>
     </Form>
   )
