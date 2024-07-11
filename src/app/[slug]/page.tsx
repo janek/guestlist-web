@@ -58,7 +58,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
         Skip: {link.limit_skip ?? "N/A"}
       </p>
       {/* {guests && guests.length > 0 && ( */}
-      <ScrollArea className="h-[350px] w-[350px] rounded-md border p-4 mb-4">
+      <ScrollArea className="h-[270px] w-[350px] rounded-md border p-4 mb-4">
         <GuestlistTable
           guests={guests || []}
           link={link}
