@@ -96,6 +96,7 @@ export const GuestDetailsDialog = ({
           <GuestDetailsForm
             guest={guest}
             organisation={organisation}
+            eventId={link?.event_id || ""}
             availableListTypes={listTypes ?? new Set([])}
           />
         </DialogHeader>

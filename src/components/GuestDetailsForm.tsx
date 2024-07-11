@@ -35,6 +35,7 @@ type GuestDetailsFormProps = {
   guest: Guest | null
   organisation: string
   availableListTypes: Set<ListType>
+  eventId: string
 }
 
 type GuestlistType = "free" | "half" | "skip"
@@ -42,10 +43,13 @@ type GuestlistType = "free" | "half" | "skip"
 export function GuestDetailsForm({
   guest,
   organisation,
+  eventId,
   availableListTypes,
 }: GuestDetailsFormProps) {
   console.log(
-    `In GDF, availableListTypes: ${JSON.stringify(Array.from(availableListTypes))}`,
+    `In GDF, availableListTypes: ${JSON.stringify(
+      Array.from(availableListTypes),
+    )}`,
   )
   const supabase = createClient()
   const form = useForm<z.infer<typeof formSchema>>({
@@ -75,7 +79,14 @@ export function GuestDetailsForm({
     } else {
       const { data, error } = await supabase
         .from("guests")
-        .insert([{ name: name, organisation: organisation, type: type }])
+        .insert([
+          {
+            name: name,
+            organisation: organisation,
+            type: type,
+            event_id: eventId,
+          },
+        ])
         .select()
       console.log(data, error)
     }
