@@ -26,7 +26,7 @@ export default async function Page() {
 
   console.log("Event ID:", eventId)
 
-  // XXX: below we seem to have 3 requests to the DB, they should probably be one?
+  // XXX: below we seem to have 3 requests to the DB, they should probably be one
   const { data: event, error: eventError } = await supabase
     .from("events")
     .select()
