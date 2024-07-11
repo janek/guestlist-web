@@ -11,13 +11,36 @@ import { redirect } from "next/navigation"
 export default async function Page() {
   const supabase = createClient()
 
-  const { data, error } = await supabase.auth.getUser()
-  if (error || !data?.user) {
+  const { data: user, error } = await supabase.auth.getUser()
+  if (error || !user?.user) {
     redirect("/login")
   }
 
-  const { data: guests } = await supabase.from("guests").select()
-  const { data: links } = await supabase.from("links").select()
+  const { data: allowedEvents } = await supabase
+    .from("user_event_permissions")
+    .select("event_id")
+    .eq("user_id", user.user.id)
+
+  // XXX: hardcoded "Cabin Pressure" for now
+  const eventId = "e9b4afb9-70f7-48a6-95e1-c95c8c093319"
+
+  console.log("Event ID:", eventId)
+
+  // XXX: below we seem to have 3 requests to the DB, they should probably be one?
+  const { data: event, error: eventError } = await supabase
+    .from("events")
+    .select()
+    .eq("id", eventId)
+
+  const { data: guests, error: guestsError } = await supabase
+    .from("guests")
+    .select()
+    .eq("event_id", eventId)
+
+  const { data: links, error: linksError } = await supabase
+    .from("links")
+    .select()
+    .eq("event_id", eventId)
 
   return (
     <div className="flex flex-col md:h-screen md:justify-center">
@@ -50,7 +73,7 @@ export default async function Page() {
         </div>
       </div>
       <div className="m-4 pt-7 pb-2 flex flex-row text-xs italic text-gray-400 md:fixed md:bottom-0 md:right-0 justify-center">
-        <p>Logged in as {data.user.email}.&nbsp;</p>
+        <p>Logged in as {user.user.email}.&nbsp;</p>
         <LogoutButton />
       </div>
     </div>
