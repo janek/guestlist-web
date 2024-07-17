@@ -116,6 +116,7 @@ export function AddLinkForm({ onSubmitFromParent }: AddLinkFormProps) {
                   <Input
                     type="number"
                     {...field}
+                    value={field.value ?? 0}
                     onChange={(e) =>
                       field.onChange(
                         e.target.value ? Number.parseInt(e.target.value) : 0,
@@ -138,6 +139,7 @@ export function AddLinkForm({ onSubmitFromParent }: AddLinkFormProps) {
                   <Input
                     type="number"
                     {...field}
+                    value={field.value ?? 0}
                     onChange={(e) =>
                       field.onChange(
                         e.target.value ? Number.parseInt(e.target.value) : 0,
@@ -160,6 +162,7 @@ export function AddLinkForm({ onSubmitFromParent }: AddLinkFormProps) {
                   <Input
                     type="number"
                     {...field}
+                    value={field.value ?? 0}
                     onChange={(e) =>
                       field.onChange(
                         e.target.value ? Number.parseInt(e.target.value) : 0,
