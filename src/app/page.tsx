@@ -42,6 +42,12 @@ export default async function Page() {
     .select()
     .eq("event_id", eventId)
 
+  const { data: staff, error: staffError } = await supabase
+    .from("staff")
+    .select()
+    // TODO: Get staff only for current account
+    // .eq("belongs_to_account", currentUserId)
+
   return (
     <div className="flex flex-col md:h-screen md:justify-center">
       <div className="flex flex-col items-center md:flex-row md:items-start">
@@ -70,8 +76,18 @@ export default async function Page() {
             Link creation from database only at the moment
           </p> */}
           <div className="flex space-x-4">
-          <AddLinkDialogButton title="Create link" variant="manual" eventId={eventId}/>
-          <AddLinkDialogButton title="Send out staff links" description="Links will be sent via telegram" variant="staff" eventId={eventId}/>
+            <AddLinkDialogButton
+              title="Create link"
+              variant="manual"
+              eventId={eventId}
+            />
+            <AddLinkDialogButton
+              title="Send out staff links"
+              description="Links will be sent via telegram"
+              variant="staff"
+              eventId={eventId}
+              staff={staff as Staff[]}
+            />
           </div>
         </div>
       </div>

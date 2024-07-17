@@ -18,9 +18,10 @@ interface AddLinkDialogButtonProps {
   variant: "manual" | "staff";
   title: string;
   description?: string;
+  staff?: Staff[];
 }
 
-export const AddLinkDialogButton = ({ eventId, variant, title, description }: AddLinkDialogButtonProps) => {
+export const AddLinkDialogButton = ({ eventId, variant, title, description, staff }: AddLinkDialogButtonProps) => {
   const [open, setOpen] = useState(false)
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -39,6 +40,7 @@ export const AddLinkDialogButton = ({ eventId, variant, title, description }: Ad
           ) : (
             <SendStaffLinksForm
               eventId={eventId}
+              staff={staff}
               onSubmitFromParent={() => setOpen(false)}
             />
           )}
