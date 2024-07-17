@@ -66,10 +66,10 @@ export default async function Page() {
           <ScrollArea className="h-[300px] w-[350px] rounded-md border p-4 mb-4">
             <LinksTable links={links || []} />
           </ScrollArea>
-          <p className="text-sm text-gray-400 italic">
+          {/* <p className="text-sm text-gray-400 italic">
             Link creation from database only at the moment
-          </p>
-          {/* <AddLinkDialogButton /> */}
+          </p> */}
+          <AddLinkDialogButton />
         </div>
       </div>
       <div className="m-4 pt-7 pb-2 flex flex-row text-xs italic text-gray-400 md:fixed md:bottom-0 md:right-0 justify-center">
