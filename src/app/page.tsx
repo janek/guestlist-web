@@ -71,7 +71,7 @@ export default async function Page() {
           </p> */}
           <div className="flex space-x-4">
           <AddLinkDialogButton title="Create link" variant="manual" eventId={eventId}/>
-          {/* <AddLinkDialogButton title="Send out staff links" description="Links will be sent via telegram" variant="staff" eventId={eventId}/> */}
+          <AddLinkDialogButton title="Send out staff links" description="Links will be sent via telegram" variant="staff" eventId={eventId}/>
           </div>
         </div>
       </div>
