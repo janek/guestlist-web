@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "bunx @biomejs/biome format --write src/*",
-    "db-types": "supabase  gen types typescript --project-id $SUPABASE_PROJECT_ID > lib/database.types.ts"
+    "db-types": "supabase gen types typescript --project-id sdijqzzygmhswueqdbvf > lib/database.types.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
