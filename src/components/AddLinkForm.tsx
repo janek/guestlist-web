@@ -27,7 +27,6 @@ const formSchema = z.object({
   limit_free: z.number().min(0).nullable(),
   limit_half: z.number().min(0).nullable(),
   limit_skip: z.number().min(0).nullable(),
-  limit_3: z.number().min(0).nullable(),
 })
 
 // props are a handler to run w when the form is submitted
@@ -46,12 +45,11 @@ export function AddLinkForm({ onSubmitFromParent }: AddLinkFormProps) {
       limit_free: null,
       limit_half: null,
       limit_skip: null,
-      limit_3: null,
     },
   })
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const { slug, organisation, limit_free, limit_half, limit_skip, limit_3 } = values
+    const { slug, organisation, limit_free, limit_half, limit_skip } = values
 
     const { data, error } = await supabase
       .from("links")
@@ -60,8 +58,7 @@ export function AddLinkForm({ onSubmitFromParent }: AddLinkFormProps) {
         organisation, 
         limit_free: limit_free || null,
         limit_half: limit_half || null,
-        limit_skip: limit_skip || null,
-        limit_3: limit_3 || null
+        limit_skip: limit_skip || null
       }])
       .select()
     console.log(data, error)
@@ -149,24 +146,6 @@ export function AddLinkForm({ onSubmitFromParent }: AddLinkFormProps) {
             render={({ field }) => (
               <FormItem className="text-left">
                 <FormLabel>Skip Limit</FormLabel>
-                <FormControl>
-                  <Input 
-                    type="number" 
-                    {...field} 
-                    onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value) : null)}
-                    className="w-20"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="limit_3"
-            render={({ field }) => (
-              <FormItem className="text-left">
-                <FormLabel>3 Limit</FormLabel>
                 <FormControl>
                   <Input 
                     type="number" 
