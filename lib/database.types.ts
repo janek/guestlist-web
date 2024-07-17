@@ -70,6 +70,7 @@ export type Database = {
       }
       links: {
         Row: {
+          created_at: string | null
           event_id: string
           id: string
           limit_free: number
@@ -80,6 +81,7 @@ export type Database = {
           slug: string
         }
         Insert: {
+          created_at?: string | null
           event_id: string
           id?: string
           limit_free?: number
@@ -90,6 +92,7 @@ export type Database = {
           slug: string
         }
         Update: {
+          created_at?: string | null
           event_id?: string
           id?: string
           limit_free?: number
@@ -105,6 +108,38 @@ export type Database = {
             columns: ["event_id"]
             isOneToOne: false
             referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      staff: {
+        Row: {
+          belongs_to_account: string | null
+          created_at: string
+          id: number
+          name: string | null
+          telegram_id: number | null
+        }
+        Insert: {
+          belongs_to_account?: string | null
+          created_at?: string
+          id?: number
+          name?: string | null
+          telegram_id?: number | null
+        }
+        Update: {
+          belongs_to_account?: string | null
+          created_at?: string
+          id?: number
+          name?: string | null
+          telegram_id?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "staff_belongs_to_account_fkey"
+            columns: ["belongs_to_account"]
+            isOneToOne: false
+            referencedRelation: "users"
             referencedColumns: ["id"]
           },
         ]
