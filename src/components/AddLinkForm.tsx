@@ -24,6 +24,9 @@ const formSchema = z.object({
   organisation: z.string().min(2, {
     message: "The org name must be at least 2 characters.",
   }),
+  limit_free: z.number().min(0).nullable(),
+  limit_half: z.number().min(0).nullable(),
+  limit_skip: z.number().min(0).nullable(),
 })
 
 // props are a handler to run w when the form is submitted
@@ -39,15 +42,24 @@ export function AddLinkForm({ onSubmitFromParent }: AddLinkFormProps) {
     defaultValues: {
       slug: "",
       organisation: "",
+      limit_free: null,
+      limit_half: null,
+      limit_skip: null,
     },
   })
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const { slug, organisation } = values
+    const { slug, organisation, limit_free, limit_half, limit_skip } = values
 
     const { data, error } = await supabase
       .from("links")
-      .insert([{ slug: slug, organisation: organisation }])
+      .insert([{ 
+        slug, 
+        organisation, 
+        limit_free: limit_free || null,
+        limit_half: limit_half || null,
+        limit_skip: limit_skip || null
+      }])
       .select()
     console.log(data, error)
 
@@ -91,6 +103,62 @@ export function AddLinkForm({ onSubmitFromParent }: AddLinkFormProps) {
             </FormItem>
           )}
         />
+        <div className="flex space-x-4">
+          <FormField
+            control={form.control}
+            name="limit_free"
+            render={({ field }) => (
+              <FormItem className="text-left">
+                <FormLabel>Free Limit</FormLabel>
+                <FormControl>
+                  <Input 
+                    type="number" 
+                    {...field} 
+                    onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value) : null)}
+                    className="w-20"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="limit_half"
+            render={({ field }) => (
+              <FormItem className="text-left">
+                <FormLabel>Half Limit</FormLabel>
+                <FormControl>
+                  <Input 
+                    type="number" 
+                    {...field} 
+                    onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value) : null)}
+                    className="w-20"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="limit_skip"
+            render={({ field }) => (
+              <FormItem className="text-left">
+                <FormLabel>Skip Limit</FormLabel>
+                <FormControl>
+                  <Input 
+                    type="number" 
+                    {...field} 
+                    onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value) : null)}
+                    className="w-20"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
         <Button type="submit">Submit</Button>
       </form>
     </Form>
