@@ -92,7 +92,7 @@ export function AddLinkForm({ onSubmitFromParent }: AddLinkFormProps) {
                 <Input {...field} />
               </FormControl>
               <FormDescription>
-                This will create the link, e.g. guestlist.berlin/slug
+                Will create the link, e.g. guestlist.berlin/slug
               </FormDescription>
               <FormMessage />
             </FormItem>
