@@ -69,7 +69,10 @@ export default async function Page() {
           {/* <p className="text-sm text-gray-400 italic">
             Link creation from database only at the moment
           </p> */}
-          <AddLinkDialogButton eventId={eventId}/>
+          <div className="flex space-x-4">
+          <AddLinkDialogButton title="Create link" variant="manual" eventId={eventId}/>
+          <AddLinkDialogButton title="Send out staff links" description="Links will be sent via telegram" variant="staff" eventId={eventId}/>
+          </div>
         </div>
       </div>
       <div className="m-4 pt-7 pb-2 flex flex-row text-xs italic text-gray-400 md:fixed md:bottom-0 md:right-0 justify-center">
