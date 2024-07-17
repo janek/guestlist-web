@@ -1,15 +1,30 @@
-import React from 'react';
 import {
+  FormControl,
   FormItem,
   FormLabel,
-  FormControl,
   FormMessage,
-} from "@/components/ui/form"; 
-import { Input } from "@/components/ui/input";
-import { Controller } from 'react-hook-form';
-import { Control } from 'react-hook-form';
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import React from "react"
+import { Controller } from "react-hook-form"
+import type { Control } from "react-hook-form"
 
-const LimitInputField = ({ control, name, label }: { control: Control, name: 'limit_free' | 'limit_half' | 'limit_skip', label: string }) => {
+type CustomControl = Control<{
+  limit_free: number | null
+  limit_half: number | null
+  limit_skip: number | null
+  slug: string
+  organisation: string
+}>
+const LimitInputField = ({
+  control,
+  name,
+  label,
+}: {
+  control: CustomControl
+  name: "limit_free" | "limit_half" | "limit_skip"
+  label: string
+}) => {
   return (
     <Controller
       control={control}
@@ -21,12 +36,15 @@ const LimitInputField = ({ control, name, label }: { control: Control, name: 'li
             <Input
               id={`${name}-input`}
               type="number"
-              placeholder='0'
+              min="0"
+              placeholder="0"
               {...field}
-              value={field.value === 0 ? '' : field.value}
+              value={
+                field.value === 0 || field.value === null ? "" : field.value
+              }
               onChange={(e) =>
                 field.onChange(
-                  e.target.value ? parseInt(e.target.value, 10) : 0,
+                  e.target.value ? Number.parseInt(e.target.value, 10) : 0,
                 )
               }
               className="w-20"
@@ -36,7 +54,7 @@ const LimitInputField = ({ control, name, label }: { control: Control, name: 'li
         </FormItem>
       )}
     />
-  );
-};
+  )
+}
 
-export default LimitInputField;
+export default LimitInputField
