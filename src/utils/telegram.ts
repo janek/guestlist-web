@@ -8,6 +8,7 @@ const teamInfo = {
   //   Johannes: "27087952",
 };
 
+// TODO: use env var, use the live bot
 const bot = new Bot("6753060735:AAG5KDtydqTNP4R5Iyln0NsGX4efXk7Vi1U");
 const supabase = createClient();
 
@@ -32,13 +33,15 @@ export async function sendOutStaffLinks(
         },
       ])
       .select();
+
+    // TODO: error 400 will happen a lot at because people won't be authorized - needs to be handled in the UI
     if (error) {
       throw error;
     }
     if (data) {
         const slug = data[0].slug;
         const url = `${baseUrl}/${slug}`;
-        bot.api.sendMessage(id, `Hi ${name}! Your guestlist link is <a href="${url}">${url}</a>`, { parse_mode: "HTML" }).catch(console.error);
+        bot.api.sendMessage(id, `Hi ${name}! Your guestlist link is:\n\n<a href="${url}">${url}</a>\n<i>(${limit_free} free, ${limit_half} half, ${limit_skip} skip)</i>`, { parse_mode: "HTML" }).catch(console.error);
     }
   }
 }
