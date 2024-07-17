@@ -21,7 +21,7 @@ export const AddLinkDialogButton = () => {
       </DialogTrigger>
       <DialogContent className="max-w-xs">
         <DialogHeader>
-          <DialogTitle className="mb-4">Add guest</DialogTitle>
+          <DialogTitle className="mb-4">Create link</DialogTitle>
           {/* <DialogDescription>ABC</DialogDescription> */}
           <AddLinkForm onSubmitFromParent={() => setOpen(false)} />
         </DialogHeader>
