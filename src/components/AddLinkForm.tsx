@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { createClient } from "@/utils/supabase/client"
+import LimitInputField from "./LimitInputField"
 
 const formSchema = z.object({
   slug: z.string().min(3, {
@@ -120,17 +121,12 @@ export function AddLinkForm({ onSubmitFromParent }: AddLinkFormProps) {
             name="limit_free"
             render={({ field }) => (
               <FormItem className="text-left">
-                <FormLabel>Free Limit</FormLabel>
+                <FormLabel>Free</FormLabel>
                 <FormControl>
                   <Input
                     type="number"
+                    placeholder="0"
                     {...field}
-                    value={field.value ?? 0}
-                    onChange={(e) =>
-                      field.onChange(
-                        e.target.value ? Number.parseInt(e.target.value) : 0,
-                      )
-                    }
                     className="w-20"
                   />
                 </FormControl>
@@ -138,55 +134,19 @@ export function AddLinkForm({ onSubmitFromParent }: AddLinkFormProps) {
               </FormItem>
             )}
           />
-          <FormField
+          <LimitInputField
             control={form.control}
             name="limit_half"
-            render={({ field }) => (
-              <FormItem className="text-left">
-                <FormLabel>Half Limit</FormLabel>
-                <FormControl>
-                  <Input
-                    type="number"
-                    {...field}
-                    value={field.value ?? 0}
-                    onChange={(e) =>
-                      field.onChange(
-                        e.target.value ? Number.parseInt(e.target.value) : 0,
-                      )
-                    }
-                    className="w-20"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+            label="Half"
           />
-          <FormField
+          <LimitInputField
             control={form.control}
             name="limit_skip"
-            render={({ field }) => (
-              <FormItem className="text-left">
-                <FormLabel>Skip Limit</FormLabel>
-                <FormControl>
-                  <Input
-                    type="number"
-                    {...field}
-                    value={field.value ?? 0}
-                    onChange={(e) =>
-                      field.onChange(
-                        e.target.value ? Number.parseInt(e.target.value) : 0,
-                      )
-                    }
-                    className="w-20"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+            label="Skip"
           />
         </div>
         <Button type="submit">Submit</Button>
       </form>
     </Form>
-  )
+  );
 }
