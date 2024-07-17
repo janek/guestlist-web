@@ -106,31 +106,79 @@ export function AddLinkForm({ onSubmitFromParent }: AddLinkFormProps) {
             </FormItem>
           )}
         />
-        <div className="space-y-4">
-          <h3 className="text-lg font-semibold">Quota Limits</h3>
-          <div className="flex flex-wrap gap-4">
-            {["free", "half", "skip", "3"].map((limitType) => (
-              <FormField
-                key={limitType}
-                control={form.control}
-                name={`limit_${limitType}` as "limit_free" | "limit_half" | "limit_skip" | "limit_3"}
-                render={({ field }) => (
-                  <FormItem className="text-left">
-                    <FormLabel>{limitType.charAt(0).toUpperCase() + limitType.slice(1)} Limit</FormLabel>
-                    <FormControl>
-                      <Input 
-                        type="number" 
-                        {...field} 
-                        onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value) : null)}
-                        className="w-20"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            ))}
-          </div>
+        <div className="flex space-x-4">
+          <FormField
+            control={form.control}
+            name="limit_free"
+            render={({ field }) => (
+              <FormItem className="text-left">
+                <FormLabel>Free Limit</FormLabel>
+                <FormControl>
+                  <Input 
+                    type="number" 
+                    {...field} 
+                    onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value) : null)}
+                    className="w-20"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="limit_half"
+            render={({ field }) => (
+              <FormItem className="text-left">
+                <FormLabel>Half Limit</FormLabel>
+                <FormControl>
+                  <Input 
+                    type="number" 
+                    {...field} 
+                    onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value) : null)}
+                    className="w-20"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="limit_skip"
+            render={({ field }) => (
+              <FormItem className="text-left">
+                <FormLabel>Skip Limit</FormLabel>
+                <FormControl>
+                  <Input 
+                    type="number" 
+                    {...field} 
+                    onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value) : null)}
+                    className="w-20"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="limit_3"
+            render={({ field }) => (
+              <FormItem className="text-left">
+                <FormLabel>3 Limit</FormLabel>
+                <FormControl>
+                  <Input 
+                    type="number" 
+                    {...field} 
+                    onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value) : null)}
+                    className="w-20"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         </div>
         <Button type="submit">Submit</Button>
       </form>
