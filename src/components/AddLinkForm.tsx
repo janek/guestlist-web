@@ -23,9 +23,9 @@ const formSchema = z.object({
   organisation: z.string().min(2, {
     message: "The org name must be at least 2 characters.",
   }),
-  limit_free: z.number().min(0).nullable(),
-  limit_half: z.number().min(0).nullable(),
-  limit_skip: z.number().min(0).nullable(),
+  limit_free: z.number().min(0),
+  limit_half: z.number().min(0),
+  limit_skip: z.number().min(0),
 })
 
 // props are a handler to run w when the form is submitted

@@ -9,24 +9,31 @@ import React from "react"
 import { Controller } from "react-hook-form"
 import type { Control } from "react-hook-form"
 
-type CustomControl = Control<{
+type FormValidation = Control<{
   limit_free: number 
   limit_half: number 
   limit_skip: number
-  organisation?: string
+  organisation: string
 }>
+
+type FormValidationWithoutOrg = Control<{
+  limit_free: number
+  limit_half: number
+  limit_skip: number
+}>
+
 const LimitInputField = ({
   control,
   name,
   label,
 }: {
-  control: CustomControl
+  control: FormValidation | FormValidationWithoutOrg // It wasn't working to make org an optiona in the type
   name: "limit_free" | "limit_half" | "limit_skip"
   label: string
 }) => {
   return (
     <Controller
-      control={control}
+      control={control as FormValidation}
       name={name}
       render={({ field }) => (
         <FormItem className="text-left">
