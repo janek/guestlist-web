@@ -13,7 +13,6 @@ type CustomControl = Control<{
   limit_free: number | null
   limit_half: number | null
   limit_skip: number | null
-  slug: string
   organisation: string
 }>
 const LimitInputField = ({

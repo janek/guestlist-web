@@ -20,9 +20,6 @@ import { createClient } from "@/utils/supabase/client"
 import LimitInputField from "./LimitInputField"
 
 const formSchema = z.object({
-  slug: z.string().min(3, {
-    message: "The link must be at least 3 characters.",
-  }),
   organisation: z.string().min(2, {
     message: "The org name must be at least 2 characters.",
   }),
@@ -37,14 +34,13 @@ type AddLinkFormProps = {
   eventId: string
 }
 
-export function AddLinkForm({ onSubmitFromParent, eventId }: AddLinkFormProps) {
+export function AddLinkForm({ onSubmitFromParent, eventId}: AddLinkFormProps) {
   const supabase = createClient()
   const { toast } = useToast()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      slug: "",
       organisation: "",
       limit_free: 0,
       limit_half: 0,
@@ -53,13 +49,12 @@ export function AddLinkForm({ onSubmitFromParent, eventId }: AddLinkFormProps) {
   })
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const { slug, organisation, limit_free, limit_half, limit_skip } = values
+    const { organisation, limit_free, limit_half, limit_skip } = values
 
     const { data, error } = await supabase
       .from("links")
       .insert([
         {
-          slug,
           organisation,
           event_id: eventId,
           limit_free: limit_free || 0,
@@ -85,22 +80,6 @@ export function AddLinkForm({ onSubmitFromParent, eventId }: AddLinkFormProps) {
         onSubmit={form.handleSubmit(onSubmit)}
         className="space-y-8  max-w-xs"
       >
-        <FormField
-          control={form.control}
-          name="slug"
-          render={({ field }) => (
-            <FormItem className="text-left">
-              <FormLabel>Slug</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormDescription>
-                Will create the link, e.g. guestlist.berlin/slug
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
         <FormField
           control={form.control}
           name="organisation"
