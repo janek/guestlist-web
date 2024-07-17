@@ -42,9 +42,9 @@ export function AddLinkForm({ onSubmitFromParent }: AddLinkFormProps) {
     defaultValues: {
       slug: "",
       organisation: "",
-      limit_free: null,
-      limit_half: null,
-      limit_skip: null,
+      limit_free: 0,
+      limit_half: 0,
+      limit_skip: 0,
     },
   })
 
@@ -53,13 +53,15 @@ export function AddLinkForm({ onSubmitFromParent }: AddLinkFormProps) {
 
     const { data, error } = await supabase
       .from("links")
-      .insert([{ 
-        slug, 
-        organisation, 
-        limit_free: limit_free || null,
-        limit_half: limit_half || null,
-        limit_skip: limit_skip || null
-      }])
+      .insert([
+        {
+          slug,
+          organisation,
+          limit_free: limit_free || 0,
+          limit_half: limit_half || 0,
+          limit_skip: limit_skip || 0,
+        },
+      ])
       .select()
     console.log(data, error)
 
@@ -111,10 +113,14 @@ export function AddLinkForm({ onSubmitFromParent }: AddLinkFormProps) {
               <FormItem className="text-left">
                 <FormLabel>Free Limit</FormLabel>
                 <FormControl>
-                  <Input 
-                    type="number" 
-                    {...field} 
-                    onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value) : null)}
+                  <Input
+                    type="number"
+                    {...field}
+                    onChange={(e) =>
+                      field.onChange(
+                        e.target.value ? Number.parseInt(e.target.value) : 0,
+                      )
+                    }
                     className="w-20"
                   />
                 </FormControl>
@@ -129,10 +135,14 @@ export function AddLinkForm({ onSubmitFromParent }: AddLinkFormProps) {
               <FormItem className="text-left">
                 <FormLabel>Half Limit</FormLabel>
                 <FormControl>
-                  <Input 
-                    type="number" 
-                    {...field} 
-                    onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value) : null)}
+                  <Input
+                    type="number"
+                    {...field}
+                    onChange={(e) =>
+                      field.onChange(
+                        e.target.value ? Number.parseInt(e.target.value) : 0,
+                      )
+                    }
                     className="w-20"
                   />
                 </FormControl>
@@ -147,10 +157,14 @@ export function AddLinkForm({ onSubmitFromParent }: AddLinkFormProps) {
               <FormItem className="text-left">
                 <FormLabel>Skip Limit</FormLabel>
                 <FormControl>
-                  <Input 
-                    type="number" 
-                    {...field} 
-                    onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value) : null)}
+                  <Input
+                    type="number"
+                    {...field}
+                    onChange={(e) =>
+                      field.onChange(
+                        e.target.value ? Number.parseInt(e.target.value) : 0,
+                      )
+                    }
                     className="w-20"
                   />
                 </FormControl>
