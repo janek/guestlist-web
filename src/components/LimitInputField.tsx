@@ -10,9 +10,9 @@ import { Controller } from "react-hook-form"
 import type { Control } from "react-hook-form"
 
 type CustomControl = Control<{
-  limit_free: number | null
-  limit_half: number | null
-  limit_skip: number | null
+  limit_free: number 
+  limit_half: number 
+  limit_skip: number
   organisation?: string
 }>
 const LimitInputField = ({
