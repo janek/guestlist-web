@@ -1,5 +1,6 @@
 "use client"
 
+import { useToast } from "@/components/ui/use-toast"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -36,6 +37,7 @@ type AddLinkFormProps = {
 
 export function AddLinkForm({ onSubmitFromParent }: AddLinkFormProps) {
   const supabase = createClient()
+  const { toast } = useToast()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -63,7 +65,14 @@ export function AddLinkForm({ onSubmitFromParent }: AddLinkFormProps) {
         },
       ])
       .select()
-    console.log(data, error)
+    if (error) {
+      toast({
+        variant: "destructive",
+        title: "Error when creating link",
+        description: "Backend says: " + error.message,
+      })
+      throw error
+    }
 
     onSubmitFromParent()
   }
