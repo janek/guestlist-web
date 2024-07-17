@@ -4,13 +4,14 @@ import { useToast } from "@/components/ui/use-toast"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-
+import { createClient } from "@/utils/supabase/client"
 import { Button } from "@/components/ui/button"
 import {
   Form,
 } from "@/components/ui/form"
 import LimitInputField from "./LimitInputField"
 import { sendOutStaffLinks } from "@/utils/telegram"
+
 const formSchema = z.object({
   limit_free: z.number().min(0),
   limit_half: z.number().min(0),
@@ -20,10 +21,10 @@ const formSchema = z.object({
 type AddLinkFormProps = {
   onSubmitFromParent: () => void
   eventId: string
+  staff?: Staff[]
 }
 
-export function SendStaffLinksForm({ onSubmitFromParent, eventId }: AddLinkFormProps) {
-  const { toast } = useToast()
+export function SendStaffLinksForm({ onSubmitFromParent, eventId, staff }: AddLinkFormProps) {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
