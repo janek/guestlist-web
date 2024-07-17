@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button"
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -12,7 +11,11 @@ import { AddLinkForm } from "./AddLinkForm"
 
 import { useState } from "react"
 
-export const AddLinkDialogButton = () => {
+interface AddLinkDialogButtonProps {
+  eventId: string;
+}
+
+export const AddLinkDialogButton = ({ eventId }: AddLinkDialogButtonProps) => {
   const [open, setOpen] = useState(false)
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -23,7 +26,7 @@ export const AddLinkDialogButton = () => {
         <DialogHeader>
           <DialogTitle className="mb-4">Create link</DialogTitle>
           {/* <DialogDescription>ABC</DialogDescription> */}
-          <AddLinkForm onSubmitFromParent={() => setOpen(false)} />
+          <AddLinkForm eventId={eventId} onSubmitFromParent={() => setOpen(false)} />
         </DialogHeader>
       </DialogContent>
     </Dialog>

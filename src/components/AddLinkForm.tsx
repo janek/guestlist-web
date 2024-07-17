@@ -34,9 +34,10 @@ const formSchema = z.object({
 // props are a handler to run w when the form is submitted
 type AddLinkFormProps = {
   onSubmitFromParent: () => void
+  eventId: string
 }
 
-export function AddLinkForm({ onSubmitFromParent }: AddLinkFormProps) {
+export function AddLinkForm({ onSubmitFromParent, eventId }: AddLinkFormProps) {
   const supabase = createClient()
   const { toast } = useToast()
 
@@ -60,6 +61,7 @@ export function AddLinkForm({ onSubmitFromParent }: AddLinkFormProps) {
         {
           slug,
           organisation,
+          event_id: eventId,
           limit_free: limit_free || 0,
           limit_half: limit_half || 0,
           limit_skip: limit_skip || 0,
@@ -70,7 +72,7 @@ export function AddLinkForm({ onSubmitFromParent }: AddLinkFormProps) {
       toast({
         variant: "destructive",
         title: "Error when creating link",
-        description: "Backend says: " + error.message,
+        description: `Backend says: ${error.message}`,
       })
       throw error
     }
@@ -109,7 +111,7 @@ export function AddLinkForm({ onSubmitFromParent }: AddLinkFormProps) {
                 <Input {...field} />
               </FormControl>
               <FormDescription>
-                For example: DJ Transparency, Sweet Collective{" "}
+                E.g. DJ Transparency, Sweet Collective
               </FormDescription>
               <FormMessage />
             </FormItem>
