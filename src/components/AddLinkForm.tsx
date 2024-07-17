@@ -116,23 +116,10 @@ export function AddLinkForm({ onSubmitFromParent }: AddLinkFormProps) {
           )}
         />
         <div className="flex space-x-4">
-          <FormField
+          <LimitInputField
             control={form.control}
             name="limit_free"
-            render={({ field }) => (
-              <FormItem className="text-left">
-                <FormLabel>Free</FormLabel>
-                <FormControl>
-                  <Input
-                    type="number"
-                    placeholder="0"
-                    {...field}
-                    className="w-20"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+            label="Free"
           />
           <LimitInputField
             control={form.control}
