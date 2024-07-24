@@ -3,9 +3,9 @@ import { createClient } from "@/utils/supabase/client";
 
 const teamInfo = {
   Janek: "224704481",
-  // Jan: "224704481",
-  //   Julie: "5676203249",
-  //   Johannes: "27087952",
+  // Janek2: "224704481",
+  // Julie: "5676203249",
+  // Johannes: "27087952",
 };
 
 // TODO: use env var, use the live bot
