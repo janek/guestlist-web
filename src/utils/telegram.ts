@@ -30,6 +30,7 @@ export async function sendOutStaffLinks(
           limit_free: limit_free || 0,
           limit_half: limit_half || 0,
           limit_skip: limit_skip || 0,
+          telegram_user_id: id,
         },
       ])
       .select();
