@@ -15,6 +15,7 @@ import { GuestDetailsForm } from "./GuestDetailsForm"
 type GuestDetailsDialogProps = {
   editingGuest?: Guest | null
   open?: boolean | null
+  editedFromLinkId: string | null
   onOpenChange?: ((open: boolean) => void) | null
   addGuestButtonHidden?: boolean
   organisation?: string // Deprecated, use info from link
@@ -28,6 +29,7 @@ export const GuestDetailsDialog = ({
   open = null,
   onOpenChange = null,
   addGuestButtonHidden = false,
+  editedFromLinkId = null,
   organisation = "no_org_error",
   link,
   currentGuestlist = [],
@@ -96,6 +98,7 @@ export const GuestDetailsDialog = ({
           <GuestDetailsForm
             guest={guest}
             organisation={organisation}
+            editedFromLinkId={editedFromLinkId}
             eventId={link?.event_id || ""}
             availableListTypes={listTypes ?? new Set([])}
           />

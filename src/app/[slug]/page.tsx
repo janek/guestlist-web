@@ -70,6 +70,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
         organisation={organisationName}
         link={link}
         currentGuestlist={guests || []}
+        editedFromLinkId={link.id}
       />
     </div>
   )
