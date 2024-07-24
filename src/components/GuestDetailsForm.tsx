@@ -34,6 +34,7 @@ const formSchema = z.object({
 type GuestDetailsFormProps = {
   guest: Guest | null
   organisation: string
+  editedFromLinkId: string | null
   availableListTypes: Set<ListType>
   eventId: string
 }
@@ -45,6 +46,7 @@ export function GuestDetailsForm({
   organisation,
   eventId,
   availableListTypes,
+  editedFromLinkId,
 }: GuestDetailsFormProps) {
   console.log(
     `In GDF, availableListTypes: ${JSON.stringify(
@@ -85,6 +87,7 @@ export function GuestDetailsForm({
             organisation: organisation,
             type: type,
             event_id: eventId,
+            link_id: editedFromLinkId,
           },
         ])
         .select()
