@@ -21,8 +21,8 @@ export default async function Page() {
     .select("event_id")
     .eq("user_id", user.user.id)
 
-  // XXX: hardcoded "Cabin Pressure" for now
-  const eventId = "e9b4afb9-70f7-48a6-95e1-c95c8c093319"
+  // XXX:
+  const eventId = process.env.DEFAULT_EVENT_ID
 
   console.log("Event ID:", eventId)
 
@@ -45,8 +45,8 @@ export default async function Page() {
   const { data: staff, error: staffError } = await supabase
     .from("staff")
     .select()
-    // TODO: Get staff only for current account
-    // .eq("belongs_to_account", currentUserId)
+  // TODO: Get staff only for current account
+  // .eq("belongs_to_account", currentUserId)
 
   return (
     <div className="flex flex-col md:h-screen md:justify-center">

@@ -26,13 +26,14 @@ export default async function Page({ params }: { params: { slug: string } }) {
 
   // TODO: this should be a joined table, probably, for performance reasons - see egghead course
   // https://egghead.io/courses/build-a-twitter-clone-with-the-next-js-app-router-and-supabase-19bebadb
-  const organisationName = link.organisation as string // XXX: Use a joined view instead
+  const linkId = link.id
   const { data: guests } = await supabase
     .from("guests")
     .select()
-    .eq("organisation", organisationName)
+    .eq("link_id", linkId)
     .returns<Guest[]>()
-
+    
+  const organisationName = link.organisation as string
   return (
     <div className="flex flex-col items-center justify-center h-screen">
       <h4 className="scroll-m-20 text-2xl mb-2 font-semibold tracking-tight text-left">
