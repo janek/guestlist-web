@@ -22,7 +22,7 @@ export default async function Page() {
     .eq("user_id", user.user.id)
 
   // XXX:
-  const eventId = process.env.DEFAULT_EVENT_ID
+  const eventId = process.env.DEFAULT_EVENT_ID!
 
   console.log("Event ID:", eventId)
 
