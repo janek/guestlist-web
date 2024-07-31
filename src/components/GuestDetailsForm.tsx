@@ -36,7 +36,7 @@ type GuestDetailsFormProps = {
   organisation: string
   editedFromLinkId: string | null
   availableListTypes: Set<ListType>
-  eventId: string
+  eventId: string | null
 }
 
 type GuestlistType = "free" | "half" | "skip"
@@ -48,11 +48,6 @@ export function GuestDetailsForm({
   availableListTypes,
   editedFromLinkId,
 }: GuestDetailsFormProps) {
-  console.log(
-    `In GDF, availableListTypes: ${JSON.stringify(
-      Array.from(availableListTypes),
-    )}`,
-  )
   const supabase = createClient()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
