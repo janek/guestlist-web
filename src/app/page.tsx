@@ -21,7 +21,6 @@ export default async function Page() {
     .select("event_id")
     .eq("user_id", user.user.id)
 
-  // XXX:
   const eventId = process.env.DEFAULT_EVENT_ID!
 
   console.log("Event ID:", eventId)
@@ -45,6 +44,7 @@ export default async function Page() {
   const { data: staff, error: staffError } = await supabase
     .from("staff")
     .select()
+
   // TODO: Get staff only for current account
   // .eq("belongs_to_account", currentUserId)
 
@@ -61,7 +61,7 @@ export default async function Page() {
           <div className="flex hflex space-x-2">
             {/* XXX: instead of hardcoded, use real value. Users table has no organisation
               field, so maybe we need a table/view which links users to organisations? */}
-            <GuestDetailsDialog organisation={"Turbulence"} />
+            <GuestDetailsDialog organisation={"entropie"} eventId={eventId} />
             <DownloadCsvButton guests={guests || []} />
           </div>
         </div>

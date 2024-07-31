@@ -18,6 +18,7 @@ type GuestDetailsDialogProps = {
   editedFromLinkId: string | null
   onOpenChange?: ((open: boolean) => void) | null
   addGuestButtonHidden?: boolean
+  eventId: string
   organisation?: string // Deprecated, use info from link
   link: Link
   currentGuestlist: Guest[]
@@ -31,6 +32,7 @@ export const GuestDetailsDialog = ({
   addGuestButtonHidden = false,
   editedFromLinkId = null,
   organisation = "no_org_error",
+  eventId,
   link,
   currentGuestlist = [],
 }: Partial<GuestDetailsDialogProps> = {}) => {
@@ -99,7 +101,7 @@ export const GuestDetailsDialog = ({
             guest={guest}
             organisation={organisation}
             editedFromLinkId={editedFromLinkId}
-            eventId={link?.event_id || ""}
+            eventId={eventId || link?.event_id || null}
             availableListTypes={listTypes ?? new Set([])}
           />
         </DialogHeader>
