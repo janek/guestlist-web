@@ -21,7 +21,7 @@ export default async function Page() {
     .select("event_id")
     .eq("user_id", user.user.id)
 
-  const eventId = process.env.DEFAULT_EVENT_ID!
+  const eventId = "b5ca17dd-3ccf-40f2-808f-03ddf5bb15d4"
 
   console.log("Event ID:", eventId)
 
