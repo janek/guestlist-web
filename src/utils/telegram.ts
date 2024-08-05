@@ -1,8 +1,12 @@
 import { Bot } from "grammy";
 import { createClient } from "@/utils/supabase/client";
 
+const adminId = "224704481"
+
 const teamInfo = {
   Janek: "224704481",
+  Pajka: "7105079392",
+  Saskia: "298058903",
   // Janek2: "224704481",
   // Julie: "5676203249",
   // Johannes: "27087952",
@@ -19,6 +23,8 @@ export async function sendOutStaffLinks(
   eventId: string,
   baseUrl: string
 ) {
+  const undeliveredLinks = [];
+
   for (const [name, id] of Object.entries(teamInfo)) {
     
     const { data, error } = await supabase
@@ -42,7 +48,17 @@ export async function sendOutStaffLinks(
     if (data) {
         const slug = data[0].slug;
         const url = `${baseUrl}/${slug}`;
-        bot.api.sendMessage(id, `Hi ${name}! Your guestlist link is:\n\n<a href="${url}">${url}</a>\n<i>(${limit_free} free, ${limit_half} half, ${limit_skip} skip)</i>`, { parse_mode: "HTML" }).catch(console.error);
+        try {
+          await bot.api.sendMessage(id, `Hi ${name}! Your guestlist link is:\n\n<a href="${url}">${url}</a>\n<i>(${limit_free} free, ${limit_half} half, ${limit_skip} skip)</i>`, { parse_mode: "HTML" });
+        } catch (error) {
+          console.error(`Failed to send message to ${name}:`, error);
+          undeliveredLinks.push({ name, id });
+        }
     }
+  }
+
+  if (undeliveredLinks.length > 0) {
+    const undeliveredMessage = undeliveredLinks.map(({ name, id }) => `${name} (ID: ${id})`).join(', ');
+    await bot.api.sendMessage(adminId, `These staff links could not be delivered: ${undeliveredMessage}`);
   }
 }
