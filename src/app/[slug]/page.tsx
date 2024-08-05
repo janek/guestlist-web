@@ -48,7 +48,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
                   minute: "2-digit",
                 })
               : ""
-          }, Turbulence`}
+          }, TXL Airport`}
         </h5>
       )}
       <p className="scroll-m-20 text-md mb-4 font-normal tracking-tight text-left">
