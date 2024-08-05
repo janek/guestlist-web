@@ -61,7 +61,7 @@ export default async function Page() {
           <div className="flex hflex space-x-2">
             {/* XXX: instead of hardcoded, use real value. Users table has no organisation
               field, so maybe we need a table/view which links users to organisations? */}
-            <GuestDetailsDialog organisation={"entropie"} eventId={eventId} />
+            <GuestDetailsDialog organisation={"Turbulence"} eventId={eventId} />
             <DownloadCsvButton guests={guests || []} />
           </div>
         </div>
