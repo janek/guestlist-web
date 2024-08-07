@@ -6,10 +6,20 @@ const adminId = "224704481"
 const teamInfo = {
   Janek: "224704481",
   Pajka: "7105079392",
-  Saskia: "298058903",
-  // Janek2: "224704481",
-  // Julie: "5676203249",
+  // Saskia: "298058903",
+  // Raulito: "201575900",
+  // Fabi: "296141797",
   // Johannes: "27087952",
+  // Arun: "671842270",
+  // Laura: "689093771",
+  // Tutti: "813457031",
+  Manu: "968563962",
+  // AlexBr: "224704481",
+  // Fraenze: "648270588",
+  // Caspar: "1152830468",
+  // Julie: "5676203249",
+  // Shelly: "503953582",
+  // Ady: "425952926",
 };
 
 // TODO: use env var, use the live bot
@@ -47,6 +57,7 @@ export async function sendOutStaffLinks(
     }
     if (data) {
         const slug = data[0].slug;
+        console.log("Data \n", data)
         const url = `${baseUrl}/${slug}`;
         try {
           await bot.api.sendMessage(id, `Hi ${name}! Your guestlist link is:\n\n<a href="${url}">${url}</a>\n<i>(${limit_free} free, ${limit_half} half, ${limit_skip} skip)</i>`, { parse_mode: "HTML" });
