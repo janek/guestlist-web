@@ -23,7 +23,7 @@ const teamInfo = {
 };
 
 // TODO: use env var, use the live bot
-const bot = new Bot("6753060735:AAG5KDtydqTNP4R5Iyln0NsGX4efXk7Vi1U");
+const bot = new Bot("7141745995:AAGEa_CKxwLgyo96Nw3I1xcPot0uQT29F3Y");
 const supabase = createClient();
 
 export async function sendOutStaffLinks(
@@ -60,7 +60,7 @@ export async function sendOutStaffLinks(
         console.log("Data \n", data)
         const url = `${baseUrl}/${slug}`;
         try {
-          await bot.api.sendMessage(id, `Hi ${name}! Your guestlist link is:\n\n<a href="${url}">${url}</a>\n<i>(${limit_free} free, ${limit_half} half, ${limit_skip} skip)</i>`, { parse_mode: "HTML" });
+          await bot.api.sendMessage(id, `Hi ${name}! Your guestlist link is:\n\n<a href="${url}">${url}</a>\n<i>(${limit_free} free, ${limit_half} half, ${limit_skip} skip)</i>.\n\n You can write me the name(s), for example "Suley Blum, free"`, { parse_mode: "HTML" });
         } catch (error) {
           console.error(`Failed to send message to ${name}:`, error);
           undeliveredLinks.push({ name, id });
