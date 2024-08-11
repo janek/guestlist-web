@@ -9,7 +9,7 @@ type Event = {
   date: string
 }
 
-export function EventSwitcher({ events, currentEventId }: { events: Event[], currentEventId: string }) {
+export function EventSwitcher({ events, currentEventId }: { events: Event[], currentEventId: string | undefined }) {
   const router = useRouter()
 
   const handleEventChange = (eventId: string) => {
@@ -17,7 +17,7 @@ export function EventSwitcher({ events, currentEventId }: { events: Event[], cur
   }
 
   return (
-    <Select defaultValue={currentEventId} onValueChange={handleEventChange}>
+    <Select defaultValue={currentEventId || undefined} onValueChange={handleEventChange}>
       <SelectTrigger className="w-[280px]">
         <SelectValue placeholder="Select an event" />
       </SelectTrigger>
