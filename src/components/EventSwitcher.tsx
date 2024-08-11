@@ -18,7 +18,7 @@ export function EventSwitcher({ events, currentEventId }: { events: Event[], cur
 
   return (
     <Select defaultValue={currentEventId || undefined} onValueChange={handleEventChange}>
-      <SelectTrigger className="w-[280px]">
+      <SelectTrigger className="w-full">
         <SelectValue placeholder="Select an event" />
       </SelectTrigger>
       <SelectContent>
