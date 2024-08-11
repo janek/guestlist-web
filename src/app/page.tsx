@@ -58,14 +58,15 @@ export default async function Page({
 
   return (
     <div className="flex flex-col md:h-screen md:justify-center">
-      <div className="text-center mb-8">
-        <EventSwitcher events={allowedEvents || []} currentEventId={eventId} />
-        <h2 className="scroll-m-20 text-3xl font-semibold tracking-tight mt-4">
-          {event?.name}
-        </h2>
-        <p className="text-xl text-muted-foreground">
-          {new Date(event?.date).toLocaleDateString()}
-        </p>
+      <div className="flex flex-row items-center justify-center w-full mb-8 mt-8 md:mt-0">
+        <h4 className="scroll-m-20 text-xl font-semibold tracking-tight mr-4">
+          Event:
+        </h4>
+        <EventSwitcher
+          className="w-[280px]"
+          events={allowedEvents || []}
+          currentEventId={eventId}
+        />
       </div>
       <div className="flex flex-col items-center md:flex-row md:items-start">
         <div className="flex flex-col items-center w-full">
