@@ -58,20 +58,18 @@ export default async function Page({
 
   return (
     <div className="flex flex-col md:h-screen md:justify-center">
-      <div className="flex flex-col items-center md:items-start md:pl-4">
-        <div className="w-[350px] mb-8">
-          <EventSwitcher events={allowedEvents || []} currentEventId={eventId} />
-          <h2 className="scroll-m-20 text-3xl font-semibold tracking-tight mt-4 text-center">
-            {event?.name}
-          </h2>
-          <p className="text-xl text-muted-foreground text-center">
-            {new Date(event?.date).toLocaleDateString()}
-          </p>
-        </div>
+      <div className="text-center mb-8">
+        <EventSwitcher events={allowedEvents || []} currentEventId={eventId} />
+        <h2 className="scroll-m-20 text-3xl font-semibold tracking-tight mt-4">
+          {event?.name}
+        </h2>
+        <p className="text-xl text-muted-foreground">
+          {new Date(event?.date).toLocaleDateString()}
+        </p>
       </div>
       <div className="flex flex-col items-center md:flex-row md:items-start">
         <div className="flex flex-col items-center w-full">
-          <h4 className="scroll-m-20 text-xl mb-4 font-semibold tracking-tight text-left w-[350px]">
+          <h4 className="scroll-m-20 text-xl mb-4 font-semibold tracking-tight text-left">
             Full guestlist
           </h4>
           <ScrollArea className="h-[500px] w-[350px] rounded-md border p-4 mb-4">
