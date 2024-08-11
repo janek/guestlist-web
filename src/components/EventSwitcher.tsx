@@ -9,7 +9,12 @@ type Event = {
   date: string
 }
 
-export function EventSwitcher({ events, currentEventId }: { events: Event[], currentEventId: string | undefined }) {
+interface EventSwitcherProps extends React.HTMLAttributes<HTMLDivElement> {
+  events: Event[];
+  currentEventId: string | undefined;
+}
+
+export function EventSwitcher({ events, currentEventId, ...props }: EventSwitcherProps) {
   const router = useRouter()
 
   const handleEventChange = (eventId: string) => {
@@ -17,17 +22,19 @@ export function EventSwitcher({ events, currentEventId }: { events: Event[], cur
   }
 
   return (
-    <Select defaultValue={currentEventId || undefined} onValueChange={handleEventChange}>
-      <SelectTrigger className="w-[280px]">
-        <SelectValue placeholder="Select an event" />
-      </SelectTrigger>
-      <SelectContent>
-        {events.map((event) => (
-          <SelectItem key={event.id} value={event.id}>
-            {event.name} - {new Date(event.date).toLocaleDateString()}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
+    <div {...props}>
+      <Select defaultValue={currentEventId || undefined} onValueChange={handleEventChange}>
+        <SelectTrigger className="w-[280px]">
+          <SelectValue placeholder="Select an event" />
+        </SelectTrigger>
+        <SelectContent>
+          {events.map((event) => (
+            <SelectItem key={event.id} value={event.id}>
+              {event.name} - {new Date(event.date).toLocaleDateString()}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
   )
 }
