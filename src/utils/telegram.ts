@@ -14,7 +14,8 @@ const teamInfo = {
   Laura: "689093771",
   Tutti: "813457031",
   Manu: "968563962",
-  AlexBr: "224704481",
+  // AlexBr: (hiddden user)
+  Jule: "6018809085",
   Fraenze: "648270588",
   Caspar: "1152830468",
   Julie: "5676203249",
