@@ -1,5 +1,6 @@
 import { AddLinkDialogButton } from "@/components/AddLinkDialogButton"
 import { DownloadCsvButton } from "@/components/DownloadCsvButton"
+import { EventSwitcher } from "@/components/EventSwitcher"
 import { GuestDetailsDialog } from "@/components/GuestDetailsDialog"
 import GuestlistTable from "@/components/GuestlistTable"
 import LinksTable from "@/components/LinksTable"
@@ -8,8 +9,11 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { createClient } from "@/utils/supabase/server"
 import { redirect } from "next/navigation"
 
-
-export default async function Page() {
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] | undefined }
+}) {
   const supabase = createClient()
 
   const { data: user, error } = await supabase.auth.getUser()
@@ -18,13 +22,12 @@ export default async function Page() {
   }
 
   const { data: allowedEvents } = await supabase
-    .from("user_event_permissions")
-    .select("event_id")
-    .eq("user_id", user.user.id)
-
+    .from("events")
+    .select("id, name, date")
+    .order('date', { ascending: false })
 
   const defaultEventId = process.env.DEFAULT_EVENT_ID
-  const eventId = defaultEventId || "6fcb4c0c-be01-483d-811e-a4433f64da3b"
+  const eventId = (searchParams.eventId as string) || defaultEventId || allowedEvents?.[0]?.id
   console.log("Default event ID:", defaultEventId, "Event ID:", eventId)
 
   // XXX: below we seem to have 3 requests to the DB, they should probably be one
@@ -54,7 +57,8 @@ export default async function Page() {
   return (
     <div className="flex flex-col md:h-screen md:justify-center">
       <div className="text-center mb-8">
-        <h2 className="scroll-m-20 text-3xl font-semibold tracking-tight">
+        <EventSwitcher events={allowedEvents || []} currentEventId={eventId} />
+        <h2 className="scroll-m-20 text-3xl font-semibold tracking-tight mt-4">
           {event?.name}
         </h2>
         <p className="text-xl text-muted-foreground">
