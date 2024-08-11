@@ -8,6 +8,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { createClient } from "@/utils/supabase/server"
 import { redirect } from "next/navigation"
 
+
 export default async function Page() {
   const supabase = createClient()
 
@@ -21,15 +22,17 @@ export default async function Page() {
     .select("event_id")
     .eq("user_id", user.user.id)
 
-  const eventId = "6fcb4c0c-be01-483d-811e-a4433f64da3b"
 
-  console.log("Event ID:", eventId)
+  const defaultEventId = process.env.DEFAULT_EVENT_ID
+  const eventId = defaultEventId || "6fcb4c0c-be01-483d-811e-a4433f64da3b"
+  console.log("Default event ID:", defaultEventId, "Event ID:", eventId)
 
   // XXX: below we seem to have 3 requests to the DB, they should probably be one
   const { data: event, error: eventError } = await supabase
     .from("events")
     .select()
     .eq("id", eventId)
+    .single()
 
   const { data: guests, error: guestsError } = await supabase
     .from("guests")
@@ -50,6 +53,14 @@ export default async function Page() {
 
   return (
     <div className="flex flex-col md:h-screen md:justify-center">
+      <div className="text-center mb-8">
+        <h2 className="scroll-m-20 text-3xl font-semibold tracking-tight">
+          {event?.name}
+        </h2>
+        <p className="text-xl text-muted-foreground">
+          {new Date(event?.date).toLocaleDateString()}
+        </p>
+      </div>
       <div className="flex flex-col items-center md:flex-row md:items-start">
         <div className="flex flex-col items-center w-full">
           <h4 className="scroll-m-20 text-xl mb-4 font-semibold tracking-tight text-left">
