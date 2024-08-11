@@ -14,6 +14,8 @@ export default async function Page({
 }: {
   searchParams: { [key: string]: string | string[] | undefined }
 }) {
+  // Type assertion for TypeScript
+  const eventIdParam = searchParams.eventId as string | undefined
   const supabase = createClient()
 
   const { data: user, error } = await supabase.auth.getUser()
@@ -27,7 +29,7 @@ export default async function Page({
     .order('date', { ascending: false })
 
   const defaultEventId = process.env.DEFAULT_EVENT_ID
-  const eventId = (searchParams.eventId as string) || defaultEventId || allowedEvents?.[0]?.id
+  const eventId = eventIdParam || defaultEventId || allowedEvents?.[0]?.id
   console.log("Default event ID:", defaultEventId, "Event ID:", eventId)
 
   // XXX: below we seem to have 3 requests to the DB, they should probably be one
