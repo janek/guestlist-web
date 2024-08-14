@@ -41,14 +41,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
       </h4>
       {link.event_date && (
         <h5 className="scroll-m-20 text-lg mb-4 font-normal tracking-tight text-left italic">
-          {`${new Date(link.event_date).toLocaleDateString("de-DE")} ${
-            link.event_date.includes("T")
-              ? new Date(link.event_date).toLocaleTimeString("de-DE", {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })
-              : ""
-          }, TXL Airport`}
+          {`${new Date(link.event_date).toLocaleDateString("de-DE")}, TXL Airport`}
         </h5>
       )}
       <p className="scroll-m-20 text-md mb-4 font-normal tracking-tight text-left">
