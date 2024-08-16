@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/form"
 import LimitInputField from "./LimitInputField"
 import { sendOutStaffLinks } from "@/utils/telegram"
+import { Tables } from "@/lib/database.types"
 
 
 const formSchema = z.object({
@@ -21,9 +22,10 @@ type AddLinkFormProps = {
   onSubmitFromParent: () => void
   eventId: string
   staff?: Staff[]
+  event: Tables<"events">["Row"]
 }
 
-export function SendStaffLinksForm({ onSubmitFromParent, eventId, staff }: AddLinkFormProps) {
+export function SendStaffLinksForm({ onSubmitFromParent, eventId, staff, event }: AddLinkFormProps) {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -35,9 +37,9 @@ export function SendStaffLinksForm({ onSubmitFromParent, eventId, staff }: AddLi
   })
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const {  limit_free, limit_half, limit_skip } = values
+    const { limit_free, limit_half, limit_skip } = values
     const currentUrl = window.location.origin;
-    sendOutStaffLinks(limit_free, limit_half, limit_skip, eventId, currentUrl) 
+    sendOutStaffLinks(limit_free, limit_half, limit_skip, eventId, currentUrl, event.name, event.date)
     onSubmitFromParent()
   }
   return (
