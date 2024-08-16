@@ -32,7 +32,9 @@ export async function sendOutStaffLinks(
   limit_half: number,
   limit_skip: number,
   eventId: string,
-  baseUrl: string
+  baseUrl: string,
+  eventName: string,
+  eventDate: string
 ) {
   const undeliveredLinks = [];
 
@@ -61,7 +63,7 @@ export async function sendOutStaffLinks(
         console.log("Data \n", data)
         const url = `${baseUrl}/${slug}`;
         try {
-          await bot.api.sendMessage(id, `Hi ${name}! Your guestlist link is:\n\n<a href="${url}">${url}</a>\n<i>(${limit_free} free, ${limit_half} half, ${limit_skip} skip)</i>.\n\n You can write me the name(s), for example "Suley Blum, free"`, { parse_mode: "HTML" });
+          await bot.api.sendMessage(id, `Hi ${name}! Your guestlist link for <i>${eventName} (${eventDate})</i> is:\n\n<a href="${url}">${url}</a>\n<i>(${limit_free} free, ${limit_half} half, ${limit_skip} skip)</i>.\n\n You can write me the name(s), for example "Suley Blum, free"`, { parse_mode: "HTML" });
         } catch (error) {
           console.error(`Failed to send message to ${name}:`, error);
           undeliveredLinks.push({ name, id });
