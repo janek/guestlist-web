@@ -38,7 +38,7 @@ export function SendStaffLinksForm({ onSubmitFromParent, eventId, staff, event }
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const { limit_free, limit_half, limit_skip } = values
     const currentUrl = window.location.origin;
-    sendOutStaffLinks(limit_free, limit_half, limit_skip, eventId, currentUrl, event.name, event.date)
+    sendOutStaffLinks(limit_free, limit_half, limit_skip, eventId, currentUrl, event)
     onSubmitFromParent()
   }
   return (
