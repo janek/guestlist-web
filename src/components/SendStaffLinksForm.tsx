@@ -9,7 +9,6 @@ import {
 } from "@/components/ui/form"
 import LimitInputField from "./LimitInputField"
 import { sendOutStaffLinks } from "@/utils/telegram"
-import { Tables } from "@/lib/database.types"
 
 
 const formSchema = z.object({
@@ -22,7 +21,7 @@ type AddLinkFormProps = {
   onSubmitFromParent: () => void
   eventId: string
   staff?: Staff[]
-  event: Tables<"events">["Row"]
+  event: Event
 }
 
 export function SendStaffLinksForm({ onSubmitFromParent, eventId, staff, event }: AddLinkFormProps) {
