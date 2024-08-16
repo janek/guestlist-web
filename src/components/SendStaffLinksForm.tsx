@@ -39,6 +39,7 @@ export function SendStaffLinksForm({ onSubmitFromParent, eventId, staff, event }
     const { limit_free, limit_half, limit_skip } = values
     const currentUrl = window.location.origin;
     sendOutStaffLinks(limit_free, limit_half, limit_skip, eventId, currentUrl, event)
+    console.log("Sending staff links for event:", event)  // Add this line for debugging
     onSubmitFromParent()
   }
   return (

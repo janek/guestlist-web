@@ -35,6 +35,7 @@ export async function sendOutStaffLinks(
   baseUrl: string,
   event: Event
 ) {
+  console.log("Received event:", event)  // Add this line for debugging
   const undeliveredLinks = [];
 
   for (const [name, id] of Object.entries(teamInfo)) {
@@ -62,6 +63,9 @@ export async function sendOutStaffLinks(
         console.log("Data \n", data)
         const url = `${baseUrl}/${slug}`;
         try {
+          if (!event || !event.name || !event.date) {
+            throw new Error("Event details are missing");
+          }
           await bot.api.sendMessage(id, `Hi ${name}! Your guestlist link for <i>${event.name} (${event.date})</i> is:\n\n<a href="${url}">${url}</a>\n<i>(${limit_free} free, ${limit_half} half, ${limit_skip} skip)</i>.\n\n You can write me the name(s), for example "Suley Blum, free"`, { parse_mode: "HTML" });
         } catch (error) {
           console.error(`Failed to send message to ${name}:`, error);
