@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dialog"
 import { AddLinkForm } from "./AddLinkForm"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { SendStaffLinksForm } from "./SendStaffLinksForm"
 
 interface AddLinkDialogButtonProps {
@@ -23,16 +23,7 @@ interface AddLinkDialogButtonProps {
 
 export const AddLinkDialogButton = ({ variant, title, description, staff, event }: AddLinkDialogButtonProps) => {
   const [open, setOpen] = useState(false)
-  const [clientSideEvent, setClientSideEvent] = useState<GuestlistEvent | null>(null)
-
-  useEffect(() => {
-    console.log("Event1 (initial):", event)
-    setClientSideEvent(event)
-  }, [event])
-
-  useEffect(() => {
-    console.log("Event1 (updated):", clientSideEvent)
-  }, [clientSideEvent])
+  console.log("Event1:", event)
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -44,17 +35,15 @@ export const AddLinkDialogButton = ({ variant, title, description, staff, event 
           {description && <DialogDescription>{description}</DialogDescription>}
           {variant === "manual" ? (
             <AddLinkForm
-              eventId={clientSideEvent?.id || ''}
-              onSubmitFromParent={() => setOpen(false)}
-            />
-          ) : clientSideEvent ? (
-            <SendStaffLinksForm
-              staff={staff}
-              event={clientSideEvent}
+              eventId={event.id}
               onSubmitFromParent={() => setOpen(false)}
             />
           ) : (
-            <p>Loading...</p>
+            <SendStaffLinksForm
+              staff={staff}
+              event={event}
+              onSubmitFromParent={() => setOpen(false)}
+            />
           )}
         </DialogHeader>
       </DialogContent>
