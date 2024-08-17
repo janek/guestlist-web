@@ -14,7 +14,6 @@ import { useState } from "react"
 import { SendStaffLinksForm } from "./SendStaffLinksForm"
 
 interface AddLinkDialogButtonProps {
-  eventId: string;
   variant: "manual" | "staff";
   title: string;
   description?: string;
@@ -22,7 +21,7 @@ interface AddLinkDialogButtonProps {
   event: Event;
 }
 
-export const AddLinkDialogButton = ({ eventId, variant, title, description, staff, event }: AddLinkDialogButtonProps) => {
+export const AddLinkDialogButton = ({ variant, title, description, staff, event }: AddLinkDialogButtonProps) => {
   const [open, setOpen] = useState(false)
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -35,12 +34,11 @@ export const AddLinkDialogButton = ({ eventId, variant, title, description, staf
           {description && <DialogDescription>{description}</DialogDescription>}
           {variant === "manual" ? (
             <AddLinkForm
-              eventId={eventId}
+              eventId={event.id}
               onSubmitFromParent={() => setOpen(false)}
             />
           ) : (
             <SendStaffLinksForm
-              eventId={eventId}
               staff={staff}
               event={event}
               onSubmitFromParent={() => setOpen(false)}
