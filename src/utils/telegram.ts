@@ -68,7 +68,11 @@ export async function sendOutStaffLinks(
           await bot.api.sendMessage(id, `Hi ${name}! Your guestlist link for <i>${event.name}</i> is:\n\n<a href="${url}">${url}</a>\n<i>(${limit_free} free, ${limit_half} half, ${limit_skip} skip)</i>.\n\n You can write me the name(s), for example "Suley Blum, free"`, { parse_mode: "HTML" });
         } catch (error) {
           console.error(`Failed to send message to ${name}:`, error);
-          undeliveredLinks.push({ name, id, error: error.message });
+          undeliveredLinks.push({ 
+            name, 
+            id, 
+            error: error instanceof Error ? error.message : String(error) 
+          });
         }
     }
   }
