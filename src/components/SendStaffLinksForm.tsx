@@ -26,6 +26,7 @@ type AddLinkFormProps = {
 
 export function SendStaffLinksForm({ onSubmitFromParent, eventId, staff, event }: AddLinkFormProps) {
 
+  console.log("Event:", event)
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -38,8 +39,8 @@ export function SendStaffLinksForm({ onSubmitFromParent, eventId, staff, event }
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const { limit_free, limit_half, limit_skip } = values
     const currentUrl = window.location.origin;
-    sendOutStaffLinks(limit_free, limit_half, limit_skip, eventId, currentUrl, event)
     console.log("Sending staff links for event:", event)  // Add this line for debugging
+    sendOutStaffLinks(limit_free, limit_half, limit_skip, eventId, currentUrl, event)
     onSubmitFromParent()
   }
   return (
