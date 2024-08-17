@@ -97,7 +97,7 @@ export default async function Page({
             <AddLinkDialogButton
               title="Create link"
               variant="manual"
-              eventId={eventId}
+              event={event as GuestlistEvent}
             />
             <AddLinkDialogButton
               title="Send out staff links"
