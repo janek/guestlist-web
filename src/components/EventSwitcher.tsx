@@ -3,14 +3,8 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useRouter } from "next/navigation"
 
-type Event = {
-  id: string
-  name: string
-  date: string
-}
-
 interface EventSwitcherProps extends React.HTMLAttributes<HTMLDivElement> {
-  events: Event[];
+  events: GuestlistEvent[];
   currentEventId: string | undefined;
 }
 

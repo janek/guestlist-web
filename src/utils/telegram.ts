@@ -31,9 +31,8 @@ export async function sendOutStaffLinks(
   limit_free: number,
   limit_half: number,
   limit_skip: number,
-  eventId: string,
   baseUrl: string,
-  event: Event
+  event: GuestlistEvent
 ) {
   console.log("Received event:", event)  // Add this line for debugging
   const undeliveredLinks = [];
@@ -45,7 +44,7 @@ export async function sendOutStaffLinks(
       .insert([
         {
           organisation: `${name} (Turbulence)`,
-          event_id: eventId,
+          event_id: event.id,
           limit_free: limit_free || 0,
           limit_half: limit_half || 0,
           limit_skip: limit_skip || 0,

@@ -19,14 +19,13 @@ const formSchema = z.object({
 
 type SendStaffLinksFormProps = {
   onSubmitFromParent: () => void
-  eventId: string
   staff?: Staff[]
-  event: Event
+  event: GuestlistEvent
 }
 
-export function SendStaffLinksForm({ onSubmitFromParent, eventId, staff, event }: SendStaffLinksFormProps) {
+export function SendStaffLinksForm({ onSubmitFromParent, staff, event }: SendStaffLinksFormProps) {
 
-  console.log("Event:", event)
+  console.log("Event2:", event)
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -40,7 +39,7 @@ export function SendStaffLinksForm({ onSubmitFromParent, eventId, staff, event }
     const { limit_free, limit_half, limit_skip } = values
     const currentUrl = window.location.origin;
     console.log("Sending staff links for event:", event)  // Add this line for debugging
-    sendOutStaffLinks(limit_free, limit_half, limit_skip, eventId, currentUrl, event)
+    sendOutStaffLinks(limit_free, limit_half, limit_skip, currentUrl, event)
     onSubmitFromParent()
   }
   return (
