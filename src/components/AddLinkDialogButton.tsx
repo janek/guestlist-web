@@ -18,11 +18,12 @@ interface AddLinkDialogButtonProps {
   title: string;
   description?: string;
   staff?: Staff[];
-  event: Event;
+  event: GuestlistEvent;
 }
 
 export const AddLinkDialogButton = ({ variant, title, description, staff, event }: AddLinkDialogButtonProps) => {
   const [open, setOpen] = useState(false)
+  console.log("Event1:", event)
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
