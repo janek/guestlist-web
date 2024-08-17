@@ -17,14 +17,14 @@ const formSchema = z.object({
   limit_skip: z.number().min(0),
 })
 
-type AddLinkFormProps = {
+type SendStaffLinksFormProps = {
   onSubmitFromParent: () => void
   eventId: string
   staff?: Staff[]
   event: Event
 }
 
-export function SendStaffLinksForm({ onSubmitFromParent, eventId, staff, event }: AddLinkFormProps) {
+export function SendStaffLinksForm({ onSubmitFromParent, eventId, staff, event }: SendStaffLinksFormProps) {
 
   console.log("Event:", event)
   const form = useForm<z.infer<typeof formSchema>>({
