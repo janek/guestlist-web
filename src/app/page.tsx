@@ -103,8 +103,8 @@ export default async function Page({
               title="Send out staff links"
               description="Links will be sent via telegram"
               variant="staff"
-              eventId={eventId}
               staff={staff as Staff[]}
+              event={event as GuestlistEvent}
             />
           </div>
         </div>
