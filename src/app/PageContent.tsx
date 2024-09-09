@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 import { AddLinkDialogButton } from "@/components/AddLinkDialogButton"
 import { DownloadCsvButton } from "@/components/DownloadCsvButton"
 import { EventSwitcher } from "@/components/EventSwitcher"
@@ -31,6 +32,7 @@ export default function PageContent({
   links,
   staff,
 }: PageContentProps) {
+  const router = useRouter()
   const [isAddEventDialogOpen, setIsAddEventDialogOpen] = useState(false)
   const [events, setEvents] = useState(allowedEvents)
 
@@ -46,6 +48,8 @@ export default function PageContent({
       // TODO: Handle error (e.g., show error message to user)
     } else if (data) {
       setEvents([...events, data[0]])
+      // Redirect to the newly created event
+      router.push(`/?eventId=${data[0].id}`)
     }
   }
 
