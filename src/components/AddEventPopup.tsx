@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField } from '@mui/material';
 import { Event } from '../types/Event';
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Calendar } from "@/components/ui/calendar";
 
 interface AddEventPopupProps {
   open: boolean;
@@ -14,19 +15,19 @@ interface AddEventPopupProps {
 export const AddEventPopup: React.FC<AddEventPopupProps> = ({ open, onClose, onAddEvent }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [startTime, setStartTime] = useState<Date | null>(null);
-  const [endTime, setEndTime] = useState<Date | null>(null);
+  const [startDate, setStartDate] = useState<Date | undefined>(undefined);
+  const [endDate, setEndDate] = useState<Date | undefined>(undefined);
   const [location, setLocation] = useState('');
   const [imageUrl, setImageUrl] = useState('');
   const [pin, setPin] = useState<number | ''>('');
 
   const handleSubmit = () => {
-    if (title && description && startTime && endTime && location && pin !== '') {
+    if (title && description && startDate && endDate && location && pin !== '') {
       onAddEvent({
         title,
         description,
-        start_time: startTime.toISOString(),
-        end_time: endTime.toISOString(),
+        start_time: startDate.toISOString(),
+        end_time: endDate.toISOString(),
         location,
         image_url: imageUrl || undefined,
         pin: Number(pin),
@@ -36,70 +37,76 @@ export const AddEventPopup: React.FC<AddEventPopupProps> = ({ open, onClose, onA
   };
 
   return (
-    <Dialog open={open} onClose={onClose}>
-      <DialogTitle>Add New Event</DialogTitle>
-      <DialogContent>
-        <TextField
-          autoFocus
-          margin="dense"
-          label="Title"
-          type="text"
-          fullWidth
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-        <TextField
-          margin="dense"
-          label="Description"
-          type="text"
-          fullWidth
-          multiline
-          rows={4}
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <DateTimePicker
-            label="Start Time"
-            value={startTime}
-            onChange={(newValue) => setStartTime(newValue)}
+    <Dialog open={open} onOpenChange={onClose}>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>Add New Event</DialogTitle>
+        </DialogHeader>
+        <div className="grid gap-4 py-4">
+          <Input
+            id="title"
+            placeholder="Title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
           />
-          <DateTimePicker
-            label="End Time"
-            value={endTime}
-            onChange={(newValue) => setEndTime(newValue)}
+          <Textarea
+            id="description"
+            placeholder="Description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
           />
-        </LocalizationProvider>
-        <TextField
-          margin="dense"
-          label="Location"
-          type="text"
-          fullWidth
-          value={location}
-          onChange={(e) => setLocation(e.target.value)}
-        />
-        <TextField
-          margin="dense"
-          label="Image URL"
-          type="text"
-          fullWidth
-          value={imageUrl}
-          onChange={(e) => setImageUrl(e.target.value)}
-        />
-        <TextField
-          margin="dense"
-          label="Pin"
-          type="number"
-          fullWidth
-          value={pin}
-          onChange={(e) => setPin(e.target.value === '' ? '' : Number(e.target.value))}
-          inputProps={{ min: 0 }}
-        />
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label htmlFor="start-date" className="block text-sm font-medium text-gray-700">
+                Start Date
+              </label>
+              <Calendar
+                mode="single"
+                selected={startDate}
+                onSelect={setStartDate}
+                className="rounded-md border"
+              />
+            </div>
+            <div>
+              <label htmlFor="end-date" className="block text-sm font-medium text-gray-700">
+                End Date
+              </label>
+              <Calendar
+                mode="single"
+                selected={endDate}
+                onSelect={setEndDate}
+                className="rounded-md border"
+              />
+            </div>
+          </div>
+          <Input
+            id="location"
+            placeholder="Location"
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+          />
+          <Input
+            id="image-url"
+            placeholder="Image URL"
+            value={imageUrl}
+            onChange={(e) => setImageUrl(e.target.value)}
+          />
+          <Input
+            id="pin"
+            type="number"
+            placeholder="Pin"
+            value={pin}
+            onChange={(e) => setPin(e.target.value === '' ? '' : Number(e.target.value))}
+            min={0}
+          />
+        </div>
+        <DialogFooter>
+          <Button variant="outline" onClick={onClose}>
+            Cancel
+          </Button>
+          <Button onClick={handleSubmit}>Add Event</Button>
+        </DialogFooter>
       </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose}>Cancel</Button>
-        <Button onClick={handleSubmit}>Add Event</Button>
-      </DialogActions>
     </Dialog>
   );
 };
