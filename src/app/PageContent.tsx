@@ -39,22 +39,27 @@ export default function PageContent({
   const handleAddEvent = async (eventData: { name: string; date: string }) => {
     const supabase = createClient()
     console.log("Adding event:", eventData, "User ID:", user.id)
-    const { data, error } = await supabase
-      .from("events")
-      .insert([{ name: eventData.name, date: eventData.date, owner: user.id }])
-      .select()
-    console.log("Supabase response:", { data, error })
+    try {
+      const { data, error } = await supabase
+        .from("events")
+        .insert([{ name: eventData.name, date: eventData.date, owner: user.id }])
+        .select()
+      console.log("Supabase response:", { data, error })
 
-    if (error) {
-      console.error("Error adding event:", error)
-      alert("Failed to add event. Please try again.")
-    } else if (data && data.length > 0) {
-      const newEvent = data[0] as GuestlistEvent
-      setEvents((prevEvents) => [...prevEvents, newEvent])
-      router.push(`/?eventId=${newEvent.id}`)
-    } else {
-      console.error("No data returned after inserting event")
-      alert("Failed to add event. Please try again.")
+      if (error) {
+        console.error("Error adding event:", error)
+        alert(`Failed to add event. Error: ${error.message}`)
+      } else if (data && data.length > 0) {
+        const newEvent = data[0] as GuestlistEvent
+        setEvents((prevEvents) => [...prevEvents, newEvent])
+        router.push(`/?eventId=${newEvent.id}`)
+      } else {
+        console.error("No data returned after inserting event")
+        alert("Failed to add event. No data returned from the server.")
+      }
+    } catch (error) {
+      console.error("Unexpected error:", error)
+      alert(`An unexpected error occurred: ${error instanceof Error ? error.message : String(error)}`)
     }
   }
 
