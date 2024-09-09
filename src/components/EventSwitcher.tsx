@@ -2,13 +2,15 @@
 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useRouter } from "next/navigation"
+import { AddEventButton } from "./AddEventButton"
 
 interface EventSwitcherProps extends React.HTMLAttributes<HTMLDivElement> {
   events: GuestlistEvent[];
   currentEventId: string | undefined;
+  onAddEvent: () => void;
 }
 
-export function EventSwitcher({ events, currentEventId, ...props }: EventSwitcherProps) {
+export function EventSwitcher({ events, currentEventId, onAddEvent, ...props }: EventSwitcherProps) {
   const router = useRouter()
 
   const handleEventChange = (eventId: string) => {
@@ -16,7 +18,7 @@ export function EventSwitcher({ events, currentEventId, ...props }: EventSwitche
   }
 
   return (
-    <div {...props}>
+    <div className="flex items-center space-x-2" {...props}>
       <Select defaultValue={currentEventId || undefined} onValueChange={handleEventChange}>
         <SelectTrigger className="w-[280px]">
           <SelectValue placeholder="Select an event" />
@@ -29,6 +31,7 @@ export function EventSwitcher({ events, currentEventId, ...props }: EventSwitche
           ))}
         </SelectContent>
       </Select>
+      <AddEventButton onClick={onAddEvent} />
     </div>
   )
 }
