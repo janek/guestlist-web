@@ -38,18 +38,23 @@ export default function PageContent({
 
   const handleAddEvent = async (eventData: { name: string; date: string }) => {
     const supabase = createClient()
+    console.log("Adding event:", eventData, "User ID:", user.id)
     const { data, error } = await supabase
       .from("events")
       .insert([{ name: eventData.name, date: eventData.date, owner: user.id }])
       .select()
+    console.log("Supabase response:", { data, error })
 
     if (error) {
       console.error("Error adding event:", error)
-      // TODO: Handle error (e.g., show error message to user)
-    } else if (data) {
-      setEvents([...events, data[0]])
-      // Redirect to the newly created event
-      router.push(`/?eventId=${data[0].id}`)
+      alert("Failed to add event. Please try again.")
+    } else if (data && data.length > 0) {
+      const newEvent = data[0] as GuestlistEvent
+      setEvents((prevEvents) => [...prevEvents, newEvent])
+      router.push(`/?eventId=${newEvent.id}`)
+    } else {
+      console.error("No data returned after inserting event")
+      alert("Failed to add event. Please try again.")
     }
   }
 
