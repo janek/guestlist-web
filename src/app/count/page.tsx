@@ -74,10 +74,10 @@ export default function GuestCount() {
   return (
     <div className="container mx-auto p-4">
       <p className="text-lg">
-        Total slots: <span className="font-semibold">{totalRegularCount} + {totalAdditionalCount}</span>
+        Total on the list: <span className="font-semibold">{totalRegularCount} + {totalAdditionalCount}</span>
       </p>
       <p className="text-lg">
-        Used slots: <span className="font-semibold">{usedRegularCount} + {usedAdditionalCount}</span>
+        Checked in: <span className="font-semibold">{usedRegularCount} + {usedAdditionalCount}</span>
       </p>
     </div>
   )
