@@ -34,6 +34,11 @@ export default async function Page({ params }: { params: { slug: string } }) {
     .returns<Guest[]>()
 
   const organisationName = link.organisation as string
+
+  const usedFree = guests?.filter(guest => guest.type === 'free').length || 0
+  const usedHalf = guests?.filter(guest => guest.type === 'half').length || 0
+  const usedSkip = guests?.filter(guest => guest.type === 'skip').length || 0
+
   return (
     <div className="flex flex-col items-center justify-center h-screen">
       <h4 className="scroll-m-20 text-2xl mb-2 font-semibold tracking-tight text-left">
@@ -48,10 +53,12 @@ export default async function Page({ params }: { params: { slug: string } }) {
         Guestlist for {organisationName}
       </p>
       <p className="scroll-m-20 text-md mb-4 font-normal tracking-tight text-left">
-        Free: {link.limit_free ?? "N/A"}, Half: {link.limit_half ?? "N/A"},
-        Skip: {link.limit_skip ?? "N/A"}
+        {link.limit_free > 0 && `Free: ${usedFree}/${link.limit_free} used`}
+        {link.limit_free > 0 && link.limit_half > 0 && ', '}
+        {link.limit_half > 0 && `Half: ${usedHalf}/${link.limit_half} used`}
+        {(link.limit_free > 0 || link.limit_half > 0) && link.limit_skip > 0 && ', '}
+        {link.limit_skip > 0 && `Skip: ${usedSkip}/${link.limit_skip} used`}
       </p>
-      {/* {guests && guests.length > 0 && ( */}
       <ScrollArea className="h-[270px] w-[350px] rounded-md border p-4 mb-4">
         <GuestlistTable
           guests={guests || []}
@@ -59,7 +66,6 @@ export default async function Page({ params }: { params: { slug: string } }) {
           shouldShowOrganization={false}
         />
       </ScrollArea>
-      {/* )} */}
       <GuestDetailsDialog
         organisation={organisationName}
         link={link}
