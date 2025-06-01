@@ -25,7 +25,7 @@ export default async function Page({
 
   const { data: allowedEvents } = await supabase
     .from("events")
-    .select("id, name, date, owner")
+    .select("id, name, date, owner, pin")
     .order('date', { ascending: false })
 
   const defaultEventId = process.env.DEFAULT_EVENT_ID
