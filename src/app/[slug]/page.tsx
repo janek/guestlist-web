@@ -8,7 +8,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
 
   const { data: links } = await supabase
     .from("links_with_event_details")
-    .select()
+    .select("id, slug, organisation, limit_free, limit_half, limit_skip, event_name, event_date, event_id")
     .eq("slug", params.slug)
     .returns<Link[]>()
 
@@ -23,21 +23,32 @@ export default async function Page({ params }: { params: { slug: string } }) {
   }
 
   const link = links[0] as Link
-
-  // TODO: this should be a joined table, probably, for performance reasons - see egghead course
-  // https://egghead.io/courses/build-a-twitter-clone-with-the-next-js-app-router-and-supabase-19bebadb
   const linkId = link.id
-  const { data: guests } = await supabase
-    .from("guests")
-    .select()
-    .eq("link_id", linkId)
-    .returns<Guest[]>()
+  
+  const [guestsResult, countsResult] = await Promise.all([
+    // These run in parallel
+    supabase
+      .from("guests")
+      .select("id, name, type, used, created_at, organisation")
+      .eq("link_id", linkId)
+      .order("created_at", { ascending: true })
+      .returns<Guest[]>(),
+    
+    supabase
+      .from("guests")
+      .select("type")
+      .eq("link_id", linkId)
+  ])
+
+  const guests = guestsResult.data || []
+  const guestCounts = countsResult.data || []
+  
+  // Server-side count calculation
+  const usedFree = guestCounts.filter(guest => guest.type === 'free').length
+  const usedHalf = guestCounts.filter(guest => guest.type === 'half').length  
+  const usedSkip = guestCounts.filter(guest => guest.type === 'skip').length
 
   const organisationName = link.organisation as string
-
-  const usedFree = guests?.filter(guest => guest.type === 'free').length || 0
-  const usedHalf = guests?.filter(guest => guest.type === 'half').length || 0
-  const usedSkip = guests?.filter(guest => guest.type === 'skip').length || 0
 
   return (
     <div className="flex flex-col items-center justify-center h-screen">
@@ -61,7 +72,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
       </p>
       <ScrollArea className="h-[270px] w-[350px] rounded-md border p-4 mb-4">
         <GuestlistTable
-          guests={guests || []}
+          guests={guests}
           link={link}
           shouldShowOrganization={false}
         />
@@ -69,7 +80,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
       <GuestDetailsDialog
         organisation={organisationName}
         link={link}
-        currentGuestlist={guests || []}
+        currentGuestlist={guests}
         editedFromLinkId={link.id}
       />
     </div>
