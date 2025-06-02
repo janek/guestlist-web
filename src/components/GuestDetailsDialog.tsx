@@ -21,6 +21,8 @@ type GuestDetailsDialogProps = {
   organisation?: string // Deprecated, use info from link
   link: Link
   currentGuestlist: Guest[]
+  onOptimisticUpdate?: (guest: Guest) => void  // Add callback for optimistic updates
+  onOptimisticDelete?: (guestId: string) => void  // Add callback for optimistic deletes
 }
 
 // Set default props using destructuring with default values
@@ -34,7 +36,11 @@ export const GuestDetailsDialog = ({
   eventId,
   link,
   currentGuestlist = [],
+  onOptimisticUpdate,
+  onOptimisticDelete,
 }: Partial<GuestDetailsDialogProps> = {}) => {
+  console.log("🔗 GuestDetailsDialog - onOptimisticDelete callback:", onOptimisticDelete ? "✅ Present" : "❌ Missing")
+
   const availableListTypes = (
     link: Link,
     guests: Guest[],
@@ -107,6 +113,8 @@ export const GuestDetailsDialog = ({
             editedFromLinkId={editedFromLinkId}
             eventId={eventId || link?.event_id || null}
             availableListTypes={listTypes ?? new Set([])}
+            onOptimisticUpdate={onOptimisticUpdate}
+            onOptimisticDelete={onOptimisticDelete}
           />
         </DialogHeader>
       </DialogContent>

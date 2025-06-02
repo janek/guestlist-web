@@ -25,12 +25,16 @@ type GuestlistTableProps = {
   link?: Link
   guests: Guest[]
   shouldShowOrganization: boolean
+  onOptimisticUpdate?: (guest: Guest) => void
+  onOptimisticDelete?: (guestId: string) => void
 }
 
 const GuestlistTable = ({
   link,
   guests,
   shouldShowOrganization,
+  onOptimisticUpdate,
+  onOptimisticDelete,
 }: GuestlistTableProps) => {
   const supabase = createClient()
   const router = useRouter()
@@ -49,7 +53,9 @@ const GuestlistTable = ({
         },
         (payload) => {
           console.log("Guests Payload")
-          router.refresh()
+          // Remove router.refresh() to prevent full page refreshes
+          // Optimistic updates will handle the UI changes instead
+          // router.refresh()
         },
       )
       .subscribe()
@@ -100,6 +106,8 @@ const GuestlistTable = ({
         addGuestButtonHidden={true}
         link={link}
         currentGuestlist={guests}
+        onOptimisticUpdate={onOptimisticUpdate}
+        onOptimisticDelete={onOptimisticDelete}
       />
     </>
   )

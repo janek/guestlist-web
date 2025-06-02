@@ -37,6 +37,8 @@ type GuestDetailsFormProps = {
   editedFromLinkId: string | null
   availableListTypes: Set<ListType>
   eventId: string | null
+  onOptimisticUpdate?: (guest: Guest) => void
+  onOptimisticDelete?: (guestId: string) => void
 }
 
 type GuestlistType = "free" | "half" | "skip"
@@ -47,6 +49,8 @@ export function GuestDetailsForm({
   eventId,
   availableListTypes,
   editedFromLinkId,
+  onOptimisticUpdate,
+  onOptimisticDelete,
 }: GuestDetailsFormProps) {
   const supabase = createClient()
   const form = useForm<z.infer<typeof formSchema>>({
@@ -74,6 +78,20 @@ export function GuestDetailsForm({
         .select()
       console.log(data, error)
     } else {
+      if (onOptimisticUpdate) {
+        const optimisticGuest: Guest = {
+          id: `temp-${Date.now()}`,
+          name: name,
+          organisation: organisation,
+          type: type,
+          event_id: eventId || "",
+          link_id: editedFromLinkId,
+          used: false,
+          created_at: new Date().toISOString(),
+        }
+        onOptimisticUpdate(optimisticGuest)
+      }
+
       const { data, error } = await supabase
         .from("guests")
         .insert([
@@ -86,14 +104,47 @@ export function GuestDetailsForm({
           },
         ])
         .select()
+      
+      if (error) {
+        console.error("Failed to add guest:", error)
+      }
+      
       console.log(data, error)
     }
   }
 
   async function handleDelete() {
+    console.log("🗑️ handleDelete called")
     if (guest) {
-      const response = await supabase.from("guests").delete().eq("id", guest.id)
-      console.log(response)
+      console.log("🗑️ Guest to delete:", guest.id, guest.name)
+      
+      // Check if this is a temporary ID (from optimistic add)
+      const isTempId = guest.id.startsWith('temp-')
+      console.log("🗑️ Is temporary ID:", isTempId)
+      
+      // Always do optimistic delete first
+      if (onOptimisticDelete) {
+        console.log("🗑️ Calling onOptimisticDelete with guest ID:", guest.id)
+        onOptimisticDelete(guest.id)
+      } else {
+        console.log("🗑️ ERROR: onOptimisticDelete callback is missing!")
+      }
+
+      // Only try database delete if it's a real ID (not temporary)
+      if (!isTempId) {
+        console.log("🗑️ Starting database delete...")
+        const { error } = await supabase.from("guests").delete().eq("id", guest.id)
+        
+        if (error) {
+          console.error("🗑️ Failed to delete guest:", error)
+        } else {
+          console.log("🗑️ Database delete successful")
+        }
+      } else {
+        console.log("🗑️ Skipping database delete for temporary guest")
+      }
+    } else {
+      console.log("🗑️ ERROR: No guest to delete!")
     }
   }
 
@@ -158,7 +209,13 @@ export function GuestDetailsForm({
             <Button type="submit">Save</Button>
           </DialogClose>
           <DialogClose asChild>
-            <Button variant="outline" onClick={handleDelete}>
+            <Button 
+              variant="outline" 
+              onClick={(e) => {
+                console.log("🗑️ Delete button clicked!")
+                handleDelete()
+              }}
+            >
               Delete
             </Button>
           </DialogClose>

@@ -1,6 +1,4 @@
-import { GuestDetailsDialog } from "@/components/GuestDetailsDialog"
-import GuestlistTable from "@/components/GuestlistTable"
-import { ScrollArea } from "@/components/ui/scroll-area"
+import { OptimisticGuestlistPage } from "@/components/OptimisticGuestlistPage"
 import { createClient } from "@/utils/supabase/server"
 
 // Type for the optimized single-query result
@@ -57,41 +55,18 @@ export default async function Page({ params }: { params: { slug: string } }) {
     permissions: null
   }
 
-  const organisationName = result.organisation
-
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
-      <h4 className="scroll-m-20 text-2xl mb-2 font-semibold tracking-tight text-left">
-        {result.event_name}
-      </h4>
-      {result.event_date && (
-        <h5 className="scroll-m-20 text-lg mb-4 font-normal tracking-tight text-left italic">
-          {`${new Date(result.event_date).toLocaleDateString("de-DE")}, TXL Airport`}
-        </h5>
-      )}
-      <p className="scroll-m-20 text-md mb-4 font-normal tracking-tight text-left">
-        Guestlist for {organisationName}
-      </p>
-      <p className="scroll-m-20 text-md mb-4 font-normal tracking-tight text-left">
-        {result.limit_free > 0 && `Free: ${result.used_free}/${result.limit_free} used`}
-        {result.limit_free > 0 && result.limit_half > 0 && ', '}
-        {result.limit_half > 0 && `Half: ${result.used_half}/${result.limit_half} used`}
-        {(result.limit_free > 0 || result.limit_half > 0) && result.limit_skip > 0 && ', '}
-        {result.limit_skip > 0 && `Skip: ${result.used_skip}/${result.limit_skip} used`}
-      </p>
-      <ScrollArea className="h-[270px] w-[350px] rounded-md border p-4 mb-4">
-        <GuestlistTable
-          guests={guests}
-          link={link}
-          shouldShowOrganization={false}
-        />
-      </ScrollArea>
-      <GuestDetailsDialog
-        organisation={organisationName}
-        link={link}
-        currentGuestlist={guests}
-        editedFromLinkId={result.id}
-      />
-    </div>
+    <OptimisticGuestlistPage
+      initialGuests={guests}
+      link={link}
+      organisationName={result.organisation}
+      usedCounts={{
+        used_free: result.used_free,
+        used_half: result.used_half,
+        used_skip: result.used_skip,
+      }}
+      eventName={result.event_name}
+      eventDate={result.event_date}
+    />
   )
 }
