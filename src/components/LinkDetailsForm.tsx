@@ -123,6 +123,10 @@ export function LinkDetailsForm({ link }: LinkDetailsFormProps) {
       <form
         onSubmit={form.handleSubmit(onSubmit)}
         className="space-y-6 max-w-xs"
+        autoComplete="off"
+        data-1p-ignore
+        data-lpignore="true"
+        data-form-type="other"
       >
         <FormField
           control={form.control}

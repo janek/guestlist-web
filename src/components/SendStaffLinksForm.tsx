@@ -47,6 +47,10 @@ export function SendStaffLinksForm({ onSubmitFromParent, staff, event }: SendSta
       <form
         onSubmit={form.handleSubmit(onSubmit)}
         className="space-y-8  max-w-xs"
+        autoComplete="off"
+        data-1p-ignore
+        data-lpignore="true"
+        data-form-type="other"
       >
         <div className="flex space-x-4">
           <LimitInputField

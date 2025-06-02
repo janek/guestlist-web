@@ -3,10 +3,19 @@ import * as React from "react"
 import { cn } from "@/lib/utils"
 
 export interface InputProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {}
+  extends React.InputHTMLAttributes<HTMLInputElement> {
+  allowPasswordManager?: boolean
+}
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, ...props }, ref) => {
+  ({ className, type, allowPasswordManager = false, ...props }, ref) => {
+    const passwordManagerProps = allowPasswordManager ? {} : {
+      autoComplete: "off",
+      "data-1p-ignore": true,
+      "data-lpignore": true,
+      "data-form-type": "other"
+    }
+
     return (
       <input
         type={type}
@@ -15,6 +24,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           className,
         )}
         ref={ref}
+        {...passwordManagerProps}
         {...props}
       />
     )

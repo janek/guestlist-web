@@ -79,6 +79,10 @@ export function AddLinkForm({ onSubmitFromParent, eventId}: AddLinkFormProps) {
       <form
         onSubmit={form.handleSubmit(onSubmit)}
         className="space-y-8  max-w-xs"
+        autoComplete="off"
+        data-1p-ignore
+        data-lpignore="true"
+        data-form-type="other"
       >
         <FormField
           control={form.control}
