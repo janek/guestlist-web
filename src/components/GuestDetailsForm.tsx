@@ -212,17 +212,19 @@ export function GuestDetailsForm({
           <DialogClose asChild>
             <Button type="submit">Save</Button>
           </DialogClose>
-          <DialogClose asChild>
-            <Button 
-              variant="outline" 
-              onClick={(e) => {
-                console.log("🗑️ Delete button clicked!")
-                handleDelete()
-              }}
-            >
-              Delete
-            </Button>
-          </DialogClose>
+          {guest && (
+            <DialogClose asChild>
+              <Button 
+                variant="outline" 
+                onClick={(e) => {
+                  console.log("🗑️ Delete button clicked!")
+                  handleDelete()
+                }}
+              >
+                Delete
+              </Button>
+            </DialogClose>
+          )}
         </div>
       </form>
     </Form>
