@@ -7,7 +7,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { useEffect, useState } from "react"
 import type { Tables } from "../../lib/database.types"
 import { GuestDetailsForm } from "./GuestDetailsForm"
 
@@ -36,12 +35,6 @@ export const GuestDetailsDialog = ({
   link,
   currentGuestlist = [],
 }: Partial<GuestDetailsDialogProps> = {}) => {
-  const [isClient, setIsClient] = useState(false)
-
-  useEffect(() => {
-    setIsClient(true)
-  }, [])
-
   const availableListTypes = (
     link: Link,
     guests: Guest[],
@@ -79,19 +72,30 @@ export const GuestDetailsDialog = ({
     ? availableListTypes(link, currentGuestlist)
     : new Set<ListType>(["free", "half", "skip"])
 
+  // Always render something to prevent layout shift - no hydration check needed
+  const renderTrigger = () => {
+    if (addGuestButtonHidden) {
+      return null
+    }
+
+    if (listTypes.size > 0) {
+      return (
+        <DialogTrigger asChild>
+          <Button variant="outline">Add guest</Button>
+        </DialogTrigger>
+      )
+    }
+
+    return (
+      <p className="text-sm italic">
+        Your list is full, click on a name to edit or delete it
+      </p>
+    )
+  }
+
   return (
     <Dialog open={open ?? undefined} onOpenChange={onOpenChange ?? undefined}>
-      {isClient &&
-        !addGuestButtonHidden &&
-        (listTypes.size > 0 ? (
-          <DialogTrigger asChild>
-            <Button variant="outline">Add guest</Button>
-          </DialogTrigger>
-        ) : (
-          <p className="text-sm italic">
-            Your list is full, click on a name to edit or delete it
-          </p>
-        ))}
+      {renderTrigger()}
       <DialogContent className="max-w-xs">
         <DialogHeader>
           <DialogTitle className="mb-4">
