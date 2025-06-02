@@ -100,7 +100,7 @@ export default async function Page({
               event={event as GuestlistEvent}
             />
             <AddLinkDialogButton
-              title="Staff links"
+              title="Send staff links"
               variant="staff"
               staff={staff as Staff[]}
               event={event as GuestlistEvent}
