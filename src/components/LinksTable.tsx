@@ -11,8 +11,9 @@ import {
 } from "@/components/ui/table"
 import { createClient } from "@/utils/supabase/client"
 import { useRouter } from "next/navigation"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import type { Tables } from "../../lib/database.types"
+import { LinkDetailsDialog } from "./LinkDetailsDialog"
 
 type LinksTableProps = {
   links: Tables<"links">[]
@@ -21,6 +22,8 @@ type LinksTableProps = {
 const LinksTable = ({ links }: LinksTableProps) => {
   const supabase = createClient()
   const router = useRouter()
+  const [selectedLink, setSelectedLink] = useState<Tables<"links"> | null>(null)
+  const [dialogOpen, setDialogOpen] = useState(false)
 
   useEffect(() => {
     const channel = supabase
@@ -43,43 +46,45 @@ const LinksTable = ({ links }: LinksTableProps) => {
       supabase.removeChannel(channel)
     }
   }, [supabase, router])
+
+  const handleRowClick = (link: Tables<"links">) => {
+    setSelectedLink(link)
+    setDialogOpen(true)
+  }
+
   return (
-    <Table>
-      {/* <TableCaption>Guestlist for event {event.name} </TableCaption> */}
-      <TableHeader>
-        <TableRow>
-          <TableHead>Organisation</TableHead>
-          <TableHead>Limits</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {links.map((link) => (
-          // XXX: The table should be customised to enable the whole row being a link
-          <TableRow key={link.id}>
-            <TableCell>
-              <a
-                className="block"
-                href={link.slug}
-                target="_blank"
-                rel="noreferrer"
-              >
-                {link.organisation}
-              </a>
-            </TableCell>
-            <TableCell>
-              <a
-                className="block"
-                href={link.slug}
-                target="_blank"
-                rel="noreferrer"
-              >
-                {link.limit_free}-{link.limit_half}-{link.limit_skip}
-              </a>
-            </TableCell>
+    <>
+      <Table>
+        {/* <TableCaption>Guestlist for event {event.name} </TableCaption> */}
+        <TableHeader>
+          <TableRow>
+            <TableHead>Organisation</TableHead>
+            <TableHead>Limits</TableHead>
           </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+        </TableHeader>
+        <TableBody>
+          {links.map((link) => (
+            <TableRow 
+              key={link.id}
+              onClick={() => handleRowClick(link)}
+              className="cursor-pointer"
+            >
+              <TableCell>
+                {link.organisation}
+              </TableCell>
+              <TableCell>
+                {link.limit_free}-{link.limit_half}-{link.limit_skip}
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+      <LinkDetailsDialog
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+        link={selectedLink}
+      />
+    </>
   )
 }
 
