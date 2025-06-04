@@ -80,7 +80,7 @@ export default function GuestCountClient({ eventId }: GuestCountClientProps) {
       
       {/* Guestlist Section */}
       <div className="text-center">
-        <h2 className="text-lg font-semibold mb-4 text-gray-700">Guestlist</h2>
+        <h2 className="text-lg font-semibold mb-4 text-gray-700">Guestlist checked in</h2>
         <div className="space-y-3">
           <div className="w-full bg-gray-200 rounded-full h-2">
             <div 

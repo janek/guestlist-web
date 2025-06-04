@@ -37,8 +37,16 @@ export default function TicketsSection() {
   if (loading) {
     return (
       <div className="text-center">
-        <h2 className="text-lg font-semibold mb-4 text-gray-700">Tickets</h2>
-        <p className="text-xs text-gray-500">Loading...</p>
+        <h2 className="text-lg font-semibold mb-4 text-gray-700">Tickets sold</h2>
+        <div className="space-y-3">
+          <div className="w-full bg-gray-200 rounded-full h-2">
+            <div className="h-2 rounded-full bg-gray-300 animate-pulse" />
+          </div>
+          <div className="flex items-center justify-center space-x-2">
+            <div className="w-4 h-4 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin" />
+            <p className="text-sm text-gray-500 font-medium">Loading...</p>
+          </div>
+        </div>
       </div>
     )
   }
@@ -46,8 +54,11 @@ export default function TicketsSection() {
   if (error) {
     return (
       <div className="text-center">
-        <h2 className="text-lg font-semibold mb-4 text-gray-700">Tickets</h2>
-        <p className="text-xs text-red-500">Error: {error}</p>
+        <h2 className="text-lg font-semibold mb-4 text-gray-700">Tickets sold</h2>
+        <div className="space-y-3">
+          <div className="w-full bg-gray-200 rounded-full h-2" />
+          <p className="text-xs text-red-500">Error: {error}</p>
+        </div>
       </div>
     )
   }
@@ -55,8 +66,11 @@ export default function TicketsSection() {
   if (!ticketData) {
     return (
       <div className="text-center">
-        <h2 className="text-lg font-semibold mb-4 text-gray-700">Tickets</h2>
-        <p className="text-xs text-gray-500">No data available</p>
+        <h2 className="text-lg font-semibold mb-4 text-gray-700">Tickets sold</h2>
+        <div className="space-y-3">
+          <div className="w-full bg-gray-200 rounded-full h-2" />
+          <p className="text-xs text-gray-500">No data available</p>
+        </div>
       </div>
     )
   }
@@ -67,7 +81,7 @@ export default function TicketsSection() {
 
   return (
     <div className="text-center">
-      <h2 className="text-lg font-semibold mb-4 text-gray-700">Tickets</h2>
+      <h2 className="text-lg font-semibold mb-4 text-gray-700">Tickets sold</h2>
       <div className="space-y-3">
         <div className="w-full bg-gray-200 rounded-full h-2">
           <div 
