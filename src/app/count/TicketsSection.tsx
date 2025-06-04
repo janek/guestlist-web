@@ -1,10 +1,44 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { Progress } from '@/components/ui/progress'
 
 type TicketData = {
   total_sold: string
   total_allocation: string
+}
+
+function useAnimatedCounter(target: number, duration: number = 500) {
+  const [current, setCurrent] = useState(0)
+
+  useEffect(() => {
+    if (target === 0) {
+      setCurrent(0)
+      return
+    }
+
+    const startTime = Date.now()
+    const startValue = current
+
+    const animate = () => {
+      const elapsed = Date.now() - startTime
+      const progress = Math.min(elapsed / duration, 1)
+      
+      // Easing function for smooth animation
+      const easeOut = 1 - Math.pow(1 - progress, 3)
+      const value = Math.round(startValue + (target - startValue) * easeOut)
+      
+      setCurrent(value)
+      
+      if (progress < 1) {
+        requestAnimationFrame(animate)
+      }
+    }
+    
+    requestAnimationFrame(animate)
+  }, [target, duration])
+
+  return current
 }
 
 export default function TicketsSection() {
@@ -34,14 +68,20 @@ export default function TicketsSection() {
     fetchTicketData()
   }, [])
 
+  const sold = ticketData ? parseInt(ticketData.total_sold) : 0
+  const total = ticketData ? parseInt(ticketData.total_allocation) : 0
+  const ticketPercentage = total > 0 ? (sold / total) * 100 : 0
+
+  const animatedSold = useAnimatedCounter(sold)
+  const animatedTotal = useAnimatedCounter(total)
+  const animatedPercentage = useAnimatedCounter(ticketPercentage)
+
   if (loading) {
     return (
       <div className="text-center">
         <h2 className="text-lg font-semibold mb-4 text-gray-700">Tickets sold</h2>
-        <div className="space-y-3">
-          <div className="w-full bg-gray-200 rounded-full h-2">
-            <div className="h-2 rounded-full bg-gray-300 animate-pulse" />
-          </div>
+        <div className="space-y-3 max-w-48 mx-auto">
+          <Progress value={0} className="h-1.5 animate-pulse" />
           <div className="flex items-center justify-center space-x-2">
             <div className="w-4 h-4 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin" />
             <p className="text-sm text-gray-500 font-medium">Loading...</p>
@@ -55,8 +95,8 @@ export default function TicketsSection() {
     return (
       <div className="text-center">
         <h2 className="text-lg font-semibold mb-4 text-gray-700">Tickets sold</h2>
-        <div className="space-y-3">
-          <div className="w-full bg-gray-200 rounded-full h-2" />
+        <div className="space-y-3 max-w-48 mx-auto">
+          <Progress value={0} className="h-1.5" />
           <p className="text-xs text-red-500">Error: {error}</p>
         </div>
       </div>
@@ -67,30 +107,21 @@ export default function TicketsSection() {
     return (
       <div className="text-center">
         <h2 className="text-lg font-semibold mb-4 text-gray-700">Tickets sold</h2>
-        <div className="space-y-3">
-          <div className="w-full bg-gray-200 rounded-full h-2" />
+        <div className="space-y-3 max-w-48 mx-auto">
+          <Progress value={0} className="h-1.5" />
           <p className="text-xs text-gray-500">No data available</p>
         </div>
       </div>
     )
   }
 
-  const sold = parseInt(ticketData.total_sold)
-  const total = parseInt(ticketData.total_allocation)
-  const ticketPercentage = total > 0 ? (sold / total) * 100 : 0
-
   return (
     <div className="text-center">
       <h2 className="text-lg font-semibold mb-4 text-gray-700">Tickets sold</h2>
-      <div className="space-y-3">
-        <div className="w-full bg-gray-200 rounded-full h-2">
-          <div 
-            className="h-2 rounded-full transition-all duration-500 ease-out bg-gradient-to-r from-gray-500 to-gray-700"
-            style={{ width: `${ticketPercentage}%` }}
-          />
-        </div>
-        <p className="text-sm text-gray-600 font-medium">
-          {sold}/{total}
+      <div className="space-y-3 max-w-48 mx-auto">
+        <Progress value={animatedPercentage} className="h-1.5" />
+        <p className="text-sm text-gray-600 font-medium font-mono">
+          {animatedSold}/{animatedTotal}
         </p>
       </div>
     </div>

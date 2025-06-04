@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { createClient } from '@/utils/supabase/client'
+import { Progress } from '@/components/ui/progress'
 import TicketsSection from './TicketsSection'
 
 type GuestCountClientProps = {
@@ -12,6 +13,39 @@ type GuestBreakdown = {
   free: { total: number; checkedIn: number }
   half: { total: number; checkedIn: number }
   skip: { total: number; checkedIn: number }
+}
+
+function useAnimatedCounter(target: number, duration: number = 500) {
+  const [current, setCurrent] = useState(0)
+
+  useEffect(() => {
+    if (target === 0) {
+      setCurrent(0)
+      return
+    }
+
+    const startTime = Date.now()
+    const startValue = current
+
+    const animate = () => {
+      const elapsed = Date.now() - startTime
+      const progress = Math.min(elapsed / duration, 1)
+      
+      // Easing function for smooth animation
+      const easeOut = 1 - Math.pow(1 - progress, 3)
+      const value = Math.round(startValue + (target - startValue) * easeOut)
+      
+      setCurrent(value)
+      
+      if (progress < 1) {
+        requestAnimationFrame(animate)
+      }
+    }
+    
+    requestAnimationFrame(animate)
+  }, [target, duration])
+
+  return current
 }
 
 export default function GuestCountClient({ eventId }: GuestCountClientProps) {
@@ -105,6 +139,19 @@ export default function GuestCountClient({ eventId }: GuestCountClientProps) {
 
   const guestPercentage = totalCount > 0 ? (checkedInCount / totalCount) * 100 : 0
 
+  // Animated counters
+  const animatedCheckedIn = useAnimatedCounter(checkedInCount)
+  const animatedTotal = useAnimatedCounter(totalCount)
+  const animatedPercentage = useAnimatedCounter(guestPercentage)
+  
+  // Animated breakdown counters
+  const animatedFreeCheckedIn = useAnimatedCounter(breakdown.free.checkedIn)
+  const animatedFreeTotal = useAnimatedCounter(breakdown.free.total)
+  const animatedHalfCheckedIn = useAnimatedCounter(breakdown.half.checkedIn)
+  const animatedHalfTotal = useAnimatedCounter(breakdown.half.total)
+  const animatedSkipCheckedIn = useAnimatedCounter(breakdown.skip.checkedIn)
+  const animatedSkipTotal = useAnimatedCounter(breakdown.skip.total)
+
   return (
     <div className="container mx-auto p-4 space-y-8 max-w-sm">
       {/* Tickets Section */}
@@ -113,19 +160,14 @@ export default function GuestCountClient({ eventId }: GuestCountClientProps) {
       {/* Guestlist Section */}
       <div className="text-center">
         <h2 className="text-lg font-semibold mb-4 text-gray-700">Guestlist checked in</h2>
-        <div className="space-y-3">
-          <div className="w-full bg-gray-200 rounded-full h-2">
-            <div 
-              className="h-2 rounded-full transition-all duration-500 ease-out bg-gradient-to-r from-gray-400 to-gray-600"
-              style={{ width: `${guestPercentage}%` }}
-            />
-          </div>
+        <div className="space-y-3 max-w-48 mx-auto">
+          <Progress value={animatedPercentage} className="h-1.5" />
           <div className="space-y-1">
-            <p className="text-sm text-gray-600 font-medium">
-              {checkedInCount}/{totalCount}
+            <p className="text-sm text-gray-600 font-medium font-mono">
+              {animatedCheckedIn}/{animatedTotal}
             </p>
-            <p className="text-xs text-gray-400 italic">
-              ({breakdown.free.checkedIn}/{breakdown.free.total} free, {breakdown.half.checkedIn}/{breakdown.half.total} half, {breakdown.skip.checkedIn}/{breakdown.skip.total} skip)
+            <p className="text-xs text-gray-400 italic font-mono">
+              ({animatedFreeCheckedIn}/{animatedFreeTotal} free, {animatedHalfCheckedIn}/{animatedHalfTotal} half, {animatedSkipCheckedIn}/{animatedSkipTotal} skip)
             </p>
           </div>
         </div>
