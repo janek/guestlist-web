@@ -139,18 +139,14 @@ export default function GuestCountClient({ eventId }: GuestCountClientProps) {
 
   const guestPercentage = totalCount > 0 ? (checkedInCount / totalCount) * 100 : 0
 
-  // Animated counters
+  // Animated counters - only animate the "checked in" numbers, not totals
   const animatedCheckedIn = useAnimatedCounter(checkedInCount)
-  const animatedTotal = useAnimatedCounter(totalCount)
   const animatedPercentage = useAnimatedCounter(guestPercentage)
   
-  // Animated breakdown counters
+  // Animated breakdown counters - only checked in counts
   const animatedFreeCheckedIn = useAnimatedCounter(breakdown.free.checkedIn)
-  const animatedFreeTotal = useAnimatedCounter(breakdown.free.total)
   const animatedHalfCheckedIn = useAnimatedCounter(breakdown.half.checkedIn)
-  const animatedHalfTotal = useAnimatedCounter(breakdown.half.total)
   const animatedSkipCheckedIn = useAnimatedCounter(breakdown.skip.checkedIn)
-  const animatedSkipTotal = useAnimatedCounter(breakdown.skip.total)
 
   return (
     <div className="container mx-auto p-4 space-y-8 max-w-sm">
@@ -160,14 +156,14 @@ export default function GuestCountClient({ eventId }: GuestCountClientProps) {
       {/* Guestlist Section */}
       <div className="text-center">
         <h2 className="text-lg font-semibold mb-4 text-gray-700">Guestlist checked in</h2>
-        <div className="space-y-3 max-w-48 mx-auto">
-          <Progress value={animatedPercentage} className="h-1.5" />
+        <div className="space-y-3 max-w-64 mx-auto">
+          <Progress value={animatedPercentage} className="h-3 [&>div]:bg-gradient-to-r [&>div]:from-gray-400 [&>div]:to-gray-600" />
           <div className="space-y-1">
             <p className="text-sm text-gray-600 font-medium font-mono">
-              {animatedCheckedIn}/{animatedTotal}
+              {animatedCheckedIn}/{totalCount}
             </p>
             <p className="text-xs text-gray-400 italic font-mono">
-              ({animatedFreeCheckedIn}/{animatedFreeTotal} free, {animatedHalfCheckedIn}/{animatedHalfTotal} half, {animatedSkipCheckedIn}/{animatedSkipTotal} skip)
+              ({animatedFreeCheckedIn}/{breakdown.free.total} free, {animatedHalfCheckedIn}/{breakdown.half.total} half, {animatedSkipCheckedIn}/{breakdown.skip.total} skip)
             </p>
           </div>
         </div>

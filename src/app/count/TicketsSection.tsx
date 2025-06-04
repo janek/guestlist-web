@@ -73,15 +73,14 @@ export default function TicketsSection() {
   const ticketPercentage = total > 0 ? (sold / total) * 100 : 0
 
   const animatedSold = useAnimatedCounter(sold)
-  const animatedTotal = useAnimatedCounter(total)
   const animatedPercentage = useAnimatedCounter(ticketPercentage)
 
   if (loading) {
     return (
       <div className="text-center">
         <h2 className="text-lg font-semibold mb-4 text-gray-700">Tickets sold</h2>
-        <div className="space-y-3 max-w-48 mx-auto">
-          <Progress value={0} className="h-1.5 animate-pulse" />
+        <div className="space-y-3 max-w-64 mx-auto">
+          <Progress value={0} className="h-3 animate-pulse [&>div]:bg-gradient-to-r [&>div]:from-gray-300 [&>div]:to-gray-400" />
           <div className="flex items-center justify-center space-x-2">
             <div className="w-4 h-4 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin" />
             <p className="text-sm text-gray-500 font-medium">Loading...</p>
@@ -95,8 +94,8 @@ export default function TicketsSection() {
     return (
       <div className="text-center">
         <h2 className="text-lg font-semibold mb-4 text-gray-700">Tickets sold</h2>
-        <div className="space-y-3 max-w-48 mx-auto">
-          <Progress value={0} className="h-1.5" />
+        <div className="space-y-3 max-w-64 mx-auto">
+          <Progress value={0} className="h-3 [&>div]:bg-gradient-to-r [&>div]:from-gray-300 [&>div]:to-gray-400" />
           <p className="text-xs text-red-500">Error: {error}</p>
         </div>
       </div>
@@ -107,8 +106,8 @@ export default function TicketsSection() {
     return (
       <div className="text-center">
         <h2 className="text-lg font-semibold mb-4 text-gray-700">Tickets sold</h2>
-        <div className="space-y-3 max-w-48 mx-auto">
-          <Progress value={0} className="h-1.5" />
+        <div className="space-y-3 max-w-64 mx-auto">
+          <Progress value={0} className="h-3 [&>div]:bg-gradient-to-r [&>div]:from-gray-300 [&>div]:to-gray-400" />
           <p className="text-xs text-gray-500">No data available</p>
         </div>
       </div>
@@ -118,10 +117,10 @@ export default function TicketsSection() {
   return (
     <div className="text-center">
       <h2 className="text-lg font-semibold mb-4 text-gray-700">Tickets sold</h2>
-      <div className="space-y-3 max-w-48 mx-auto">
-        <Progress value={animatedPercentage} className="h-1.5" />
+      <div className="space-y-3 max-w-64 mx-auto">
+        <Progress value={animatedPercentage} className="h-3 [&>div]:bg-gradient-to-r [&>div]:from-gray-500 [&>div]:to-gray-700" />
         <p className="text-sm text-gray-600 font-medium font-mono">
-          {animatedSold}/{animatedTotal}
+          {animatedSold}/{total}
         </p>
       </div>
     </div>
