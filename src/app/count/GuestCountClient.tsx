@@ -2,16 +2,15 @@
 
 import { useEffect, useState } from 'react'
 import { createClient } from '@/utils/supabase/client'
+import TicketsSection from './TicketsSection'
 
 type GuestCountClientProps = {
   eventId: string
 }
 
 export default function GuestCountClient({ eventId }: GuestCountClientProps) {
-  const [totalRegularCount, setTotalRegularCount] = useState(0)
-  const [totalAdditionalCount, setTotalAdditionalCount] = useState(0)
-  const [usedRegularCount, setUsedRegularCount] = useState(0)
-  const [usedAdditionalCount, setUsedAdditionalCount] = useState(0)
+  const [totalCount, setTotalCount] = useState(0)
+  const [checkedInCount, setCheckedInCount] = useState(0)
 
   const supabase = createClient()
 
@@ -28,27 +27,28 @@ export default function GuestCountClient({ eventId }: GuestCountClientProps) {
         return
       }
 
-      let trc = 0, tac = 0, urc = 0, uac = 0
+      let total = 0, checkedIn = 0
 
       guests?.forEach(guest => {
-        trc++
+        // Count the main guest
+        total++
+        if (guest.used) {
+          checkedIn++
+        }
+
+        // Count additional guests (e.g., +2, +3)
         const match = guest.name.match(/\+(\d+)$/)
         if (match) {
           const additionalGuests = parseInt(match[1], 10)
-          tac += additionalGuests
+          total += additionalGuests
           if (guest.used) {
-            urc++
-            uac += additionalGuests
+            checkedIn += additionalGuests
           }
-        } else if (guest.used) {
-          urc++
         }
       })
 
-      setTotalRegularCount(trc)
-      setTotalAdditionalCount(tac)
-      setUsedRegularCount(urc)
-      setUsedAdditionalCount(uac)
+      setTotalCount(total)
+      setCheckedInCount(checkedIn)
     }
 
     // Initial fetch
@@ -71,14 +71,28 @@ export default function GuestCountClient({ eventId }: GuestCountClientProps) {
     }
   }, [eventId, supabase])
 
+  const guestPercentage = totalCount > 0 ? (checkedInCount / totalCount) * 100 : 0
+
   return (
-    <div className="container mx-auto p-4">
-      <p className="text-lg">
-        Total on the list: <span className="font-semibold">{totalRegularCount} + {totalAdditionalCount}</span>
-      </p>
-      <p className="text-lg">
-        Checked in: <span className="font-semibold">{usedRegularCount} + {usedAdditionalCount}</span>
-      </p>
+    <div className="container mx-auto p-4 space-y-8 max-w-sm">
+      {/* Tickets Section */}
+      <TicketsSection />
+      
+      {/* Guestlist Section */}
+      <div className="text-center">
+        <h2 className="text-lg font-semibold mb-4 text-gray-700">Guestlist</h2>
+        <div className="space-y-3">
+          <div className="w-full bg-gray-200 rounded-full h-2">
+            <div 
+              className="h-2 rounded-full transition-all duration-500 ease-out bg-gradient-to-r from-gray-400 to-gray-600"
+              style={{ width: `${guestPercentage}%` }}
+            />
+          </div>
+          <p className="text-sm text-gray-600 font-medium">
+            {checkedInCount}/{totalCount}
+          </p>
+        </div>
+      </div>
     </div>
   )
 } 
