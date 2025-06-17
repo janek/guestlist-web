@@ -1,7 +1,9 @@
 "use client"
 
-import { login } from "@/app/login/actions"
+import { createClient } from "@/utils/supabase/client"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
+import { Loader2 } from "lucide-react"
 import {
   Form,
   FormControl,
@@ -24,6 +26,9 @@ const formSchema = z.object({
 })
 
 export default function LoginPage() {
+  const supabase = createClient()
+  const router = useRouter()
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -38,11 +43,25 @@ export default function LoginPage() {
   const handleSubmit = async (data: z.infer<typeof formSchema>) => {
     setLoading(true)
     setError(null)
-    const response = await login(data)
-    if (response?.message) {
-      setError(response.message)
+
+    const { error } = await supabase.auth.signInWithPassword({
+      email: data.email,
+      password: data.password,
+    })
+
+    if (error) {
+      setError(
+        error.message === "Invalid login credentials"
+          ? "Password or email is incorrect"
+          : "An unknown error occurred",
+      )
       setLoading(false)
+      return
     }
+
+    // Success – navigate to dashboard
+    router.replace("/")
+    router.refresh() // ensure RSC picks up new session
   }
 
   return (
@@ -80,7 +99,14 @@ export default function LoginPage() {
           />
           <div className="flex items-center justify-between pt-2">
             <Button type="submit" className="w-full h-10" disabled={loading}>
-              {loading ? "Logging in..." : "Log in"}
+              {loading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Logging in...
+                </>
+              ) : (
+                "Log in"
+              )}
             </Button>
           </div>
           <p
