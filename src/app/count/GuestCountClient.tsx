@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react'
 import { createClient } from '@/utils/supabase/client'
-import { Progress } from '@/components/ui/progress'
 import TicketsSection from './TicketsSection'
 
 type GuestCountClientProps = {
@@ -46,6 +45,17 @@ function useAnimatedCounter(target: number, duration: number = 500) {
   }, [target, duration])
 
   return current
+}
+
+function GradientProgress({ value }: { value: number }) {
+  return (
+    <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+      <div 
+        className="h-full rounded-full transition-all duration-500 ease-out bg-gradient-to-r from-gray-300 via-gray-400 to-gray-500"
+        style={{ width: `${value}%` }}
+      />
+    </div>
+  )
 }
 
 export default function GuestCountClient({ eventId }: GuestCountClientProps) {
@@ -157,7 +167,7 @@ export default function GuestCountClient({ eventId }: GuestCountClientProps) {
       <div className="text-center">
         <h2 className="text-lg font-semibold mb-4 text-gray-700">Guestlist checked in</h2>
         <div className="space-y-3 max-w-64 mx-auto">
-          <Progress value={animatedPercentage} className="h-3 [&>div]:bg-gradient-to-r [&>div]:from-gray-400 [&>div]:to-gray-600" />
+          <GradientProgress value={animatedPercentage} />
           <div className="space-y-1">
             <p className="text-sm text-gray-600 font-medium font-mono">
               {animatedCheckedIn}/{totalCount}

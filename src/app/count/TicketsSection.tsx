@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Progress } from '@/components/ui/progress'
 
 type TicketData = {
   total_sold: string
@@ -39,6 +38,17 @@ function useAnimatedCounter(target: number, duration: number = 500) {
   }, [target, duration])
 
   return current
+}
+
+function GradientProgress({ value }: { value: number }) {
+  return (
+    <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+      <div 
+        className="h-full rounded-full transition-all duration-500 ease-out bg-gradient-to-r from-gray-400 via-gray-500 to-gray-600"
+        style={{ width: `${value}%` }}
+      />
+    </div>
+  )
 }
 
 export default function TicketsSection() {
@@ -80,7 +90,9 @@ export default function TicketsSection() {
       <div className="text-center">
         <h2 className="text-lg font-semibold mb-4 text-gray-700">Tickets sold</h2>
         <div className="space-y-3 max-w-64 mx-auto">
-          <Progress value={0} className="h-3 animate-pulse [&>div]:bg-gradient-to-r [&>div]:from-gray-300 [&>div]:to-gray-400" />
+          <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+            <div className="h-full rounded-full bg-gradient-to-r from-gray-300 to-gray-400 animate-pulse" />
+          </div>
           <div className="flex items-center justify-center space-x-2">
             <div className="w-4 h-4 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin" />
             <p className="text-sm text-gray-500 font-medium">Loading...</p>
@@ -95,7 +107,7 @@ export default function TicketsSection() {
       <div className="text-center">
         <h2 className="text-lg font-semibold mb-4 text-gray-700">Tickets sold</h2>
         <div className="space-y-3 max-w-64 mx-auto">
-          <Progress value={0} className="h-3 [&>div]:bg-gradient-to-r [&>div]:from-gray-300 [&>div]:to-gray-400" />
+          <GradientProgress value={0} />
           <p className="text-xs text-red-500">Error: {error}</p>
         </div>
       </div>
@@ -107,7 +119,7 @@ export default function TicketsSection() {
       <div className="text-center">
         <h2 className="text-lg font-semibold mb-4 text-gray-700">Tickets sold</h2>
         <div className="space-y-3 max-w-64 mx-auto">
-          <Progress value={0} className="h-3 [&>div]:bg-gradient-to-r [&>div]:from-gray-300 [&>div]:to-gray-400" />
+          <GradientProgress value={0} />
           <p className="text-xs text-gray-500">No data available</p>
         </div>
       </div>
@@ -118,7 +130,7 @@ export default function TicketsSection() {
     <div className="text-center">
       <h2 className="text-lg font-semibold mb-4 text-gray-700">Tickets sold</h2>
       <div className="space-y-3 max-w-64 mx-auto">
-        <Progress value={animatedPercentage} className="h-3 [&>div]:bg-gradient-to-r [&>div]:from-gray-500 [&>div]:to-gray-700" />
+        <GradientProgress value={animatedPercentage} />
         <p className="text-sm text-gray-600 font-medium font-mono">
           {animatedSold}/{total}
         </p>
