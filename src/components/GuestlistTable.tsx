@@ -52,10 +52,12 @@ const GuestlistTable = ({
           table: "guests",
         },
         (payload) => {
-          console.log("Guests Payload")
-          // Remove router.refresh() to prevent full page refreshes
-          // Optimistic updates will handle the UI changes instead
-          // router.refresh()
+          console.log("Guests Payload", payload)
+          // If caller did not provide optimistic handlers, fall back to
+          // a simple router.refresh() so UI stays in sync across tabs.
+          if (!onOptimisticUpdate && !onOptimisticDelete) {
+            router.refresh()
+          }
         },
       )
       .subscribe()

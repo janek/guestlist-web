@@ -3,6 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
+import React from "react"
 
 import { Button } from "@/components/ui/button"
 import { DialogClose } from "@/components/ui/dialog"
@@ -21,6 +22,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { toast } from "@/components/ui/use-toast"
 import { createClient } from "@/utils/supabase/client"
 import type { Tables } from "../../lib/database.types"
+import { Switch } from "@/components/ui/switch"
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -61,9 +63,12 @@ export function GuestDetailsForm({
     },
   })
 
+  const [isUsed, setIsUsed] = React.useState<boolean>(guest?.used ?? false)
+  const canCheckIn = editedFromLinkId === null
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const { name, type } = values
-    if (guest && guest.name === name && guest.type === type) {
+    if (guest && guest.name === name && guest.type === type && guest.used === isUsed) {
       return
     }
 
@@ -73,6 +78,7 @@ export function GuestDetailsForm({
         .update({
           name: name,
           type: type,
+          ...(canCheckIn ? { used: isUsed } : {}),
         })
         .eq("id", guest.id)
         .select()
@@ -85,7 +91,7 @@ export function GuestDetailsForm({
           type: type,
           event_id: eventId || "",
           link_id: editedFromLinkId,
-          used: false,
+          used: isUsed,
           created_at: new Date().toISOString(),
         }
         onOptimisticUpdate(optimisticGuest)
@@ -100,6 +106,7 @@ export function GuestDetailsForm({
             type: type,
             event_id: eventId,
             link_id: editedFromLinkId,
+            ...(canCheckIn ? { used: isUsed } : {}),
           },
         ])
         .select()
@@ -182,6 +189,16 @@ export function GuestDetailsForm({
             </FormItem>
           )}
         />
+
+        {/* Check-in switch – only in admin panel (not inside links) */}
+        {canCheckIn && (
+          <FormItem className="flex items-center justify-between">
+            <FormLabel>Checked in</FormLabel>
+            <FormControl>
+              <Switch checked={isUsed} onCheckedChange={setIsUsed} />
+            </FormControl>
+          </FormItem>
+        )}
 
         <div className="flex justify-center space-x-4">
           <DialogClose asChild>
