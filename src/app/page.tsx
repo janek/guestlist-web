@@ -14,8 +14,6 @@ export default async function Page({
 }: {
   searchParams: { [key: string]: string | string[] | undefined }
 }) {
-  // Type assertion for TypeScript
-  const eventIdParam = searchParams.eventId as string | undefined
   const supabase = createClient()
 
   const { data: user, error } = await supabase.auth.getUser()
@@ -23,38 +21,39 @@ export default async function Page({
     redirect("/login")
   }
 
+  // Fetch list of allowed events first – small payload
   const { data: allowedEvents } = await supabase
     .from("events")
     .select("id, name, date, owner, pin")
     .order('date', { ascending: false })
 
   const defaultEventId = process.env.DEFAULT_EVENT_ID
-  const eventId = eventIdParam || defaultEventId || allowedEvents?.[0]?.id
-  console.log("Default event ID:", defaultEventId, "Event ID:", eventId)
+  const eventId = (searchParams.eventId as string | undefined) || defaultEventId || allowedEvents?.[0]?.id
 
-  // XXX: below we seem to have 3 requests to the DB, they should probably be one
-  const { data: event, error: eventError } = await supabase
-    .from("events")
-    .select()
-    .eq("id", eventId)
-    .single()
+  if (!eventId) {
+    // No event to show – edge-case
+    return <p className="m-4 text-red-500">No events found for this account.</p>
+  }
 
-  const { data: guests, error: guestsError } = await supabase
-    .from("guests")
-    .select()
-    .eq("event_id", eventId)
+  // ꧂ One round-trip does the heavy lifting
+  const { data: dashboardRows, error: dashboardError } = await supabase.rpc('get_dashboard', {
+    p_event_id: eventId,
+  })
 
-  const { data: links, error: linksError } = await supabase
-    .from("links")
-    .select()
-    .eq("event_id", eventId)
+  if (dashboardError || !dashboardRows || dashboardRows.length === 0) {
+    console.log("Dashboard error:", dashboardError)
+    console.log("Dashboard rows:", dashboardRows)
+    return <p className="m-4 text-red-500">Failed to load dashboard.</p>
+  }
 
-  const { data: staff, error: staffError } = await supabase
-    .from("staff")
-    .select()
+  const dashboard = dashboardRows[0] as {
+    event: GuestlistEvent
+    guests: Guest[]
+    links: Database["public"]["Tables"]["links"]["Row"][]
+    staff: Staff[]
+  }
 
-  // TODO: Get staff only for current account
-  // .eq("belongs_to_account", currentUserId)
+  const { event, guests, links, staff } = dashboard
 
   return (
     <div className="flex flex-col md:h-screen md:justify-center">
@@ -79,7 +78,7 @@ export default async function Page({
           <div className="flex hflex space-x-2">
             {/* XXX: instead of hardcoded, use real value. Users table has no organisation
               field, so maybe we need a table/view which links users to organisations? */}
-            <GuestDetailsDialog organisation={"Turbulence"} eventId={eventId} />
+            <GuestDetailsDialog organisation={"Turbulence"} eventId={eventId as string} />
             <DownloadCsvButton guests={guests || []} />
           </div>
         </div>
@@ -97,13 +96,13 @@ export default async function Page({
             <AddLinkDialogButton
               title="Create link"
               variant="manual"
-              event={event as GuestlistEvent}
+              event={event}
             />
             <AddLinkDialogButton
               title="Send staff links"
               variant="staff"
-              staff={staff as Staff[]}
-              event={event as GuestlistEvent}
+              staff={staff}
+              event={event}
             />
           </div>
         </div>
