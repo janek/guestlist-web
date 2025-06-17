@@ -1,12 +1,16 @@
 "use client"
 
-import { logout } from "@/app/login/actions" // Ensure the path is correct
-import { Button } from "@/components/ui/button"
+import { createClient } from "@/utils/supabase/client"
+import { useRouter } from "next/navigation"
 import React from "react"
 
 export const LogoutButton = () => {
+  const supabase = createClient()
+  const router = useRouter()
+
   const handleLogout = async () => {
-    await logout()
+    await supabase.auth.signOut()
+    router.replace("/login")
   }
 
   return (
