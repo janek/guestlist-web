@@ -73,6 +73,16 @@ export function GuestDetailsForm({
     }
 
     if (guest) {
+      // Optimistic update first
+      if (onOptimisticUpdate) {
+        onOptimisticUpdate({
+          ...guest,
+          name,
+          type,
+          used: isUsed,
+        })
+      }
+
       const { data, error } = await supabase
         .from("guests")
         .update({

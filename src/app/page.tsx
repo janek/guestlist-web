@@ -2,7 +2,7 @@ import { AddLinkDialogButton } from "@/components/AddLinkDialogButton"
 import { DownloadCsvButton } from "@/components/DownloadCsvButton"
 import { EventSwitcher } from "@/components/EventSwitcher"
 import { GuestDetailsDialog } from "@/components/GuestDetailsDialog"
-import GuestlistTable from "@/components/GuestlistTable"
+import FullGuestlistClient from "@/components/FullGuestlistClient"
 import LinksTable from "@/components/LinksTable"
 import { LogoutButton } from "@/components/LogoutButton"
 import { ScrollArea } from "@/components/ui/scroll-area"
@@ -73,7 +73,7 @@ export default async function Page({
             Full guestlist
           </h4>
           <ScrollArea className="h-[500px] w-[350px] rounded-md border p-4 mb-4">
-            <GuestlistTable guests={guests || []} shouldShowOrganization />
+            <FullGuestlistClient initialGuests={guests || []} eventId={eventId} shouldShowOrganization />
           </ScrollArea>
           <div className="flex hflex space-x-2">
             {/* XXX: instead of hardcoded, use real value. Users table has no organisation
