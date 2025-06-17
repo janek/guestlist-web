@@ -55,6 +55,15 @@ export default async function Page({
 
   const { event, guests, links, staff } = dashboard
 
+  const guestCount = guests?.length || 0
+  const checkedInCount = guests?.filter((guest) => guest.used).length || 0
+  const linkCount = links?.length || 0
+  const totalSlots = links?.reduce(
+    (total, link) =>
+      total + (link.limit_free + link.limit_half + link.limit_skip),
+    0,
+  ) || 0
+
   return (
     <div className="flex flex-col md:h-screen md:justify-center">
       <div className="flex flex-row items-center justify-center w-full mb-8 mt-8 md:mt-0">
@@ -75,12 +84,15 @@ export default async function Page({
           <ScrollArea className="h-[500px] w-[350px] rounded-md border p-4 mb-4">
             <FullGuestlistClient initialGuests={guests || []} eventId={eventId} shouldShowOrganization />
           </ScrollArea>
-          <div className="flex hflex space-x-2">
+          <div className="flex hflex space-x-2 mb-4">
             {/* XXX: instead of hardcoded, use real value. Users table has no organisation
               field, so maybe we need a table/view which links users to organisations? */}
             <GuestDetailsDialog organisation={"Turbulence"} eventId={eventId as string} />
             <DownloadCsvButton guests={guests || []} />
           </div>
+          <p className="text-xs italic text-gray-400 mb-4">
+            {guestCount} guests total, {checkedInCount} checked in
+          </p>
         </div>
         <div className="flex flex-col items-center w-full mt-10 md:mt-0">
           <h4 className="scroll-m-20 text-xl mb-4 font-semibold tracking-tight text-left">
@@ -89,10 +101,7 @@ export default async function Page({
           <ScrollArea className="h-[300px] w-[350px] rounded-md border p-4 mb-4">
             <LinksTable links={links || []} />
           </ScrollArea>
-          {/* <p className="text-sm text-gray-400 italic">
-            Link creation from database only at the moment
-          </p> */}
-          <div className="flex space-x-4">
+          <div className="flex space-x-4 mb-4">
             <AddLinkDialogButton
               title="Create link"
               variant="manual"
@@ -105,6 +114,9 @@ export default async function Page({
               event={event}
             />
           </div>
+          <p className="text-xs italic text-gray-400 mb-4">
+            {linkCount} links, {totalSlots} slots total
+          </p>
         </div>
       </div>
       <div className="m-4 pt-7 pb-2 flex flex-row text-xs italic text-gray-400 md:fixed md:bottom-0 md:right-0 justify-center">

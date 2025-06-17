@@ -51,10 +51,8 @@ export const AddLinkDialogButton = ({ variant, title, description, staff, event 
     
     return null
   }
-
   const finalDescription = getDescription()
   
-  console.log("Event1:", event)
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
