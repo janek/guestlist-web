@@ -22,9 +22,14 @@ export default async function Page({
   }
 
   // Fetch list of allowed events first – small payload
+  // AI comment: Consider using user_event_permissions table instead of owner field for:
+  // • Semantic correctness (owner ≠ access permissions)
+  // • Easier future RLS migration (policies would check same table)
+  // • Multi-user event access support
   const { data: allowedEvents } = await supabase
     .from("events")
     .select("id, name, date, owner, pin")
+    .eq('owner', user.user.id)
     .order('date', { ascending: false })
 
   const defaultEventId = process.env.DEFAULT_EVENT_ID
