@@ -29,15 +29,47 @@ export default async function Page({
   const { data: allowedEvents } = await supabase
     .from("events")
     .select("id, name, date, owner, pin")
-    .eq('owner', user.user.id)
+    .eq('owner', user.user.id) // Above comment is regarding this condition
     .order('date', { ascending: false })
+  
+  console.log('Filtered events:', allowedEvents)
 
   const defaultEventId = process.env.DEFAULT_EVENT_ID
-  const eventId = (searchParams.eventId as string | undefined) || defaultEventId || allowedEvents?.[0]?.id
+  const requestedEventId = (searchParams.eventId as string | undefined) || defaultEventId || allowedEvents?.[0]?.id
 
-  if (!eventId) {
+  if (!requestedEventId) {
     // No event to show – edge-case
-    return <p className="m-4 text-red-500">No events found for this account.</p>
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen p-4">
+        <div className="text-center">
+          <p className="text-lg mb-4">No events created yet</p>
+          <button 
+            onClick={() => console.log('Create event clicked')}
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4"
+          >
+            Create Event
+          </button>
+          <div className="flex items-center gap-4 justify-center">
+            <p className="text-sm text-gray-600">Logged in as {user.user.email}</p>
+            <LogoutButton />
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // Security: Verify the requested event belongs to this user
+  const eventId = allowedEvents?.find(event => event.id === requestedEventId)?.id
+  if (!eventId) {
+    return (
+      <div className="m-4">
+        <p className="text-red-500 mb-4">Information not found or access denied.</p>
+        <div className="flex items-center gap-4">
+          <p className="text-sm text-gray-600">Logged in as {user.user.email}</p>
+          <LogoutButton />
+        </div>
+      </div>
+    )
   }
 
   // ꧂ One round-trip does the heavy lifting
