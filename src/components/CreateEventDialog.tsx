@@ -76,9 +76,15 @@ export function CreateEventDialog({
     setIsLoading(true)
     try {
       const newEvent = await createEvent(data.name, data.date, parseInt(data.pin))
-      setUncontrolledOpen(false)
+      if (controlledOpen === undefined) {
+        setUncontrolledOpen(false)
+      } else {
+        onOpenChange?.(false)
+      }
       form.reset()
-      router.push(`/?eventId=${newEvent.id}`)
+      onEventCreated?.(newEvent)
+      setIsLoading(false)
+      // parent may navigate
     } catch (error) {
       console.error("Failed to create event:", error)
       setIsLoading(false)
