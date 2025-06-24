@@ -1,9 +1,9 @@
 "use client"
 
-import { useState, useCallback } from "react"
 import { GuestDetailsDialog } from "@/components/GuestDetailsDialog"
 import GuestlistTable from "@/components/GuestlistTable"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { useCallback, useState } from "react"
 
 type OptimisticGuestlistPageProps = {
   initialGuests: Guest[]
@@ -32,41 +32,47 @@ export function OptimisticGuestlistPage({
 
   // Optimistic update handler for adding guests
   const handleOptimisticGuestAdd = useCallback((newGuest: Guest) => {
-    setGuests(prevGuests => [...prevGuests, newGuest])
-    
+    setGuests((prevGuests) => [...prevGuests, newGuest])
+
     // Update counts optimistically
-    setOptimisticCounts(prevCounts => ({
+    setOptimisticCounts((prevCounts) => ({
       ...prevCounts,
-      [`used_${newGuest.type}`]: prevCounts[`used_${newGuest.type}` as keyof typeof prevCounts] + 1
+      [`used_${newGuest.type}`]:
+        prevCounts[`used_${newGuest.type}` as keyof typeof prevCounts] + 1,
     }))
   }, [])
 
   // Optimistic delete handler for removing guests
   const handleOptimisticGuestDelete = useCallback((guestId: string) => {
     console.log("🔄 handleOptimisticGuestDelete called with ID:", guestId)
-    setGuests(prevGuests => {
+    setGuests((prevGuests) => {
       console.log("🔄 Current guests before delete:", prevGuests.length)
-      const guestToDelete = prevGuests.find(g => g.id === guestId)
+      const guestToDelete = prevGuests.find((g) => g.id === guestId)
       console.log("🔄 Guest found for deletion:", guestToDelete)
-      
+
       if (!guestToDelete) {
         console.log("🔄 ERROR: Guest not found in list!")
         return prevGuests
       }
-      
+
       // Update counts optimistically
-      setOptimisticCounts(prevCounts => {
+      setOptimisticCounts((prevCounts) => {
         console.log("🔄 Updating counts, removing 1 from:", guestToDelete.type)
         const newCounts = {
           ...prevCounts,
-          [`used_${guestToDelete.type}`]: Math.max(0, prevCounts[`used_${guestToDelete.type}` as keyof typeof prevCounts] - 1)
+          [`used_${guestToDelete.type}`]: Math.max(
+            0,
+            prevCounts[
+              `used_${guestToDelete.type}` as keyof typeof prevCounts
+            ] - 1,
+          ),
         }
         console.log("🔄 New counts:", newCounts)
         return newCounts
       })
-      
+
       // Remove the guest from the list
-      const newGuestList = prevGuests.filter(g => g.id !== guestId)
+      const newGuestList = prevGuests.filter((g) => g.id !== guestId)
       console.log("🔄 New guest list length:", newGuestList.length)
       return newGuestList
     })
@@ -86,11 +92,16 @@ export function OptimisticGuestlistPage({
         Guestlist for {organisationName}
       </p>
       <p className="scroll-m-20 text-md mb-4 font-normal tracking-tight text-left">
-        {link.limit_free > 0 && `Free: ${optimisticCounts.used_free}/${link.limit_free} used`}
-        {link.limit_free > 0 && link.limit_half > 0 && ', '}
-        {link.limit_half > 0 && `Half: ${optimisticCounts.used_half}/${link.limit_half} used`}
-        {(link.limit_free > 0 || link.limit_half > 0) && link.limit_skip > 0 && ', '}
-        {link.limit_skip > 0 && `Skip: ${optimisticCounts.used_skip}/${link.limit_skip} used`}
+        {link.limit_free > 0 &&
+          `Free: ${optimisticCounts.used_free}/${link.limit_free} used`}
+        {link.limit_free > 0 && link.limit_half > 0 && ", "}
+        {link.limit_half > 0 &&
+          `Half: ${optimisticCounts.used_half}/${link.limit_half} used`}
+        {(link.limit_free > 0 || link.limit_half > 0) &&
+          link.limit_skip > 0 &&
+          ", "}
+        {link.limit_skip > 0 &&
+          `Skip: ${optimisticCounts.used_skip}/${link.limit_skip} used`}
       </p>
       <ScrollArea className="h-[270px] w-[350px] rounded-md border p-4 mb-4">
         <GuestlistTable
@@ -111,4 +122,4 @@ export function OptimisticGuestlistPage({
       />
     </div>
   )
-} 
+}

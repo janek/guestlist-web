@@ -2,8 +2,8 @@ import { AddLinkDialogButton } from "@/components/AddLinkDialogButton"
 import { CreateEventButton } from "@/components/CreateEventButton"
 import { DownloadCsvButton } from "@/components/DownloadCsvButton"
 import { EventSwitcher } from "@/components/EventSwitcher"
-import { GuestDetailsDialog } from "@/components/GuestDetailsDialog"
 import FullGuestlistClient from "@/components/FullGuestlistClient"
+import { GuestDetailsDialog } from "@/components/GuestDetailsDialog"
 import LinksTable from "@/components/LinksTable"
 import { LogoutButton } from "@/components/LogoutButton"
 import { ScrollArea } from "@/components/ui/scroll-area"
@@ -30,10 +30,10 @@ export default async function Page({
   const { data: allowedEvents } = await supabase
     .from("events")
     .select("id, name, date, owner, pin")
-    .eq('owner', user.user.id) // Above comment is regarding this condition
-    .order('date', { ascending: false })
-  
-  console.log('Filtered events:', allowedEvents)
+    .eq("owner", user.user.id) // Above comment is regarding this condition
+    .order("date", { ascending: false })
+
+  console.log("Filtered events:", allowedEvents)
 
   // Check if user has any events first
   if (!allowedEvents || allowedEvents.length === 0) {
@@ -44,7 +44,9 @@ export default async function Page({
           <p className="text-lg mb-4">No events created yet</p>
           <CreateEventButton />
           <div className="flex items-center gap-4 justify-center">
-            <p className="text-sm text-gray-600">Logged in as {user.user.email}</p>
+            <p className="text-sm text-gray-600">
+              Logged in as {user.user.email}
+            </p>
             <LogoutButton />
           </div>
         </div>
@@ -53,17 +55,26 @@ export default async function Page({
   }
 
   const defaultEventId = process.env.DEFAULT_EVENT_ID
-  const requestedEventId = (searchParams.eventId as string | undefined) || defaultEventId || allowedEvents[0].id
+  const requestedEventId =
+    (searchParams.eventId as string | undefined) ||
+    defaultEventId ||
+    allowedEvents[0].id
 
   // Verify the requested event belongs to this user
-  const eventId = allowedEvents?.find(event => event.id === requestedEventId)?.id
+  const eventId = allowedEvents?.find(
+    (event) => event.id === requestedEventId,
+  )?.id
   // TODO: Better error states (and error handling)
   if (!eventId) {
     return (
       <div className="m-4">
-        <p className="text-red-500 mb-4">No information found or access denied.</p>
+        <p className="text-red-500 mb-4">
+          No information found or access denied.
+        </p>
         <div className="flex items-center gap-4">
-          <p className="text-sm text-gray-600">Logged in as {user.user.email}</p>
+          <p className="text-sm text-gray-600">
+            Logged in as {user.user.email}
+          </p>
           <LogoutButton />
         </div>
       </div>
@@ -71,9 +82,12 @@ export default async function Page({
   }
 
   // ꧂ One round-trip does the heavy lifting
-  const { data: dashboardRows, error: dashboardError } = await supabase.rpc('get_dashboard', {
-    p_event_id: eventId,
-  })
+  const { data: dashboardRows, error: dashboardError } = await supabase.rpc(
+    "get_dashboard",
+    {
+      p_event_id: eventId,
+    },
+  )
 
   if (dashboardError || !dashboardRows || dashboardRows.length === 0) {
     console.log("Dashboard error:", dashboardError)
@@ -93,11 +107,12 @@ export default async function Page({
   const guestCount = guests?.length || 0
   const checkedInCount = guests?.filter((guest) => guest.used).length || 0
   const linkCount = links?.length || 0
-  const totalSlots = links?.reduce(
-    (total, link) =>
-      total + (link.limit_free + link.limit_half + link.limit_skip),
-    0,
-  ) || 0
+  const totalSlots =
+    links?.reduce(
+      (total, link) =>
+        total + (link.limit_free + link.limit_half + link.limit_skip),
+      0,
+    ) || 0
 
   return (
     <div className="flex flex-col md:h-screen md:justify-center">
@@ -117,12 +132,19 @@ export default async function Page({
             Full guestlist
           </h4>
           <ScrollArea className="h-[500px] w-[350px] rounded-md border p-4 mb-4">
-            <FullGuestlistClient initialGuests={guests || []} eventId={eventId} shouldShowOrganization />
+            <FullGuestlistClient
+              initialGuests={guests || []}
+              eventId={eventId}
+              shouldShowOrganization
+            />
           </ScrollArea>
           <div className="flex hflex space-x-2 mb-4">
             {/* XXX: instead of hardcoded, use real value. Users table has no organisation
               field, so maybe we need a table/view which links users to organisations? */}
-            <GuestDetailsDialog organisation={"Turbulence"} eventId={eventId as string} />
+            <GuestDetailsDialog
+              organisation={"Turbulence"}
+              eventId={eventId as string}
+            />
             <DownloadCsvButton guests={guests || []} />
           </div>
           <p className="text-xs italic text-gray-400 mb-4">

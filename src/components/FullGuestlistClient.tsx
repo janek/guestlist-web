@@ -1,7 +1,7 @@
 "use client"
 
-import { useState, useCallback, useEffect } from "react"
 import { createClient } from "@/utils/supabase/client"
+import { useCallback, useEffect, useState } from "react"
 import GuestlistTable from "./GuestlistTable"
 
 interface FullGuestlistClientProps {
@@ -10,13 +10,17 @@ interface FullGuestlistClientProps {
   shouldShowOrganization?: boolean
 }
 
-export default function FullGuestlistClient({ initialGuests, eventId, shouldShowOrganization = false }: FullGuestlistClientProps) {
+export default function FullGuestlistClient({
+  initialGuests,
+  eventId,
+  shouldShowOrganization = false,
+}: FullGuestlistClientProps) {
   const [guests, setGuests] = useState<Guest[]>(initialGuests)
   const supabase = createClient()
 
   const handleOptimisticUpdate = useCallback((newGuest: Guest) => {
-    setGuests(prev => {
-      const idx = prev.findIndex(g => g.id === newGuest.id)
+    setGuests((prev) => {
+      const idx = prev.findIndex((g) => g.id === newGuest.id)
       if (idx !== -1) {
         // replace
         const clone = [...prev]
@@ -28,7 +32,7 @@ export default function FullGuestlistClient({ initialGuests, eventId, shouldShow
   }, [])
 
   const handleOptimisticDelete = useCallback((guestId: string) => {
-    setGuests(prev => prev.filter(g => g.id !== guestId))
+    setGuests((prev) => prev.filter((g) => g.id !== guestId))
   }, [])
 
   // Realtime subscription to guests table for this event
@@ -58,7 +62,9 @@ export default function FullGuestlistClient({ initialGuests, eventId, shouldShow
           } else if (payload.eventType === "UPDATE") {
             setGuests((prev) =>
               prev.map((g) =>
-                g.id === (payload.new as any).id ? { ...g, ...(payload.new as Guest) } : g,
+                g.id === (payload.new as any).id
+                  ? { ...g, ...(payload.new as Guest) }
+                  : g,
               ),
             )
           }
@@ -79,4 +85,4 @@ export default function FullGuestlistClient({ initialGuests, eventId, shouldShow
       onOptimisticDelete={handleOptimisticDelete}
     />
   )
-} 
+}

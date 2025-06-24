@@ -1,12 +1,13 @@
 "use client"
 
-import { useState } from "react"
+import { zodResolver } from "@hookform/resolvers/zod"
 import { format } from "date-fns"
 import { Calendar as CalendarIcon } from "lucide-react"
+import { useState } from "react"
 import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 
+import { createEvent } from "@/app/actions/create-event"
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
 import {
@@ -31,14 +32,17 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { cn } from "@/lib/utils"
-import { createEvent } from "@/app/actions/create-event"
 
 const createEventSchema = z.object({
   name: z.string().min(1, "Event name is required"),
   date: z.date({
     required_error: "Event date is required",
   }),
-  pin: z.string().min(4, "PIN must be 4 digits").max(4, "PIN must be 4 digits").regex(/^\d{4}$/, "PIN must be 4 digits"),
+  pin: z
+    .string()
+    .min(4, "PIN must be 4 digits")
+    .max(4, "PIN must be 4 digits")
+    .regex(/^\d{4}$/, "PIN must be 4 digits"),
 })
 
 type CreateEventFormData = z.infer<typeof createEventSchema>
@@ -50,8 +54,8 @@ type CreateEventDialogProps = {
   open?: boolean
 }
 
-export function CreateEventDialog({ 
-  trigger, 
+export function CreateEventDialog({
+  trigger,
   onEventCreated,
   onOpenChange,
   open: controlledOpen,
@@ -60,7 +64,6 @@ export function CreateEventDialog({
   const open = controlledOpen !== undefined ? controlledOpen : uncontrolledOpen
   const [isLoading, setIsLoading] = useState(false)
   const [datePickerOpen, setDatePickerOpen] = useState(false)
-
 
   const form = useForm<CreateEventFormData>({
     resolver: zodResolver(createEventSchema),
@@ -73,7 +76,11 @@ export function CreateEventDialog({
   const onSubmit = async (data: CreateEventFormData) => {
     setIsLoading(true)
     try {
-      const newEvent = await createEvent(data.name, data.date, parseInt(data.pin))
+      const newEvent = await createEvent(
+        data.name,
+        data.date,
+        Number.parseInt(data.pin),
+      )
       if (controlledOpen === undefined) {
         setUncontrolledOpen(false)
       } else {
@@ -99,15 +106,11 @@ export function CreateEventDialog({
         onOpenChange?.(o)
       }}
     >
-      { (trigger || controlledOpen === undefined) && (
+      {(trigger || controlledOpen === undefined) && (
         <DialogTrigger asChild>
-          {trigger || (
-            <Button>
-              Create Event
-            </Button>
-          )}
+          {trigger || <Button>Create Event</Button>}
         </DialogTrigger>
-      ) }
+      )}
       <DialogContent className="max-w-md">
         <DialogHeader>
           <DialogTitle>Create New Event</DialogTitle>
@@ -121,8 +124,8 @@ export function CreateEventDialog({
                 <FormItem>
                   <FormLabel>Event Name</FormLabel>
                   <FormControl>
-                    <Input 
-                      placeholder="Enter event name" 
+                    <Input
+                      placeholder="Enter event name"
                       {...field}
                       disabled={isLoading}
                     />
@@ -131,21 +134,25 @@ export function CreateEventDialog({
                 </FormItem>
               )}
             />
-            
+
             <FormField
               control={form.control}
               name="date"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
                   <FormLabel>Event Date</FormLabel>
-                  <Popover modal={true} open={datePickerOpen} onOpenChange={setDatePickerOpen}>
+                  <Popover
+                    modal={true}
+                    open={datePickerOpen}
+                    onOpenChange={setDatePickerOpen}
+                  >
                     <PopoverTrigger asChild>
                       <FormControl>
                         <Button
                           variant="outline"
                           className={cn(
                             "w-full pl-3 text-left font-normal",
-                            !field.value && "text-muted-foreground"
+                            !field.value && "text-muted-foreground",
                           )}
                           disabled={isLoading}
                         >
@@ -160,17 +167,17 @@ export function CreateEventDialog({
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
                       <Calendar
-                          mode="single"
-                          selected={field.value}
-                          onSelect={(date) => {
-                            field.onChange(date)
-                            setDatePickerOpen(false)
-                          }}
-                          disabled={(date) =>
-                            date < new Date(new Date().setHours(0, 0, 0, 0))
-                          }
-                          initialFocus
-                        />
+                        mode="single"
+                        selected={field.value}
+                        onSelect={(date) => {
+                          field.onChange(date)
+                          setDatePickerOpen(false)
+                        }}
+                        disabled={(date) =>
+                          date < new Date(new Date().setHours(0, 0, 0, 0))
+                        }
+                        initialFocus
+                      />
                     </PopoverContent>
                   </Popover>
                   <FormMessage />
@@ -185,8 +192,8 @@ export function CreateEventDialog({
                 <FormItem>
                   <FormLabel>Event PIN</FormLabel>
                   <FormControl>
-                    <Input 
-                      placeholder="Enter 4-digit PIN" 
+                    <Input
+                      placeholder="Enter 4-digit PIN"
                       {...field}
                       disabled={isLoading}
                       maxLength={4}
@@ -196,7 +203,7 @@ export function CreateEventDialog({
                 </FormItem>
               )}
             />
-            
+
             <div className="flex justify-end space-x-2">
               <Button
                 type="button"

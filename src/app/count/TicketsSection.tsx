@@ -1,13 +1,13 @@
-'use client'
+"use client"
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from "react"
 
 type TicketData = {
   total_sold: string
   total_allocation: string
 }
 
-function useAnimatedCounter(target: number, duration: number = 500) {
+function useAnimatedCounter(target: number, duration = 500) {
   const [current, setCurrent] = useState(0)
 
   useEffect(() => {
@@ -22,18 +22,18 @@ function useAnimatedCounter(target: number, duration: number = 500) {
     const animate = () => {
       const elapsed = Date.now() - startTime
       const progress = Math.min(elapsed / duration, 1)
-      
+
       // Easing function for smooth animation
       const easeOut = 1 - Math.pow(1 - progress, 3)
       const value = Math.round(startValue + (target - startValue) * easeOut)
-      
+
       setCurrent(value)
-      
+
       if (progress < 1) {
         requestAnimationFrame(animate)
       }
     }
-    
+
     requestAnimationFrame(animate)
   }, [target, duration])
 
@@ -43,7 +43,7 @@ function useAnimatedCounter(target: number, duration: number = 500) {
 function GradientProgress({ value }: { value: number }) {
   return (
     <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
-      <div 
+      <div
         className="h-full rounded-full transition-all duration-500 ease-out bg-gradient-to-r from-gray-400 via-gray-500 to-gray-600"
         style={{ width: `${value}%` }}
       />
@@ -60,16 +60,16 @@ export default function TicketsSection() {
     const fetchTicketData = async () => {
       try {
         setLoading(true)
-        const response = await fetch('/api/ra-tickets')
-        
+        const response = await fetch("/api/ra-tickets")
+
         if (!response.ok) {
-          throw new Error('Failed to fetch ticket data')
+          throw new Error("Failed to fetch ticket data")
         }
-        
+
         const data = await response.json()
         setTicketData(data)
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'An error occurred')
+        setError(err instanceof Error ? err.message : "An error occurred")
       } finally {
         setLoading(false)
       }
@@ -78,8 +78,8 @@ export default function TicketsSection() {
     fetchTicketData()
   }, [])
 
-  const sold = ticketData ? parseInt(ticketData.total_sold) : 0
-  const total = ticketData ? parseInt(ticketData.total_allocation) : 0
+  const sold = ticketData ? Number.parseInt(ticketData.total_sold) : 0
+  const total = ticketData ? Number.parseInt(ticketData.total_allocation) : 0
   const ticketPercentage = total > 0 ? (sold / total) * 100 : 0
 
   const animatedSold = useAnimatedCounter(sold)
@@ -88,7 +88,9 @@ export default function TicketsSection() {
   if (loading) {
     return (
       <div className="text-center">
-        <h2 className="text-lg font-semibold mb-4 text-gray-700">Tickets sold</h2>
+        <h2 className="text-lg font-semibold mb-4 text-gray-700">
+          Tickets sold
+        </h2>
         <div className="space-y-3 max-w-64 mx-auto">
           <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
             <div className="h-full rounded-full bg-gradient-to-r from-gray-300 to-gray-400 animate-pulse" />
@@ -105,7 +107,9 @@ export default function TicketsSection() {
   if (error) {
     return (
       <div className="text-center">
-        <h2 className="text-lg font-semibold mb-4 text-gray-700">Tickets sold</h2>
+        <h2 className="text-lg font-semibold mb-4 text-gray-700">
+          Tickets sold
+        </h2>
         <div className="space-y-3 max-w-64 mx-auto">
           <GradientProgress value={0} />
           <p className="text-xs text-red-500">Error: {error}</p>
@@ -117,7 +121,9 @@ export default function TicketsSection() {
   if (!ticketData) {
     return (
       <div className="text-center">
-        <h2 className="text-lg font-semibold mb-4 text-gray-700">Tickets sold</h2>
+        <h2 className="text-lg font-semibold mb-4 text-gray-700">
+          Tickets sold
+        </h2>
         <div className="space-y-3 max-w-64 mx-auto">
           <GradientProgress value={0} />
           <p className="text-xs text-gray-500">No data available</p>
@@ -137,4 +143,4 @@ export default function TicketsSection() {
       </div>
     </div>
   )
-} 
+}

@@ -4,7 +4,7 @@ import { createClient } from "@/utils/supabase/server"
 
 export async function createEvent(name: string, date: Date, pin: number) {
   const supabase = createClient()
-  
+
   const { data: user, error: userError } = await supabase.auth.getUser()
   if (userError || !user?.user) {
     throw new Error("Not authenticated")

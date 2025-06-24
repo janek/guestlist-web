@@ -11,12 +11,8 @@ export function CreateEventButton() {
 
   return (
     <CreateEventDialog
-      trigger={
-        <Button className="mb-4">
-          Create Event
-        </Button>
-      }
+      trigger={<Button className="mb-4">Create Event</Button>}
       onEventCreated={handleEventCreated}
     />
   )
-} 
+}

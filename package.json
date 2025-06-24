@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "bunx @biomejs/biome format --write src/*",
+    "format": "bunx @biomejs/biome format --write src/*",
+    "lint": "bunx @biomejs/biome check src",
+    "lint:fix": "bunx @biomejs/biome check src --write",
+    "lint:fix:unsafe": "bunx @biomejs/biome check src --write --unsafe",
     "db-types": "supabase gen types typescript --project-id kevvsvanbzthbdnnbzth > lib/database.types.ts",
     "create-user": "bun run scripts/createUser.ts"
   },

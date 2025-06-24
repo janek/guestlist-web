@@ -64,14 +64,12 @@ const LinksTable = ({ links }: LinksTableProps) => {
         </TableHeader>
         <TableBody>
           {links.map((link) => (
-            <TableRow 
+            <TableRow
               key={link.id}
               onClick={() => handleRowClick(link)}
               className="cursor-pointer"
             >
-              <TableCell>
-                {link.organisation}
-              </TableCell>
+              <TableCell>{link.organisation}</TableCell>
               <TableCell>
                 {link.limit_free}-{link.limit_half}-{link.limit_skip}
               </TableCell>

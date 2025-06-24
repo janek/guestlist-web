@@ -1,17 +1,27 @@
 "use client"
 
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { CreateEventDialog } from "@/components/CreateEventDialog"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { Plus } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 
 interface EventSwitcherProps extends React.HTMLAttributes<HTMLDivElement> {
-  events: GuestlistEvent[];
-  currentEventId: string | undefined;
+  events: GuestlistEvent[]
+  currentEventId: string | undefined
 }
 
-export function EventSwitcher({ events, currentEventId, ...props }: EventSwitcherProps) {
+export function EventSwitcher({
+  events,
+  currentEventId,
+  ...props
+}: EventSwitcherProps) {
   const router = useRouter()
   const [open, setOpen] = useState(false)
   const [createDialogOpen, setCreateDialogOpen] = useState(false)

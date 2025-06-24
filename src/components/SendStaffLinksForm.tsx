@@ -1,15 +1,12 @@
 "use client"
 
+import { sendStaffLinks } from "@/app/actions/send-staff-links"
+import { Button } from "@/components/ui/button"
+import { Form } from "@/components/ui/form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import { Button } from "@/components/ui/button"
-import {
-  Form,
-} from "@/components/ui/form"
 import LimitInputField from "./LimitInputField"
-import { sendStaffLinks } from "@/app/actions/send-staff-links"
-
 
 const formSchema = z.object({
   limit_free: z.number().min(0),
@@ -23,8 +20,11 @@ type SendStaffLinksFormProps = {
   event: GuestlistEvent
 }
 
-export function SendStaffLinksForm({ onSubmitFromParent, staff, event }: SendStaffLinksFormProps) {
-
+export function SendStaffLinksForm({
+  onSubmitFromParent,
+  staff,
+  event,
+}: SendStaffLinksFormProps) {
   console.log("Event2:", event)
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),

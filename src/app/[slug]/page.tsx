@@ -22,8 +22,8 @@ export default async function Page({ params }: { params: { slug: string } }) {
   const supabase = createClient()
 
   // Single optimized query that gets everything in one database call
-  const { data, error } = await supabase.rpc('get_link_with_guests', {
-    link_slug: params.slug
+  const { data, error } = await supabase.rpc("get_link_with_guests", {
+    link_slug: params.slug,
   })
 
   if (error || !data || data.length === 0) {
@@ -37,10 +37,10 @@ export default async function Page({ params }: { params: { slug: string } }) {
   }
 
   const result = data[0] as LinkWithGuestsResponse
-  
+
   // Convert the JSON guests back to proper Guest objects
   const guests: Guest[] = Array.isArray(result.guests) ? result.guests : []
-  
+
   // Create link object for compatibility with existing components
   const link: Link = {
     id: result.id,
@@ -52,7 +52,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
     event_name: result.event_name,
     event_date: result.event_date,
     event_id: result.event_id,
-    permissions: null
+    permissions: null,
   }
 
   return (

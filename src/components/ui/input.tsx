@@ -9,12 +9,14 @@ export interface InputProps
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, type, allowPasswordManager = false, ...props }, ref) => {
-    const passwordManagerProps = allowPasswordManager ? {} : {
-      autoComplete: "off",
-      "data-1p-ignore": true,
-      "data-lpignore": true,
-      "data-form-type": "other"
-    }
+    const passwordManagerProps = allowPasswordManager
+      ? {}
+      : {
+          autoComplete: "off",
+          "data-1p-ignore": true,
+          "data-lpignore": true,
+          "data-form-type": "other",
+        }
 
     return (
       <input

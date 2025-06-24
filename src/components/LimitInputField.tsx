@@ -10,8 +10,8 @@ import { Controller } from "react-hook-form"
 import type { Control } from "react-hook-form"
 
 type FormValidation = Control<{
-  limit_free: number 
-  limit_half: number 
+  limit_free: number
+  limit_half: number
   limit_skip: number
   organisation: string
 }>

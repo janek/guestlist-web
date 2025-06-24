@@ -17,8 +17,8 @@ import {
 import { Input } from "@/components/ui/input"
 import { createClient } from "@/utils/supabase/client"
 import { ExternalLinkIcon } from "@radix-ui/react-icons"
-import type { Tables } from "../../lib/database.types"
 import { useState } from "react"
+import type { Tables } from "../../lib/database.types"
 
 const formSchema = z.object({
   organisation: z.string().min(2, {
@@ -36,7 +36,7 @@ type LinkDetailsFormProps = {
 export function LinkDetailsForm({ link }: LinkDetailsFormProps) {
   const supabase = createClient()
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
-  
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -49,7 +49,7 @@ export function LinkDetailsForm({ link }: LinkDetailsFormProps) {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const { organisation, limit_free, limit_half, limit_skip } = values
-    
+
     // Check if any values have changed
     if (
       link.organisation === organisation &&
@@ -70,7 +70,7 @@ export function LinkDetailsForm({ link }: LinkDetailsFormProps) {
       })
       .eq("id", link.id)
       .select()
-    
+
     if (error) {
       console.error("Error updating link:", error)
     } else {
@@ -93,20 +93,21 @@ export function LinkDetailsForm({ link }: LinkDetailsFormProps) {
         <div>
           <h3 className="text-lg font-semibold mb-2">Delete Link</h3>
           <p className="text-sm text-muted-foreground mb-4">
-            Are you sure you want to delete this link? This will also delete all guests from that list. This action cannot be undone.
+            Are you sure you want to delete this link? This will also delete all
+            guests from that list. This action cannot be undone.
           </p>
         </div>
         <div className="flex justify-center space-x-2">
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             onClick={() => setShowDeleteConfirm(false)}
             className="flex-1"
           >
             Cancel
           </Button>
           <DialogClose asChild>
-            <Button 
-              variant="destructive" 
+            <Button
+              variant="destructive"
               onClick={handleConfirmedDelete}
               className="flex-1"
             >
@@ -211,20 +212,22 @@ export function LinkDetailsForm({ link }: LinkDetailsFormProps) {
 
         <div className="flex justify-center space-x-2">
           <DialogClose asChild>
-            <Button type="submit" className="flex-1">Save</Button>
-          </DialogClose>          
-          <Button 
-            type="button" 
-            variant="outline" 
+            <Button type="submit" className="flex-1">
+              Save
+            </Button>
+          </DialogClose>
+          <Button
+            type="button"
+            variant="outline"
             onClick={handleOpenLink}
             className="flex items-center gap-1 flex-1"
           >
             <ExternalLinkIcon className="h-4 w-4" />
             Open
-          </Button>          
-          <Button 
+          </Button>
+          <Button
             type="button"
-            variant="outline" 
+            variant="outline"
             onClick={() => setShowDeleteConfirm(true)}
             className="flex-1"
           >
@@ -234,4 +237,4 @@ export function LinkDetailsForm({ link }: LinkDetailsFormProps) {
       </form>
     </Form>
   )
-} 
+}

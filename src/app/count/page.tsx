@@ -1,5 +1,5 @@
 import { createClient } from "@/utils/supabase/server"
-import GuestCountClient from './GuestCountClient'
+import GuestCountClient from "./GuestCountClient"
 
 export default async function GuestCountPage({
   searchParams,
@@ -11,7 +11,11 @@ export default async function GuestCountPage({
 
   const { data: user, error } = await supabase.auth.getUser()
   if (error || !user?.user) {
-    return <div className="container mx-auto p-4"><p className="text-lg">Please log in</p></div>
+    return (
+      <div className="container mx-auto p-4">
+        <p className="text-lg">Please log in</p>
+      </div>
+    )
   }
 
   // AI comment: Consider using user_event_permissions table instead of owner field for:
@@ -21,8 +25,8 @@ export default async function GuestCountPage({
   const { data: allowedEvents } = await supabase
     .from("events")
     .select("id, name, date")
-    .eq('owner', user.user.id)
-    .order('date', { ascending: false })
+    .eq("owner", user.user.id)
+    .order("date", { ascending: false })
 
   const defaultEventId = process.env.DEFAULT_EVENT_ID
   const eventId = eventIdParam || defaultEventId || allowedEvents?.[0]?.id

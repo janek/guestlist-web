@@ -34,7 +34,7 @@ type AddLinkFormProps = {
   eventId: string
 }
 
-export function AddLinkForm({ onSubmitFromParent, eventId}: AddLinkFormProps) {
+export function AddLinkForm({ onSubmitFromParent, eventId }: AddLinkFormProps) {
   const supabase = createClient()
   const { toast } = useToast()
 
@@ -120,5 +120,5 @@ export function AddLinkForm({ onSubmitFromParent, eventId}: AddLinkFormProps) {
         <Button type="submit">Submit</Button>
       </form>
     </Form>
-  );
+  )
 }

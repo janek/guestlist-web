@@ -1,9 +1,9 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
+import React from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import React from "react"
 
 import { Button } from "@/components/ui/button"
 import { DialogClose } from "@/components/ui/dialog"
@@ -19,10 +19,10 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { Switch } from "@/components/ui/switch"
 import { toast } from "@/components/ui/use-toast"
 import { createClient } from "@/utils/supabase/client"
 import type { Tables } from "../../lib/database.types"
-import { Switch } from "@/components/ui/switch"
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -68,7 +68,12 @@ export function GuestDetailsForm({
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const { name, type } = values
-    if (guest && guest.name === name && guest.type === type && guest.used === isUsed) {
+    if (
+      guest &&
+      guest.name === name &&
+      guest.type === type &&
+      guest.used === isUsed
+    ) {
       return
     }
 
@@ -126,8 +131,8 @@ export function GuestDetailsForm({
   async function handleDelete() {
     if (guest) {
       // Check if this is a temporary ID (from optimistic add)
-      const isTempId = guest.id.startsWith('temp-')
-      
+      const isTempId = guest.id.startsWith("temp-")
+
       // Always do optimistic delete first
       if (onOptimisticDelete) {
         onOptimisticDelete(guest.id)
@@ -135,7 +140,10 @@ export function GuestDetailsForm({
 
       // Only try database delete if it's a real ID (not temporary)
       if (!isTempId) {
-        const { error } = await supabase.from("guests").delete().eq("id", guest.id)
+        const { error } = await supabase
+          .from("guests")
+          .delete()
+          .eq("id", guest.id)
       }
     }
   }
@@ -216,8 +224,8 @@ export function GuestDetailsForm({
           </DialogClose>
           {guest && (
             <DialogClose asChild>
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 onClick={(e) => {
                   handleDelete()
                 }}

@@ -3,28 +3,34 @@ import { Button } from "@/components/ui/button"
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { AddLinkForm } from "./AddLinkForm"
 
+import { teamInfo } from "@/utils/telegram"
 import { useState } from "react"
 import { SendStaffLinksForm } from "./SendStaffLinksForm"
-import { teamInfo } from "@/utils/telegram"
 
 interface AddLinkDialogButtonProps {
-  variant: "manual" | "staff";
-  title: string;
-  description?: string | React.ReactNode;
-  staff?: Staff[];
-  event: GuestlistEvent;
+  variant: "manual" | "staff"
+  title: string
+  description?: string | React.ReactNode
+  staff?: Staff[]
+  event: GuestlistEvent
 }
 
-export const AddLinkDialogButton = ({ variant, title, description, staff, event }: AddLinkDialogButtonProps) => {
+export const AddLinkDialogButton = ({
+  variant,
+  title,
+  description,
+  staff,
+  event,
+}: AddLinkDialogButtonProps) => {
   const [open, setOpen] = useState(false)
-  
+
   const staffNames = Object.keys(teamInfo).sort()
   const staffCount = staffNames.length
 
@@ -33,7 +39,7 @@ export const AddLinkDialogButton = ({ variant, title, description, staff, event 
     if (description) {
       return description
     }
-    
+
     if (variant === "staff") {
       return (
         <div>
@@ -48,11 +54,11 @@ export const AddLinkDialogButton = ({ variant, title, description, staff, event 
         </div>
       )
     }
-    
+
     return null
   }
   const finalDescription = getDescription()
-  
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -61,13 +67,14 @@ export const AddLinkDialogButton = ({ variant, title, description, staff, event 
       <DialogContent className="max-w-xs">
         <DialogHeader>
           <DialogTitle className="mb-4">{title}</DialogTitle>
-          {finalDescription && (
-            typeof finalDescription === 'string' ? (
+          {finalDescription &&
+            (typeof finalDescription === "string" ? (
               <DialogDescription>{finalDescription}</DialogDescription>
             ) : (
-              <div className="text-sm text-muted-foreground">{finalDescription}</div>
-            )
-          )}
+              <div className="text-sm text-muted-foreground">
+                {finalDescription}
+              </div>
+            ))}
           {variant === "manual" ? (
             <AddLinkForm
               eventId={event.id}

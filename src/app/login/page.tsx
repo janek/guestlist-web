@@ -1,9 +1,6 @@
 "use client"
 
-import { createClient } from "@/utils/supabase/client"
-import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { Loader2 } from "lucide-react"
 import {
   Form,
   FormControl,
@@ -13,7 +10,10 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { createClient } from "@/utils/supabase/client"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { Loader2 } from "lucide-react"
+import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -91,7 +91,11 @@ export default function LoginPage() {
               <FormItem>
                 <FormLabel>Password:</FormLabel>
                 <FormControl>
-                  <Input {...field} type="password" allowPasswordManager={true} />
+                  <Input
+                    {...field}
+                    type="password"
+                    allowPasswordManager={true}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
