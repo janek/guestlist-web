@@ -1,4 +1,5 @@
 import { AddLinkDialogButton } from "@/components/AddLinkDialogButton"
+import { CreateEventButton } from "@/components/CreateEventButton"
 import { DownloadCsvButton } from "@/components/DownloadCsvButton"
 import { EventSwitcher } from "@/components/EventSwitcher"
 import { GuestDetailsDialog } from "@/components/GuestDetailsDialog"
@@ -43,12 +44,7 @@ export default async function Page({
       <div className="flex flex-col items-center justify-center min-h-screen p-4">
         <div className="text-center">
           <p className="text-lg mb-4">No events created yet</p>
-          <button 
-            onClick={() => console.log('Create event clicked')}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4"
-          >
-            Create Event
-          </button>
+          <CreateEventButton />
           <div className="flex items-center gap-4 justify-center">
             <p className="text-sm text-gray-600">Logged in as {user.user.email}</p>
             <LogoutButton />
@@ -58,12 +54,13 @@ export default async function Page({
     )
   }
 
-  // Security: Verify the requested event belongs to this user
+  // Verify the requested event belongs to this user
   const eventId = allowedEvents?.find(event => event.id === requestedEventId)?.id
+  // TODO: Better error states (and error handling)
   if (!eventId) {
     return (
       <div className="m-4">
-        <p className="text-red-500 mb-4">Information not found or access denied.</p>
+        <p className="text-red-500 mb-4">No information found or access denied.</p>
         <div className="flex items-center gap-4">
           <p className="text-sm text-gray-600">Logged in as {user.user.email}</p>
           <LogoutButton />
