@@ -37,9 +37,8 @@ export async function GET() {
         total_sold: ticketInfo["events.total_sold"],
         total_allocation: ticketInfo["events.total_allocation"],
       })
-    } else {
-      throw new Error("No ticket data found in response")
     }
+    throw new Error("No ticket data found in response")
   } catch (error) {
     console.error("Error fetching RA ticket data:", error)
     return NextResponse.json(

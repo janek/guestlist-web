@@ -31,7 +31,7 @@ function useAnimatedCounter(target: number, duration = 500) {
       const progress = Math.min(elapsed / duration, 1)
 
       // Easing function for smooth animation
-      const easeOut = 1 - Math.pow(1 - progress, 3)
+      const easeOut = 1 - (1 - progress) ** 3
       const value = Math.round(startValue + (target - startValue) * easeOut)
 
       setCurrent(value)
@@ -82,8 +82,8 @@ export default function GuestCountClient({ eventId }: GuestCountClientProps) {
         return
       }
 
-      let total = 0,
-        checkedIn = 0
+      let total = 0
+      let checkedIn = 0
       const newBreakdown: GuestBreakdown = {
         free: { total: 0, checkedIn: 0 },
         half: { total: 0, checkedIn: 0 },
