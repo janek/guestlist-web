@@ -18,6 +18,11 @@ export default function FullGuestlistClient({
   const [guests, setGuests] = useState<Guest[]>(initialGuests)
   const supabase = createClient()
 
+  // Sync local state when initialGuests prop changes (e.g., when switching events)
+  useEffect(() => {
+    setGuests(initialGuests)
+  }, [initialGuests])
+
   const handleOptimisticUpdate = useCallback((newGuest: Guest) => {
     setGuests((prev) => {
       const idx = prev.findIndex((g) => g.id === newGuest.id)
