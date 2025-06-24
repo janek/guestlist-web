@@ -32,7 +32,6 @@ import {
 } from "@/components/ui/popover"
 import { cn } from "@/lib/utils"
 import { createEvent } from "@/app/actions/create-event"
-import { useRouter } from "next/navigation"
 
 const createEventSchema = z.object({
   name: z.string().min(1, "Event name is required"),
@@ -61,7 +60,6 @@ export function CreateEventDialog({
   const open = controlledOpen !== undefined ? controlledOpen : uncontrolledOpen
   const [isLoading, setIsLoading] = useState(false)
   const [datePickerOpen, setDatePickerOpen] = useState(false)
-  const router = useRouter()
 
 
   const form = useForm<CreateEventFormData>({
