@@ -8,7 +8,7 @@ import {
   Form,
 } from "@/components/ui/form"
 import LimitInputField from "./LimitInputField"
-import { sendOutStaffLinks } from "@/utils/telegram"
+import { sendStaffLinks } from "@/app/actions/send-staff-links"
 
 
 const formSchema = z.object({
@@ -37,9 +37,8 @@ export function SendStaffLinksForm({ onSubmitFromParent, staff, event }: SendSta
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const { limit_free, limit_half, limit_skip } = values
-    const currentUrl = window.location.origin;
-    console.log("Sending staff links for event:", event)  // Add this line for debugging
-    sendOutStaffLinks(limit_free, limit_half, limit_skip, currentUrl, event)
+    console.log("Sending staff links for event:", event)
+    await sendStaffLinks(limit_free, limit_half, limit_skip, event)
     onSubmitFromParent()
   }
   return (
