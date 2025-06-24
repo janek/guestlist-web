@@ -107,6 +107,7 @@ const GuestlistTable = ({
         editingGuest={selectedGuest} // null at first, set to the selected guest when a row is clicked
         addGuestButtonHidden={true}
         link={link}
+        editedFromLinkId={link?.id ?? null}
         currentGuestlist={guests}
         onOptimisticUpdate={onOptimisticUpdate}
         onOptimisticDelete={onOptimisticDelete}
