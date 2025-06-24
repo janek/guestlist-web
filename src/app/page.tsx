@@ -35,11 +35,9 @@ export default async function Page({
   
   console.log('Filtered events:', allowedEvents)
 
-  const defaultEventId = process.env.DEFAULT_EVENT_ID
-  const requestedEventId = (searchParams.eventId as string | undefined) || defaultEventId || allowedEvents?.[0]?.id
-
-  if (!requestedEventId) {
-    // No event to show – edge-case
+  // Check if user has any events first
+  if (!allowedEvents || allowedEvents.length === 0) {
+    // No events created yet - show create event prompt
     return (
       <div className="flex flex-col items-center justify-center min-h-screen p-4">
         <div className="text-center">
@@ -53,6 +51,9 @@ export default async function Page({
       </div>
     )
   }
+
+  const defaultEventId = process.env.DEFAULT_EVENT_ID
+  const requestedEventId = (searchParams.eventId as string | undefined) || defaultEventId || allowedEvents[0].id
 
   // Verify the requested event belongs to this user
   const eventId = allowedEvents?.find(event => event.id === requestedEventId)?.id
