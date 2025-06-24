@@ -32,13 +32,14 @@ import {
 } from "@/components/ui/popover"
 import { cn } from "@/lib/utils"
 import { createEvent } from "@/app/actions/create-event"
+import { useRouter } from "next/navigation"
 
 const createEventSchema = z.object({
   name: z.string().min(1, "Event name is required"),
   date: z.date({
     required_error: "Event date is required",
   }),
-  pin: z.number().min(1000, "PIN must be at least 4 digits").max(9999, "PIN must be at most 4 digits"),
+  pin: z.string().min(4, "PIN must be 4 digits").max(4, "PIN must be 4 digits").regex(/^\d{4}$/, "PIN must be 4 digits"),
 })
 
 type CreateEventFormData = z.infer<typeof createEventSchema>
@@ -46,30 +47,38 @@ type CreateEventFormData = z.infer<typeof createEventSchema>
 type CreateEventDialogProps = {
   trigger?: React.ReactNode
   onEventCreated?: (event: GuestlistEvent) => void
+  onOpenChange?: (open: boolean) => void
+  open?: boolean
 }
 
 export function CreateEventDialog({ 
   trigger, 
-  onEventCreated 
+  onEventCreated,
+  onOpenChange,
+  open: controlledOpen,
 }: CreateEventDialogProps) {
-  const [open, setOpen] = useState(false)
+  const [uncontrolledOpen, setUncontrolledOpen] = useState(false)
+  const open = controlledOpen !== undefined ? controlledOpen : uncontrolledOpen
   const [isLoading, setIsLoading] = useState(false)
   const [datePickerOpen, setDatePickerOpen] = useState(false)
+  const router = useRouter()
 
 
   const form = useForm<CreateEventFormData>({
     resolver: zodResolver(createEventSchema),
     defaultValues: {
       name: "",
-      pin: undefined,
+      pin: "",
     },
   })
 
   const onSubmit = async (data: CreateEventFormData) => {
     setIsLoading(true)
     try {
-      await createEvent(data.name, data.date, data.pin)
-      // No need to close dialog or reset form - redirect happens in server action
+      const newEvent = await createEvent(data.name, data.date, parseInt(data.pin))
+      setUncontrolledOpen(false)
+      form.reset()
+      router.push(`/?eventId=${newEvent.id}`)
     } catch (error) {
       console.error("Failed to create event:", error)
       setIsLoading(false)
@@ -77,14 +86,24 @@ export function CreateEventDialog({
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        {trigger || (
-          <Button>
-            Create Event
-          </Button>
-        )}
-      </DialogTrigger>
+    <Dialog
+      open={open}
+      onOpenChange={(o) => {
+        if (controlledOpen === undefined) {
+          setUncontrolledOpen(o)
+        }
+        onOpenChange?.(o)
+      }}
+    >
+      { (trigger || controlledOpen === undefined) && (
+        <DialogTrigger asChild>
+          {trigger || (
+            <Button>
+              Create Event
+            </Button>
+          )}
+        </DialogTrigger>
+      ) }
       <DialogContent className="max-w-md">
         <DialogHeader>
           <DialogTitle>Create New Event</DialogTitle>
@@ -100,7 +119,7 @@ export function CreateEventDialog({
                   <FormControl>
                     <Input 
                       placeholder="Enter event name" 
-                      {...field} 
+                      {...field}
                       disabled={isLoading}
                     />
                   </FormControl>
@@ -163,11 +182,10 @@ export function CreateEventDialog({
                   <FormLabel>Event PIN</FormLabel>
                   <FormControl>
                     <Input 
-                      type="number"
                       placeholder="Enter 4-digit PIN" 
                       {...field}
-                      onChange={(e) => field.onChange(parseInt(e.target.value) || undefined)}
                       disabled={isLoading}
+                      maxLength={4}
                     />
                   </FormControl>
                   <FormMessage />
@@ -179,7 +197,7 @@ export function CreateEventDialog({
               <Button
                 type="button"
                 variant="outline"
-                onClick={() => setOpen(false)}
+                onClick={() => setUncontrolledOpen(false)}
                 disabled={isLoading}
               >
                 Cancel

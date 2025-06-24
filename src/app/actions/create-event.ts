@@ -1,7 +1,6 @@
 "use server"
 
 import { createClient } from "@/utils/supabase/server"
-import { redirect } from "next/navigation"
 
 export async function createEvent(name: string, date: Date, pin: number) {
   const supabase = createClient()
@@ -26,6 +25,5 @@ export async function createEvent(name: string, date: Date, pin: number) {
     throw new Error(`Failed to create event: ${error.message}`)
   }
 
-  // Redirect to the new event
-  redirect(`/?eventId=${data.id}`)
+  return data
 }
