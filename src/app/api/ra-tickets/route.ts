@@ -6,7 +6,7 @@ export async function GET() {
       method: 'POST',
       headers: {
         'accept': '*/*',
-        'authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzZWN1cml0eVRva2VuSWQiOiJlNGY5NGM5NS0yYzEzLTQwNzMtYTk1NS03ODhiZDhhZWMzZWUiLCJpYXQiOjE3NDg5OTkyNDIsImV4cCI6MTc0OTYwNDA0Mn0.RieURED_SJpcfESLaCe0LaDPuydKvqyfAqQroNpeywo',
+        'authorization': `Bearer ${process.env.RA_API_TOKEN!}`,
         'content-type': 'application/json',
         'origin': 'https://ra.co',
         'referer': 'https://ra.co/',
