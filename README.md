@@ -1,6 +1,5 @@
-`bun run dev`
-
-
+# Setup & usage
+`bun run dev`, also see `package.json`
 
 # Setup
 
