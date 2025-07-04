@@ -27,7 +27,6 @@ export function SendStaffLinksForm({
   event,
   selectedStaff,
 }: SendStaffLinksFormProps) {
-  console.log("Event2:", event)
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {

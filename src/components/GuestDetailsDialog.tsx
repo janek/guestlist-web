@@ -39,11 +39,6 @@ export const GuestDetailsDialog = ({
   onOptimisticUpdate,
   onOptimisticDelete,
 }: Partial<GuestDetailsDialogProps> = {}) => {
-  console.log(
-    "🔗 GuestDetailsDialog - onOptimisticDelete callback:",
-    onOptimisticDelete ? "✅ Present" : "❌ Missing",
-  )
-
   const availableListTypes = (
     link: Link,
     guests: Guest[],
