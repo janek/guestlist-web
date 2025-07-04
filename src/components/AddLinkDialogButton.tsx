@@ -8,6 +8,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import { Checkbox } from "@/components/ui/checkbox"
 import { AddLinkForm } from "./AddLinkForm"
 
 import { teamInfo } from "@/utils/telegram"
@@ -30,9 +31,21 @@ export const AddLinkDialogButton = ({
   event,
 }: AddLinkDialogButtonProps) => {
   const [open, setOpen] = useState(false)
-
+  
   const staffNames = Object.keys(teamInfo).sort()
-  const staffCount = staffNames.length
+  const [selectedStaff, setSelectedStaff] = useState<string[]>(staffNames) // Start with all selected
+
+  const handleStaffToggle = (staffName: string, checked: boolean) => {
+    if (checked) {
+      setSelectedStaff(prev => [...prev, staffName])
+    } else {
+      setSelectedStaff(prev => prev.filter(name => name !== staffName))
+    }
+  }
+
+  const handleSelectAll = (checked: boolean) => {
+    setSelectedStaff(checked ? staffNames : [])
+  }
 
   // Use provided description or generate staff list for staff variant
   const getDescription = () => {
@@ -43,13 +56,35 @@ export const AddLinkDialogButton = ({
     if (variant === "staff") {
       return (
         <div>
-          <div className="mb-2">
-            Links will be sent via Telegram to {staffCount} people:
+          <div className="mb-2 flex items-center justify-between">
+            <span>Select staff to send links to:</span>
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="select-all"
+                checked={selectedStaff.length === staffNames.length}
+                onCheckedChange={handleSelectAll}
+              />
+              <label htmlFor="select-all" className="text-xs text-muted-foreground">
+                All ({staffNames.length})
+              </label>
+            </div>
           </div>
-          <div className="grid grid-cols-3 gap-x-2 text-xs mb-5">
+          <div className="grid grid-cols-2 gap-2 text-xs mb-5 max-h-48 overflow-y-auto">
             {staffNames.map((name) => (
-              <div key={name}>{name}</div>
+              <div key={name} className="flex items-center space-x-2">
+                <Checkbox
+                  id={`staff-${name}`}
+                  checked={selectedStaff.includes(name)}
+                  onCheckedChange={(checked) => handleStaffToggle(name, !!checked)}
+                />
+                <label htmlFor={`staff-${name}`} className="cursor-pointer">
+                  {name}
+                </label>
+              </div>
             ))}
+          </div>
+          <div className="text-xs text-muted-foreground">
+            {selectedStaff.length} of {staffNames.length} selected
           </div>
         </div>
       )
@@ -86,6 +121,7 @@ export const AddLinkDialogButton = ({
               <SendStaffLinksForm
                 staff={staff}
                 event={event}
+                selectedStaff={selectedStaff}
                 onSubmitFromParent={() => setOpen(false)}
               />
             </>

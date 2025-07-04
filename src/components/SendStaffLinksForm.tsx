@@ -18,12 +18,14 @@ type SendStaffLinksFormProps = {
   onSubmitFromParent: () => void
   staff?: Staff[]
   event: GuestlistEvent
+  selectedStaff: string[]
 }
 
 export function SendStaffLinksForm({
   onSubmitFromParent,
   staff,
   event,
+  selectedStaff,
 }: SendStaffLinksFormProps) {
   console.log("Event2:", event)
   const form = useForm<z.infer<typeof formSchema>>({
@@ -38,7 +40,7 @@ export function SendStaffLinksForm({
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const { limit_free, limit_half, limit_skip } = values
     console.log("Sending staff links for event:", event)
-    await sendStaffLinks(limit_free, limit_half, limit_skip, event)
+    await sendStaffLinks(limit_free, limit_half, limit_skip, event, selectedStaff)
     onSubmitFromParent()
   }
   return (
