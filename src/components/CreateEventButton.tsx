@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 export function CreateEventButton() {
   const handleEventCreated = (event: GuestlistEvent) => {
     console.log("Event created:", event)
-    // TODO: Redirect to new event or refresh page
+    // TODO: check against the create event sub-button, I think this is a stub and over there it's already working
   }
 
   return (

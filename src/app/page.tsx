@@ -33,8 +33,6 @@ export default async function Page({
     .eq("owner", user.user.id) // Above comment is regarding this condition
     .order("date", { ascending: false })
 
-  console.log("Filtered events:", allowedEvents)
-
   // Check if user has any events first
   if (!allowedEvents || allowedEvents.length === 0) {
     // No events created yet - show create event prompt
@@ -90,8 +88,6 @@ export default async function Page({
   )
 
   if (dashboardError || !dashboardRows || dashboardRows.length === 0) {
-    console.log("Dashboard error:", dashboardError)
-    console.log("Dashboard rows:", dashboardRows)
     return <p className="m-4 text-red-500">Failed to load dashboard.</p>
   }
 
