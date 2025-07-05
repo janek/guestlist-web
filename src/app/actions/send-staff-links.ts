@@ -1,6 +1,6 @@
 "use server"
 
-import { sendOutStaffLinks } from "@/utils/telegram"
+import { sendOutStaffLinks } from "@/utils/telegram/server"
 import { headers } from "next/headers"
 
 export async function sendStaffLinks(

@@ -11,7 +11,7 @@ import {
 import { Checkbox } from "@/components/ui/checkbox"
 import { AddLinkForm } from "./AddLinkForm"
 
-import { teamInfo } from "@/utils/telegram"
+import { teamInfo } from "@/utils/telegram/constants"
 import { useState } from "react"
 import { SendStaffLinksForm } from "./SendStaffLinksForm"
 
