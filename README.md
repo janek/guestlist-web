@@ -3,17 +3,20 @@
 
 # Setup
 
-### Netlify
-Production app is hosted on Netlify
-Logs: https://app.netlify.com/projects/turbolist/logs/edge-functions
-Deploys: https://app.netlify.com/projects/turbolist/deploys
-
-### Vercel
-Staging hosted on Vercel
-
 ### Domains
 Production - gl.janek.ooo and guestlist.turbulence.berlin
 Staging - guestlist-staging.netlify.app
+
+### Vercel
+Production app is hosted on Vercel
+Deploys- https://vercel.com/janeks-projects-057a1de0/guestlist-web/deployments
+Logs - https://vercel.com/janeks-projects-057a1de0/guestlist-web/logs
+
+### Netlify
+Staging is hosted on Netlify
+Deploys - https://app.netlify.com/projects/guestlist-staging/deploys
+Logs - https://app.netlify.com/projects/guestlist-staging/logs/functions
+
 
 ### Supabase
 Database and authentication hosted by Supabase.
