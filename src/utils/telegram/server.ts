@@ -12,10 +12,19 @@ export async function sendOutStaffLinks(
   event: GuestlistEvent,
   selectedStaff: string[],
 ) {
-  // biome-ignore lint/style/noNonNullAssertion: Using ! allowed for env vars
-  const bot = new Bot(process.env.TELEGRAM_BOT_TOKEN!)
-  // biome-ignore lint/style/noNonNullAssertion: Using ! allowed for env vars
-  const adminId = process.env.TELEGRAM_ADMIN_ID!
+  const botToken = process.env.TELEGRAM_BOT_TOKEN
+  const adminId = process.env.TELEGRAM_ADMIN_ID
+  console.log("[sendOutStaffLinks] env presence:", {
+    TELEGRAM_BOT_TOKEN: !!botToken,
+    TELEGRAM_ADMIN_ID: !!adminId,
+  })
+
+  if (!botToken || !adminId) {
+    console.error("[sendOutStaffLinks] Missing required env vars – aborting")
+    throw new Error("Missing Telegram configuration on server")
+  }
+
+  const bot = new Bot(botToken)
   const supabase = createClient()
 
   const undeliveredLinks: Array<{
@@ -30,6 +39,7 @@ export async function sendOutStaffLinks(
   )
 
   for (const [name, id] of Object.entries(selectedTeamInfo)) {
+    console.log("[sendOutStaffLinks] inserting link for", { name, id })
     const { data, error } = await supabase
       .from("links")
       .insert([
@@ -45,10 +55,12 @@ export async function sendOutStaffLinks(
       .select()
 
     if (error) {
+      console.error("[sendOutStaffLinks] Supabase insert error:", error)
       throw error
     }
 
     if (data) {
+      console.log("[sendOutStaffLinks] Supabase insert success – slug:", data[0].slug)
       const slug = data[0].slug as string
       const url = `${baseUrl}/${slug}`
       try {

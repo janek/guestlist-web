@@ -15,5 +15,15 @@ export async function sendStaffLinks(
   const protocol = process.env.NODE_ENV === "production" ? "https" : "http"
   const baseUrl = `${protocol}://${host}`
 
+  // Temporary verbose logging – remove once issue is resolved
+  console.log("[sendStaffLinks] host, protocol, baseUrl:", { host, protocol, baseUrl })
+  console.log("[sendStaffLinks] payload:", {
+    limit_free,
+    limit_half,
+    limit_skip,
+    event,
+    selectedStaffCount: selectedStaff.length,
+  })
+
   await sendOutStaffLinks(limit_free, limit_half, limit_skip, baseUrl, event, selectedStaff)
 }
