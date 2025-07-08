@@ -1,6 +1,4 @@
--- Single-query function to get link details with guests and counts
--- This replaces 3 separate queries with 1 optimized database call
-
+DROP FUNCTION get_link_with_guests(link_slug TEXT);
 CREATE OR REPLACE FUNCTION get_link_with_guests(link_slug TEXT)
 RETURNS TABLE (
   -- Link details
