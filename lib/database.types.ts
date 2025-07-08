@@ -237,6 +237,10 @@ export type Database = {
       }
     }
     Functions: {
+      delete_link: {
+        Args: { p_link_id: string; p_mode: string }
+        Returns: undefined
+      }
       get_dashboard: {
         Args: { p_event_id: string }
         Returns: {
@@ -263,6 +267,30 @@ export type Database = {
           used_half: number
           used_skip: number
         }[]
+      }
+      split_link: {
+        Args: {
+          p_parent_id: string
+          p_org: string
+          p_free: number
+          p_half: number
+          p_skip: number
+        }
+        Returns: {
+          claimed_via_telegram: boolean
+          created_at: string | null
+          depth: number
+          event_id: string
+          id: string
+          limit_free: number
+          limit_half: number
+          limit_skip: number
+          organisation: string
+          parent_link_id: string | null
+          permissions: Json | null
+          slug: string
+          telegram_user_id: number | null
+        }
       }
     }
     Enums: {
