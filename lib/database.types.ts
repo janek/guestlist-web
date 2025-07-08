@@ -97,12 +97,14 @@ export type Database = {
         Row: {
           claimed_via_telegram: boolean
           created_at: string | null
+          depth: number
           event_id: string
           id: string
           limit_free: number
           limit_half: number
           limit_skip: number
           organisation: string
+          parent_link_id: string | null
           permissions: Json | null
           slug: string
           telegram_user_id: number | null
@@ -110,12 +112,14 @@ export type Database = {
         Insert: {
           claimed_via_telegram?: boolean
           created_at?: string | null
+          depth?: number
           event_id: string
           id?: string
           limit_free?: number
           limit_half?: number
           limit_skip?: number
           organisation: string
+          parent_link_id?: string | null
           permissions?: Json | null
           slug: string
           telegram_user_id?: number | null
@@ -123,12 +127,14 @@ export type Database = {
         Update: {
           claimed_via_telegram?: boolean
           created_at?: string | null
+          depth?: number
           event_id?: string
           id?: string
           limit_free?: number
           limit_half?: number
           limit_skip?: number
           organisation?: string
+          parent_link_id?: string | null
           permissions?: Json | null
           slug?: string
           telegram_user_id?: number | null
@@ -139,6 +145,20 @@ export type Database = {
             columns: ["event_id"]
             isOneToOne: false
             referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "links_parent_link_id_fkey"
+            columns: ["parent_link_id"]
+            isOneToOne: false
+            referencedRelation: "links"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "links_parent_link_id_fkey"
+            columns: ["parent_link_id"]
+            isOneToOne: false
+            referencedRelation: "links_with_event_details"
             referencedColumns: ["id"]
           },
         ]
