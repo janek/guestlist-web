@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION generate_unique_slug()
+-- This is used from a Trigger on insertion into the Links table
 DECLARE
     chars TEXT := 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     new_slug TEXT;

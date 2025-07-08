@@ -44,15 +44,13 @@ begin
     raise exception 'delete_link: link % not found', p_link_id;
   end if;
 
-  if root_rec.parent_link_id is null then
-    raise exception 'delete_link: cannot delete top-level link %', p_link_id;
+  -- Capture parent if any (for quota restoration / guest pull-up)
+  if root_rec.parent_link_id is not null then
+    select * into parent_rec
+      from links
+     where id = root_rec.parent_link_id
+     for update;
   end if;
-
-  -- Lock the parent row because we will update its quota (and maybe guests)
-  select * into parent_rec
-    from links
-   where id = root_rec.parent_link_id
-   for update;
 
   --------------------------------------------------------------------
   -- 3. Collect the entire subtree and sum limits
@@ -75,7 +73,7 @@ begin
   --------------------------------------------------------------------
   -- 4. Guest handling
   --------------------------------------------------------------------
-  if p_mode = 'pull_up' then
+  if p_mode = 'pull_up' and parent_rec is not null then
     -- Move guests to the parent link (keeps used quota consumed)
     update guests
        set link_id = parent_rec.id
@@ -119,11 +117,13 @@ begin
   --------------------------------------------------------------------
   -- 6. Restore quota to the direct parent
   --------------------------------------------------------------------
-  update links
-     set limit_free = limit_free + total_free,
-         limit_half = limit_half + total_half,
-         limit_skip = limit_skip + total_skip
-   where id = parent_rec.id;
+  if parent_rec is not null then
+    update links
+       set limit_free = limit_free + total_free,
+           limit_half = limit_half + total_half,
+           limit_skip = limit_skip + total_skip
+     where id = parent_rec.id;
+  end if;
 
   return;
 end;

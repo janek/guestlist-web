@@ -64,11 +64,10 @@ begin
   -- 3. Insert child row
   --------------------------------------------------------------------
   insert into links (
-    slug, organisation, event_id,
+    organisation, event_id,
     parent_link_id, depth,
     limit_free, limit_half, limit_skip
   ) values (
-    generate_unique_slug(),
     p_org,
     parent_rec.event_id,
     parent_rec.id,
