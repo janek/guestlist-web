@@ -79,6 +79,7 @@ export function LinkDetailsForm({ link }: LinkDetailsFormProps) {
   }
 
   async function handleConfirmedDelete() {
+    // TODO: use deleteLink RPC
     const response = await supabase.from("links").delete().eq("id", link.id)
     console.log("Delete response:", response)
   }

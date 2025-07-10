@@ -26,13 +26,15 @@ export async function rpcSplitLink({
   half,
   skip,
 }: SplitLinkParams) {
-  return getClient().rpc("split_link", {
-    p_parent_id: parentId,
-    p_org: org,
-    p_free: free,
-    p_half: half,
-    p_skip: skip,
-  })
+  return getClient()
+    .rpc("split_link", {
+      p_parent_id: parentId,
+      p_org: org,
+      p_free: free,
+      p_half: half,
+      p_skip: skip,
+    })
+    .throwOnError()
 }
 
 type DeleteLinkParams = {
@@ -41,8 +43,10 @@ type DeleteLinkParams = {
 }
 
 export async function rpcDeleteLink({ linkId, mode }: DeleteLinkParams) {
-  return getClient().rpc("delete_link", {
-    p_link_id: linkId,
-    p_mode: mode,
-  })
+  return getClient()
+    .rpc("delete_link", {
+      p_link_id: linkId,
+      p_mode: mode,
+    })
+    .throwOnError()
 } 

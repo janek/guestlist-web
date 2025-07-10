@@ -1,17 +1,4 @@
--- Atomic RPC: delete_link()
--- Deletes a link (and its descendants) and either removes or re-parents
--- their guests. Restores the reserved quotas to the direct parent so
--- capacity accounting stays correct with the subtract-on-split model.
---
---   mode = 'delete_guests' → hard-deletes guests belonging to the subtree
---   mode = 'pull_up'       → reassigns all guests to the direct parent link
---
--- Preconditions:
---   • p_mode ∈ ('delete_guests', 'pull_up')
---   • Root links (parent_link_id IS NULL) cannot be deleted via this RPC.
---
--- Returns: void
-
+-- Debug version of delete_link() with logging
 create or replace function delete_link(
   p_link_id uuid,
   p_mode    text
@@ -25,6 +12,8 @@ declare
   total_half  int := 0;
   total_skip  int := 0;
 begin
+  raise notice 'DEBUG: Starting delete_link for link_id=%, mode=%', p_link_id, p_mode;
+  
   --------------------------------------------------------------------
   -- 1. Validate mode
   --------------------------------------------------------------------
@@ -44,12 +33,20 @@ begin
     raise exception 'delete_link: link % not found', p_link_id;
   end if;
 
+  raise notice 'DEBUG: Root link found - limit_free=%, limit_half=%, limit_skip=%, parent_link_id=%', 
+    root_rec.limit_free, root_rec.limit_half, root_rec.limit_skip, root_rec.parent_link_id;
+
   -- Capture parent if any (for quota restoration / guest pull-up)
   if root_rec.parent_link_id is not null then
     select * into parent_rec
       from links
      where id = root_rec.parent_link_id
      for update;
+     
+    raise notice 'DEBUG: Parent link found - id=%, limit_free=%, limit_half=%, limit_skip=%', 
+      parent_rec.id, parent_rec.limit_free, parent_rec.limit_half, parent_rec.limit_skip;
+  else
+    raise notice 'DEBUG: No parent link found';
   end if;
 
   --------------------------------------------------------------------
@@ -69,6 +66,9 @@ begin
          coalesce(sum(limit_skip), 0)
     into total_free, total_half, total_skip
     from subtree;
+
+  raise notice 'DEBUG: Subtree totals - total_free=%, total_half=%, total_skip=%', 
+    total_free, total_half, total_skip;
 
   --------------------------------------------------------------------
   -- 4. Guest handling
@@ -101,18 +101,7 @@ begin
   end if;
 
   --------------------------------------------------------------------
-  -- 5. Restore quota to the direct parent BEFORE deletion
-  --------------------------------------------------------------------
-  if parent_rec is not null then
-    update links
-       set limit_free = limit_free + total_free,
-           limit_half = limit_half + total_half,
-           limit_skip = limit_skip + total_skip
-     where id = parent_rec.id;
-  end if;
-
-  --------------------------------------------------------------------
-  -- 6. Delete the links in the subtree
+  -- 5. Delete the links in the subtree
   --------------------------------------------------------------------
   delete from links
    where id in (
@@ -125,6 +114,27 @@ begin
      ) t
    );
 
+  raise notice 'DEBUG: Links deleted';
+
+  --------------------------------------------------------------------
+  -- 6. Restore quota to the direct parent
+  --------------------------------------------------------------------
+  if parent_rec is not null then
+    raise notice 'DEBUG: Restoring quota to parent - adding total_free=%, total_half=%, total_skip=%', 
+      total_free, total_half, total_skip;
+    
+    update links
+       set limit_free = limit_free + total_free,
+           limit_half = limit_half + total_half,
+           limit_skip = limit_skip + total_skip
+     where id = parent_rec.id;
+     
+    raise notice 'DEBUG: Quota restoration update executed';
+  else
+    raise notice 'DEBUG: No parent to restore quota to';
+  end if;
+
+  raise notice 'DEBUG: delete_link completed';
   return;
 end;
-$$; 
+$$;
