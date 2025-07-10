@@ -4,7 +4,7 @@ import { DownloadCsvButton } from "@/components/DownloadCsvButton"
 import { EventSwitcher } from "@/components/EventSwitcher"
 import FullGuestlistClient from "@/components/FullGuestlistClient"
 import { GuestDetailsDialog } from "@/components/GuestDetailsDialog"
-import LinksTable from "@/components/LinksTable"
+import LinksClient from "@/components/LinksClient"
 import { LogoutButton } from "@/components/LogoutButton"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { createClient } from "@/utils/supabase/server"
@@ -156,7 +156,7 @@ export default async function Page({
           <ScrollArea
             className="h-[300px] w-[350px] md:w-[420px] rounded-md border p-4 mb-4"
           >
-            <LinksTable links={links || []} />
+            <LinksClient initialLinks={links || []} eventId={eventId} />
           </ScrollArea>
           <div className="flex space-x-4 mb-4">
             <AddLinkDialogButton

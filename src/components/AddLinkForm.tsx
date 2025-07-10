@@ -72,6 +72,11 @@ export function AddLinkForm({ onSubmitFromParent, eventId }: AddLinkFormProps) {
       throw error
     }
 
+    // Dispatch event for optimistic UI update
+    if (typeof window !== "undefined" && data && data.length > 0) {
+      window.dispatchEvent(new CustomEvent("link-created", { detail: data[0] }))
+    }
+
     onSubmitFromParent()
   }
   return (
