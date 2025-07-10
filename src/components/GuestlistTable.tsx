@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/table"
 import { createClient } from "@/utils/supabase/client"
 import { useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useMemo } from "react"
 import type { Tables } from "../../lib/database.types"
 import { GuestDetailsDialog } from "./GuestDetailsDialog"
 
@@ -40,6 +40,15 @@ const GuestlistTable = ({
   const router = useRouter()
   const [selectedGuest, setSelectedGuest] = useState<Guest | null>(null)
   const [dialogOpen, setDialogOpen] = useState(false)
+
+  // Currently applied sort column. null = default reverse chrono
+  const [sortColumn, setSortColumn] = useState<
+    "name" | "type" | "organisation" | null
+  >(null)
+
+  const toggleSort = (column: "name" | "type" | "organisation") => {
+    setSortColumn((prev) => (prev === column ? null : column))
+  }
 
   useEffect(() => {
     const channel = supabase
@@ -72,18 +81,55 @@ const GuestlistTable = ({
     setDialogOpen(true)
   }
 
+  // Derive sorted list based on selected column (memoized for perf)
+  const sortedGuests = useMemo(() => {
+    const clone = [...guests]
+
+    if (sortColumn) {
+      clone.sort((a, b) => {
+        const aVal = ((a as any)[sortColumn] || "").toString().toLowerCase()
+        const bVal = ((b as any)[sortColumn] || "").toString().toLowerCase()
+        return aVal.localeCompare(bVal)
+      })
+    } else {
+      // Default: reverse chronological (newest first)
+      clone.sort((a, b) => {
+        const aTime = a.created_at ? new Date(a.created_at).getTime() : 0
+        const bTime = b.created_at ? new Date(b.created_at).getTime() : 0
+        return bTime - aTime
+      })
+    }
+    return clone
+  }, [guests, sortColumn])
   return (
     <>
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Name</TableHead>
-            <TableHead>Type</TableHead>
-            {shouldShowOrganization && <TableHead>Organization</TableHead>}
+            <TableHead
+              className="cursor-pointer select-none min-w-[150px]"
+              onClick={() => toggleSort("name")}
+            >
+              Name {sortColumn === "name" && "▲"}
+            </TableHead>
+            <TableHead
+              className="cursor-pointer select-none min-w-[70px]"
+              onClick={() => toggleSort("type")}
+            >
+              Type {sortColumn === "type" && "▲"}
+            </TableHead>
+            {shouldShowOrganization && (
+              <TableHead
+                className="cursor-pointer select-none min-w-[150px]"
+                onClick={() => toggleSort("organisation")}
+              >
+                Organization {sortColumn === "organisation" && "▲"}
+              </TableHead>
+            )}
           </TableRow>
         </TableHeader>
         <TableBody>
-          {guests.map((guest) => (
+          {sortedGuests.map((guest) => (
             <TableRow
               key={guest.id}
               style={{
@@ -92,10 +138,14 @@ const GuestlistTable = ({
               }}
               onClick={() => handleRowClick(guest)}
             >
-              <TableCell>{guest.name}</TableCell>
-              <TableCell>{guest.type}</TableCell>
+              <TableCell className="max-w-[160px] truncate whitespace-nowrap">
+                {guest.name}
+              </TableCell>
+              <TableCell className="min-w-[70px]">{guest.type}</TableCell>
               {shouldShowOrganization && (
-                <TableCell>{guest.organisation}</TableCell>
+                <TableCell className="min-w-[100px] truncate whitespace-nowrap">
+                  {guest.organisation}
+                </TableCell>
               )}
             </TableRow>
           ))}
@@ -108,7 +158,7 @@ const GuestlistTable = ({
         addGuestButtonHidden={true}
         link={link}
         editedFromLinkId={link?.id ?? null}
-        currentGuestlist={guests}
+        currentGuestlist={sortedGuests}
         onOptimisticUpdate={onOptimisticUpdate}
         onOptimisticDelete={onOptimisticDelete}
       />

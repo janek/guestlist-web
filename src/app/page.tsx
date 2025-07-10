@@ -127,7 +127,9 @@ export default async function Page({
           <h4 className="scroll-m-20 text-xl mb-4 font-semibold tracking-tight text-left">
             Full guestlist
           </h4>
-          <ScrollArea className="h-[500px] w-[350px] rounded-md border p-4 mb-4">
+          <ScrollArea
+            className="h-[500px] w-[350px] md:w-[420px] rounded-md border p-4 mb-4"
+          >
             <FullGuestlistClient
               initialGuests={guests || []}
               eventId={eventId}
@@ -151,7 +153,9 @@ export default async function Page({
           <h4 className="scroll-m-20 text-xl mb-4 font-semibold tracking-tight text-left">
             Links
           </h4>
-          <ScrollArea className="h-[300px] w-[350px] rounded-md border p-4 mb-4">
+          <ScrollArea
+            className="h-[300px] w-[350px] md:w-[420px] rounded-md border p-4 mb-4"
+          >
             <LinksTable links={links || []} />
           </ScrollArea>
           <div className="flex space-x-4 mb-4">

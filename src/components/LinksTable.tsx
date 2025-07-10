@@ -52,6 +52,13 @@ const LinksTable = ({ links }: LinksTableProps) => {
     setDialogOpen(true)
   }
 
+  // Sort links so newest (latest created_at) appear first
+  const sortedLinks = [...links].sort((a, b) => {
+    const aTime = a.created_at ? new Date(a.created_at).getTime() : 0
+    const bTime = b.created_at ? new Date(b.created_at).getTime() : 0
+    return bTime - aTime
+  })
+
   return (
     <>
       <Table>
@@ -63,7 +70,7 @@ const LinksTable = ({ links }: LinksTableProps) => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {links.map((link) => (
+          {sortedLinks.map((link) => (
             <TableRow
               key={link.id}
               onClick={() => handleRowClick(link)}
