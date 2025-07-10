@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/table"
 import { createClient } from "@/utils/supabase/client"
 import { useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useMemo } from "react"
 import type { Tables } from "../../lib/database.types"
 import { LinkDetailsDialog } from "./LinkDetailsDialog"
 
@@ -24,6 +24,13 @@ const LinksTable = ({ links }: LinksTableProps) => {
   const router = useRouter()
   const [selectedLink, setSelectedLink] = useState<Tables<"links"> | null>(null)
   const [dialogOpen, setDialogOpen] = useState(false)
+
+  // Sorting state: null = default reverse chrono
+  const [sortColumn, setSortColumn] = useState<"organisation" | "limits" | null>(null)
+
+  const toggleSort = (column: "organisation" | "limits") => {
+    setSortColumn((prev) => (prev === column ? null : column))
+  }
 
   useEffect(() => {
     const channel = supabase
@@ -52,12 +59,25 @@ const LinksTable = ({ links }: LinksTableProps) => {
     setDialogOpen(true)
   }
 
-  // Sort links so newest (latest created_at) appear first
-  const sortedLinks = [...links].sort((a, b) => {
-    const aTime = a.created_at ? new Date(a.created_at).getTime() : 0
-    const bTime = b.created_at ? new Date(b.created_at).getTime() : 0
-    return bTime - aTime
-  })
+  // Derive sorted links per column selection
+  const sortedLinks = useMemo(() => {
+    const clone = [...links]
+
+    if (sortColumn === "organisation") {
+      clone.sort((a, b) => a.organisation.localeCompare(b.organisation))
+    } else if (sortColumn === "limits") {
+      const points = (l: Tables<"links">) => l.limit_skip + l.limit_half * 0.5
+      clone.sort((a, b) => points(b) - points(a)) // Descending
+    } else {
+      // Default reverse chronological by created_at
+      clone.sort((a, b) => {
+        const aTime = a.created_at ? new Date(a.created_at).getTime() : 0
+        const bTime = b.created_at ? new Date(b.created_at).getTime() : 0
+        return bTime - aTime
+      })
+    }
+    return clone
+  }, [links, sortColumn])
 
   return (
     <>
@@ -65,8 +85,18 @@ const LinksTable = ({ links }: LinksTableProps) => {
         {/* <TableCaption>Guestlist for event {event.name} </TableCaption> */}
         <TableHeader>
           <TableRow>
-            <TableHead>Organisation</TableHead>
-            <TableHead>Limits</TableHead>
+            <TableHead
+              className="cursor-pointer select-none"
+              onClick={() => toggleSort("organisation")}
+            >
+              Organisation {sortColumn === "organisation" && "▲"}
+            </TableHead>
+            <TableHead
+              className="cursor-pointer select-none"
+              onClick={() => toggleSort("limits")}
+            >
+              Limits {sortColumn === "limits" && "▲"}
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -76,7 +106,9 @@ const LinksTable = ({ links }: LinksTableProps) => {
               onClick={() => handleRowClick(link)}
               className="cursor-pointer"
             >
-              <TableCell>{link.organisation}</TableCell>
+              <TableCell className="truncate whitespace-nowrap max-w-[160px]">
+                {link.organisation}
+              </TableCell>
               <TableCell>
                 {link.limit_free}-{link.limit_half}-{link.limit_skip}
               </TableCell>
