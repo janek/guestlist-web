@@ -122,7 +122,7 @@ export default async function Page({
             {/* XXX: instead of hardcoded, use real value. Users table has no organisation
               field, so maybe we need a table/view which links users to organisations? */}
             <GuestDetailsDialog
-              organisation={"Main"}
+              organisation={"Stil vor Talent"}
               eventId={eventId as string}
             />
             <DownloadCsvButton guests={guests || []} />
