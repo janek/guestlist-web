@@ -146,12 +146,7 @@ export default async function Page({
               variant="manual"
               event={event}
             />
-            <AddLinkDialogButton
-              title="Send staff links"
-              variant="staff"
-              staff={staff}
-              event={event}
-            />
+            {/* Temporarily hidden: Send staff links */}
           </div>
           <p className="text-xs italic text-gray-400 mb-4">
             {linkCount} links, {totalSlots} slots total
