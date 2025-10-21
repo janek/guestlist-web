@@ -29,7 +29,7 @@ export async function sendOutStaffLinks(
 
   const undeliveredLinks: Array<{
     name: string
-    id: string
+    id: string | number
     error: string
   }> = []
 
