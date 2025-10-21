@@ -52,32 +52,14 @@ export default async function Page({
     )
   }
 
-  const defaultEventId = process.env.DEFAULT_EVENT_ID
-  const requestedEventId =
-    (searchParams.eventId as string | undefined) ||
-    defaultEventId ||
-    allowedEvents[0].id
+  const envDefaultEventId = process.env.DEFAULT_EVENT_ID
+  const requestedEventIdCandidate =
+    (searchParams.eventId as string | undefined) || envDefaultEventId
 
-  // Verify the requested event belongs to this user
-  const eventId = allowedEvents?.find(
-    (event) => event.id === requestedEventId,
-  )?.id
-  // TODO: Better error states (and error handling)
-  if (!eventId) {
-    return (
-      <div className="m-4">
-        <p className="text-red-500 mb-4">
-          No information found or access denied.
-        </p>
-        <div className="flex items-center gap-4">
-          <p className="text-sm text-gray-600">
-            Logged in as {user.user.email}
-          </p>
-          <LogoutButton />
-        </div>
-      </div>
-    )
-  }
+  // Prefer the requested event if it belongs to the user; otherwise fall back
+  const eventId =
+    allowedEvents?.find((event) => event.id === requestedEventIdCandidate)?.id ||
+    allowedEvents[0].id
 
   // ꧂ One round-trip does the heavy lifting
   const { data: dashboardRows, error: dashboardError } = await supabase.rpc(
