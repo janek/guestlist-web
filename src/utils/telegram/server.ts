@@ -44,7 +44,7 @@ export async function sendOutStaffLinks(
       .from("links")
       .insert([
         {
-          organisation: `${name} (Turbulence)`,
+          organisation: `${name} (Main)`,
           event_id: event.id,
           limit_free: limit_free || 0,
           limit_half: limit_half || 0,
